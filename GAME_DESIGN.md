@@ -91,11 +91,13 @@ Z=24  │   ─────[Conveyor]─────     │  ← conveyor at z=
       │                            │
       │      [Counter_Delivery]    │  ← delivery counter at z=14
       │                            │
-Z=2   │                            │
-      └────────────────────────────┘  ← (entrance, no front wall)
+Z=1   ├──[Wall_Front_L]──┤  ├──[Wall_Front_R]──┤
+                         ↑
+                  4 m entrance gap
+                  (x=14 → x=18)
       X=0                       X=32
               ↑
-        Spawn (14-18, 0, 14-18)
+        Spawn (14-18, 0, 14-18) — appears just inside the doorway
         cameraTarget (16, 1, 16)
 ```
 
@@ -137,7 +139,7 @@ These are **invisible** entities (just `Transform` + `Name`, no MeshRenderer). T
 
 ## 9. Current state — Hito 1 completed
 
-### Composite entities (14)
+### Composite entities (16)
 
 | ID | Name | Type | Notes |
 |---|---|---|---|
@@ -152,6 +154,8 @@ These are **invisible** entities (just `Transform` + `Name`, no MeshRenderer). T
 | 523 | `Counter_Delivery` | Box + Material | Cream, (16, 0.5, 14), scale (8, 1, 2) |
 | 524 | `Trash_Bin` | Cylinder + Material | Dark grey, (29, 0.6, 26), radius 0.5, height 1.2 |
 | 525 | `Audio_Ambient` | AudioSource | `upbeat_1.mp3`, loop, global, volume 0.4 |
+| 526 | `Wall_Front_Left` | Box + Material | Red, (7.5, 1.5, 1), scale (13, 3, 0.4) — left half of front wall |
+| 527 | `Wall_Front_Right` | Box + Material | Red, (24.5, 1.5, 1), scale (13, 3, 0.4) — right half of front wall, leaving a 4 m doorway between x=14 and x=18 |
 
 All collidable entities use `collisionMask: 3` (CL_POINTER + CL_PHYSICS).
 

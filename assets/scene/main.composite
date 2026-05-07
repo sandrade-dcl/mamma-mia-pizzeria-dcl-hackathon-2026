@@ -181,16 +181,16 @@
               "y": 1.5,
               "z": 31
             },
-            "scale": {
-              "x": 28,
-              "y": 3,
-              "z": 0.4
-            },
             "rotation": {
               "x": 0,
               "y": 0,
               "z": 0,
               "w": 1
+            },
+            "scale": {
+              "x": 30.5,
+              "y": 3,
+              "z": 0.4000000059604645
             },
             "parent": 0
           }
@@ -374,6 +374,48 @@
               "x": 1,
               "y": 1,
               "z": 1
+            },
+            "rotation": {
+              "x": 0,
+              "y": 0,
+              "z": 0,
+              "w": 1
+            },
+            "parent": 0
+          }
+        },
+        "526": {
+          "json": {
+            "position": {
+              "x": 7.5,
+              "y": 1.5,
+              "z": 1
+            },
+            "rotation": {
+              "x": 0,
+              "y": 0,
+              "z": 0,
+              "w": 1
+            },
+            "scale": {
+              "x": 13,
+              "y": 3,
+              "z": 0.4000000059604645
+            },
+            "parent": 0
+          }
+        },
+        "527": {
+          "json": {
+            "position": {
+              "x": 24.5,
+              "y": 1.5,
+              "z": 1
+            },
+            "scale": {
+              "x": 13,
+              "y": 3,
+              "z": 0.4
             },
             "rotation": {
               "x": 0,
@@ -612,6 +654,40 @@
               }
             }
           }
+        },
+        "526": {
+          "json": {
+            "material": {
+              "$case": "pbr",
+              "pbr": {
+                "albedoColor": {
+                  "r": 0.85,
+                  "g": 0.18,
+                  "b": 0.18,
+                  "a": 1
+                },
+                "metallic": 0,
+                "roughness": 0.85
+              }
+            }
+          }
+        },
+        "527": {
+          "json": {
+            "material": {
+              "$case": "pbr",
+              "pbr": {
+                "albedoColor": {
+                  "r": 0.85,
+                  "g": 0.18,
+                  "b": 0.18,
+                  "a": 1
+                },
+                "metallic": 0,
+                "roughness": 0.85
+              }
+            }
+          }
         }
       }
     },
@@ -710,6 +786,24 @@
                 "radiusTop": 0.5,
                 "radiusBottom": 0.5
               }
+            }
+          }
+        },
+        "526": {
+          "json": {
+            "collisionMask": 3,
+            "mesh": {
+              "$case": "box",
+              "box": {}
+            }
+          }
+        },
+        "527": {
+          "json": {
+            "collisionMask": 3,
+            "mesh": {
+              "$case": "box",
+              "box": {}
             }
           }
         }
@@ -814,6 +908,26 @@
               }
             }
           }
+        },
+        "526": {
+          "json": {
+            "mesh": {
+              "$case": "box",
+              "box": {
+                "uvs": []
+              }
+            }
+          }
+        },
+        "527": {
+          "json": {
+            "mesh": {
+              "$case": "box",
+              "box": {
+                "uvs": []
+              }
+            }
+          }
         }
       }
     },
@@ -899,6 +1013,16 @@
           "json": {
             "value": "Audio_Ambient"
           }
+        },
+        "526": {
+          "json": {
+            "value": "Wall_Front_Left"
+          }
+        },
+        "527": {
+          "json": {
+            "value": "Wall_Front_Right"
+          }
         }
       }
     },
@@ -944,9 +1068,9 @@
         "serializationType": "map"
       },
       "data": {
-        "0": {
+        "516": {
           "json": {
-            "gizmo": 0
+            "gizmo": 3
           }
         }
       }
@@ -1011,6 +1135,8 @@
                   523,
                   524,
                   525,
+                  526,
+                  527,
                   1,
                   2
                 ]
@@ -1069,6 +1195,14 @@
               },
               {
                 "entity": 525,
+                "children": []
+              },
+              {
+                "entity": 526,
+                "children": []
+              },
+              {
+                "entity": 527,
                 "children": []
               },
               {
@@ -1141,6 +1275,12 @@
           "json": {}
         },
         "525": {
+          "json": {}
+        },
+        "526": {
+          "json": {}
+        },
+        "527": {
           "json": {}
         }
       }

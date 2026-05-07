@@ -17,6 +17,8 @@ export enum EntityNames {
   Station_Toppings = "Station_Toppings",
   Trash_Bin = "Trash_Bin",
   Wall_Back = "Wall_Back",
+  Wall_Front_Left = "Wall_Front_Left",
+  Wall_Front_Right = "Wall_Front_Right",
   Wall_Left = "Wall_Left",
   Wall_Right = "Wall_Right",
 } 
