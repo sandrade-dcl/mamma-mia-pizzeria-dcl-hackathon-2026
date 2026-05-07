@@ -1,0 +1,62 @@
+# ─── Dependencies ───
+node_modules/
+
+# ─── Build output (compiled JS bundle, regenerated on every build) ───
+bin/
+
+# ─── DCL runtime auto-generated artifacts ───
+# CRDT state files written by `sdk-commands start` — regenerate on next preview.
+# If checked in stale they can break "edit-mode" composite editing.
+main.crdt
+main1.crdt
+
+# ─── Environment / secrets ───
+# .env files may hold Auth Server EnvVars (API keys, private keys for signed
+# requests, etc.). Never commit them — secrets belong in env vars only.
+.env
+.env.*
+!.env.example
+
+# ─── Creator Hub workspace state (local, per-user) ───
+.editor/
+
+# ─── Logs ───
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# ─── OS noise ───
+.DS_Store
+**/.DS_Store
+Thumbs.db
+ehthumbs.db
+desktop.ini
+
+# ─── IDE — keep shared config, ignore personal ───
+# .vscode/extensions.json + launch.json ARE versioned (shared with the team).
+# .vscode/settings.json is per-user (user-specific keybinds, formatters, etc).
+.vscode/settings.json
+.vscode/*.code-workspace
+.idea/
+
+# ─── Claude Code — local settings only ───
+# Keep .claude/skills/ versioned so anyone cloning gets the SDK skills setup.
+# Keep CLAUDE.md and GAME_DESIGN.md versioned (in repo root).
+.claude/settings.local.json
+.claude/sessions/
+
+# Memory dir lives in C:\Users\Santi\.claude\projects\... outside the repo,
+# so it's already not tracked. No rule needed here.
+
+# ─── Notes on what is INTENTIONALLY versioned ───
+# - package-lock.json   (reproducible builds, npm best practice)
+# - assets/Models/      (downloaded GLBs are part of the scene)
+# - assets/Audio/       (downloaded MP3s are part of the scene)
+# - assets/scene/main.composite, entity-names.ts
+# - assets/asset-packs/ (Creator Hub asset packs the team uses)
+# - assets/images/      (thumbnails referenced by scene.json)
+# - dclcontext/         (project-shared SDK reference docs)
+# - thumbnails/         (auto-generated scene thumbnails — small, useful)
+# - skills-lock.json    (lock file for `npx skills add`)
+# - .cursor/, cursor.config, cursorignore  (shared Cursor config)
