@@ -36,11 +36,11 @@ There is **no Game Over** — the score can go negative; the round ends only by 
 - **Ingredients**: tomato, mozzarella, salami, mushrooms.
 - **Pizzas**: Margherita, Diavola, Funghi, Quattro Formaggi.
 
-### Pre-stock at start
-Stations start pre-loaded so all players have something to do immediately:
-- Station 1: a dough ball ready to flatten.
-- Station 2: an already-flattened pizza waiting for toppings.
-- Station 3: a topped pizza ready to enter the oven.
+### Initial state
+Only **Station 1 (Masa)** starts with a raw dough ball. Players at later
+stations wait for the pizza to arrive from the previous step. This keeps the
+flow direction obvious — pizzas only ever appear from upstream — and avoids
+confusion about where each pre-stocked pizza came from.
 
 ### Errors & penalties
 
@@ -106,7 +106,7 @@ Z=1   ├──[Wall_Front_L]──┤  ├──[Wall_Front_R]──┤
 | Hito | Description | Hours | Status |
 |---|---|---|---|
 | **1. Foundation** | Setup, composite, walls, stations placeholder, audio ambient, walkable scene | ~3.5h | ✅ Completed |
-| **2. Mechanics core (single-player)** | Station interactions, conveyor tweens, dough/toppings/oven flow, trash bin | ~5h | ⏳ Pending |
+| **2. Mechanics core (single-player)** | Station interactions, conveyor tweens, dough/toppings/oven flow, F-key discard | ~5h | ✅ Completed |
 | **3. Game loop complete** | Orders, tickets UI, scoring, timer, start/end states. **MVP single-player playable.** | ~3.5h | ⏳ Pending |
 | **4. Auth Server + multiplayer** | `isServer()` branching, `registerMessages`, server-authoritative orders/scoring, `Storage` leaderboard | ~6h | ⏳ Pending |
 | **5. Polish** | Particles (flour, smoke), SFX, feedback on success/fail, bug fixing | ~2h | ⏳ Pending |
@@ -137,9 +137,50 @@ Total ≈ 20h.
 
 These are **invisible** entities (just `Transform` + `Name`, no MeshRenderer). They use local positions relative to their parent so a parent swap (cube → GLB) only needs the slot's local Y/Z fine-tuned.
 
-## 9. Current state — Hito 1 completed
+## 9. Current state — Hitos 1 & 2 completed
 
-### Composite entities (16)
+### Hito 2 — single-player sandbox
+
+The full pizza-making flow is playable end-to-end (no orders/scoring yet):
+
+- **Pizza model**: custom ECS component `PizzaState` tracks `step`, `toppings[]`, `bakeStartTime`, `doughClicks`. Spawned at runtime, lives in world space (`parent: 0`), moves between stations with `Tween`.
+- **Masa**: starts with a raw-dough sphere; 3 clicks progressively flatten it (sphere → squashed → flat cylinder, yellow). One more click sends the pizza along the belt and respawns a fresh ball. No discard here.
+- **Toppings**: empty at start; receives the flattened dough from masa. 4 ingredient boxes (cubes coloured tomato / mozzarella / salami / mushroom) at the back of the table; click adds a topping (Vogel sunflower distribution covers the whole disc). Click on the pizza sends it to the oven once it has at least one topping.
+- **Horno**: empty at start; pizza arrives at the oven mouth (`Slot_Toppings_To_Horno_Conveyor_2`) and waits. Click slides it inside (`Slot_Horno`), starts the bake timer (5 s → Perfect, 9 s → Burnt). Click on Perfect sends it down the delivery belt.
+- **Delivery**: receives the finished pizza; no primary action yet (Hito 3 will add click-to-serve).
+- **Discard**: secondary action (F key) on any pizza except the masa one removes it. Hovering shows "Tirar a la basura".
+- **Conveyor**: pizzas glide at constant 5 m/s through any number of waypoints (`sendPizzaAlongPath`). Easing is linear so velocity stays uniform across the whole path.
+- **Interaction**: custom `interaction.ts` helper supports a primary action (left click) and an optional secondary action (F key) with independent hover text per button. WASD does NOT trigger interactions.
+
+### Code layout (src/client/)
+
+```
+src/client/
+├── setup.ts                 wires station handlers, conveyor, delivery
+├── interaction.ts           onInteract() helper — left-click + F-key
+├── conveyor.ts              sendPizzaAlongPath() with constant 5 m/s speed
+├── slots.ts                 getEntityByName / getSlotPosition helpers
+├── pizza/
+│   ├── pizzaTypes.ts        PizzaStep, Topping, PizzaState component, constants
+│   └── pizzaVisual.ts       spawnPizza, applyDoughClickVisual, spawnTopping…
+└── stations/
+    ├── masa.ts              setup + handler + auto-respawn after send
+    ├── toppings.ts          setup + ingredient boxes + topping placement
+    ├── horno.ts             setup + receive + insert tween + bake timer
+    └── delivery.ts          receive pizza (Hito 3 will add serve action)
+```
+
+### Composite changes since Hito 1
+
+8 new Slot/Anchor entities added (IDs 528-535+), then refined manually by the
+user to match the new conveyor geometry. Current navigation slots:
+
+- `Slot_Masa`, `Slot_Masa_To_Toppings_Conveyor_1`, `Slot_Masa_To_Toppings_Conveyor_2`, `Slot_Toppings`
+- `Slot_Toppings_To_Horno_Conveyor_1`, `Slot_Toppings_To_Horno_Conveyor_2`, `Slot_Horno`
+- `Slot_Horno_To_Delivery_Conveyor_1`, `Slot_Delivery`
+- `Anchor_Trash` (decorative — discard is now per-pizza, no longer needed for logic)
+
+### Composite entities (Hito 1 baseline, 16 user-defined)
 
 | ID | Name | Type | Notes |
 |---|---|---|---|

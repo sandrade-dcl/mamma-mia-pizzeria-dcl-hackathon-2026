@@ -1,3 +1,11 @@
+import { isServer } from '@dcl/sdk/network'
+import { initClient } from './client/setup'
+import { initServer } from './server/server'
+
 export function main() {
-  console.log('[Mamma Mia\'s Pizzeria] Scene loaded — Hito 1 baseline')
+  if (isServer()) {
+    initServer()
+  } else {
+    initClient()
+  }
 }
