@@ -1,4 +1,13 @@
-import { ColliderLayer, Entity, Material, MeshCollider, MeshRenderer, Transform, engine } from '@dcl/sdk/ecs'
+import {
+  ColliderLayer,
+  Entity,
+  Material,
+  MeshCollider,
+  MeshRenderer,
+  Transform,
+  Tween,
+  engine
+} from '@dcl/sdk/ecs'
 import { Color4, Quaternion, Vector3 } from '@dcl/sdk/math'
 import { PizzaState, PizzaStep, Topping } from './pizzaTypes'
 
@@ -95,3 +104,109 @@ export function despawnPizza(pizza: Entity): void {
   // Children (toppings) are removed automatically when the parent is removed.
   engine.removeEntityWithChildren(pizza)
 }
+
+// ---------------------------------------------------------------------------
+// Discard animation
+// ---------------------------------------------------------------------------
+// Plays a quick "puff up then shrink to nothing" scale animation on the pizza
+// while it also pops up and falls back to its original Y. Both animations run
+// in parallel and finish at the same instant, after which the entity is
+// removed. The Tween component can only host one channel per entity, so the
+// scale and the jump are computed manually each frame in this system.
+//
+// The pizza is logically gone the moment this is called — game state stops
+// tracking it; only the visual lingers for ~400 ms while the animation plays.
+
+const PUFF_UP_RATIO = 0.375 // 150 ms of the 400 ms total spent puffing up
+const TOTAL_MS = 400
+const PUFF_FACTOR = 1.4
+const JUMP_HEIGHT_M = 0.6
+
+type DiscardPending = {
+  pizza: Entity
+  startTime: number
+  originalScale: { x: number; y: number; z: number }
+  originalPosition: { x: number; y: number; z: number }
+}
+
+const pendingDiscards: DiscardPending[] = []
+
+export function discardPizzaWithAnimation(pizza: Entity): void {
+  const transform = Transform.getOrNull(pizza)
+  if (!transform) {
+    engine.removeEntityWithChildren(pizza)
+    return
+  }
+
+  // Drop any in-flight tween (e.g. conveyor) so it doesn't fight our manual
+  // per-frame updates to position and scale.
+  Tween.deleteFrom(pizza)
+
+  pendingDiscards.push({
+    pizza,
+    startTime: Date.now(),
+    originalScale: {
+      x: transform.scale.x,
+      y: transform.scale.y,
+      z: transform.scale.z
+    },
+    originalPosition: {
+      x: transform.position.x,
+      y: transform.position.y,
+      z: transform.position.z
+    }
+  })
+}
+
+function discardAnimationSystem(_dt: number) {
+  if (pendingDiscards.length === 0) return
+  const now = Date.now()
+
+  for (let i = pendingDiscards.length - 1; i >= 0; i--) {
+    const p = pendingDiscards[i]
+    const elapsed = now - p.startTime
+
+    if (elapsed >= TOTAL_MS) {
+      engine.removeEntityWithChildren(p.pizza)
+      pendingDiscards.splice(i, 1)
+      continue
+    }
+
+    const transform = Transform.getMutableOrNull(p.pizza)
+    if (!transform) {
+      pendingDiscards.splice(i, 1)
+      continue
+    }
+
+    const t = elapsed / TOTAL_MS
+
+    // Scale curve: puff up to PUFF_FACTOR (ease-out), then collapse to 0
+    // (ease-in). Ends exactly at t=1.
+    let scaleFactor: number
+    if (t < PUFF_UP_RATIO) {
+      const tNorm = t / PUFF_UP_RATIO
+      const eased = 1 - (1 - tNorm) * (1 - tNorm)
+      scaleFactor = 1 + (PUFF_FACTOR - 1) * eased
+    } else {
+      const tNorm = (t - PUFF_UP_RATIO) / (1 - PUFF_UP_RATIO)
+      const eased = tNorm * tNorm
+      scaleFactor = PUFF_FACTOR * (1 - eased)
+    }
+
+    transform.scale = Vector3.create(
+      p.originalScale.x * scaleFactor,
+      p.originalScale.y * scaleFactor,
+      p.originalScale.z * scaleFactor
+    )
+
+    // Jump: a half-sine peak that returns to the original Y at t=1.
+    const jumpProgress = Math.sin(t * Math.PI)
+    transform.position = Vector3.create(
+      p.originalPosition.x,
+      p.originalPosition.y + JUMP_HEIGHT_M * jumpProgress,
+      p.originalPosition.z
+    )
+  }
+}
+
+engine.addSystem(discardAnimationSystem)

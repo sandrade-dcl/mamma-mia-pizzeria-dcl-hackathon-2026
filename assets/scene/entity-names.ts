@@ -6,7 +6,6 @@
  */
 export enum EntityNames {
   Anchor_Order_Board = "Anchor_Order_Board",
-  Anchor_Trash = "Anchor_Trash",
   Audio_Ambient = "Audio_Ambient",
   Conveyor = "Conveyor",
   Conveyor_2 = "Conveyor_2",
@@ -30,7 +29,6 @@ export enum EntityNames {
   Station_Horno = "Station_Horno",
   Station_Masa = "Station_Masa",
   Station_Toppings = "Station_Toppings",
-  Trash_Bin = "Trash_Bin",
   Wall_Back = "Wall_Back",
   Wall_Front_Left = "Wall_Front_Left",
   Wall_Front_Right = "Wall_Front_Right",

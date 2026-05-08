@@ -1,13 +1,14 @@
 import { Entity, Transform, engine } from '@dcl/sdk/ecs'
 import { EntityNames } from '../../../assets/scene/entity-names'
 import { sendPizzaAlongPath } from '../conveyor'
+import { showFloatingText } from '../feedback'
 import { onInteract } from '../interaction'
 import { BAKE_TIME_BURNT, BAKE_TIME_PERFECT, PizzaState, PizzaStep } from '../pizza/pizzaTypes'
-import { despawnPizza, updatePizzaStep } from '../pizza/pizzaVisual'
+import { despawnPizza, discardPizzaWithAnimation, updatePizzaStep } from '../pizza/pizzaVisual'
 import { getSlotPosition } from '../slots'
 
 type HornoHandlers = {
-  onSendToDelivery: (pizza: Entity) => void
+  onSendToDelivery: (pizza: Entity) => boolean
 }
 
 // The oven owns two slots:
@@ -18,7 +19,22 @@ const FRONT_SLOT = EntityNames.Slot_Toppings_To_Horno_Conveyor_2
 const INSIDE_SLOT = EntityNames.Slot_Horno
 
 let currentPizza: Entity | null = null
+let pendingIncoming = false
 let handlers: HornoHandlers | null = null
+// Tracks pizzas currently sliding from FRONT_SLOT to INSIDE_SLOT — used to
+// block double-click during the insert tween, since `currentPizza` doesn't
+// change in that flow.
+const insertingPizzas = new Set<Entity>()
+
+// True while a pizza is in front of/inside the oven OR while one is
+// travelling on the belt towards us.
+export function isOccupied(): boolean {
+  return currentPizza !== null || pendingIncoming
+}
+
+export function notifyIncoming() {
+  pendingIncoming = true
+}
 
 export function setupHornoStation(h: HornoHandlers) {
   handlers = h
@@ -34,49 +50,80 @@ export function receivePizza(pizza: Entity) {
     despawnPizza(currentPizza)
   }
   currentPizza = pizza
+  pendingIncoming = false
   Transform.getMutable(pizza).position = getSlotPosition(FRONT_SLOT)
-  attachHandler(pizza)
+  refreshHandler(pizza)
 }
 
 // Discard the pizza currently in the oven (front or inside), if any.
 export function discardActivePizza(): boolean {
   if (!currentPizza) return false
-  despawnPizza(currentPizza)
+  discardPizzaWithAnimation(currentPizza)
   currentPizza = null
   console.log('[Horno] pizza discarded')
   return true
 }
 
-function attachHandler(pizza: Entity) {
-  onInteract(
-    pizza,
-    {
-      hoverText: 'Horno',
-      maxDistance: 6,
-      secondary: {
-        hoverText: 'Tirar a la basura',
-        callback: () => discardActivePizza()
-      }
-    },
-    () => {
-      const state = PizzaState.getMutableOrNull(pizza)
-      if (!state) return
+// Wires the pizza's click handlers based on its current step. Called when
+// the pizza arrives, after the insert tween, and on every step change in
+// the bake timer.
+function refreshHandler(pizza: Entity) {
+  const state = PizzaState.getOrNull(pizza)
+  if (!state) return
 
-      if (state.step === PizzaStep.Topped) {
-        // Slide pizza from in-front-of-oven to inside-the-oven, then start baking.
-        sendPizzaAlongPath(pizza, [FRONT_SLOT, INSIDE_SLOT], () => {
-          const s = PizzaState.getMutableOrNull(pizza)
-          if (!s) return
-          s.bakeStartTime = Date.now() / 1000
-          updatePizzaStep(pizza, PizzaStep.Baking)
-          console.log('[Horno] pizza in the oven — baking…')
-        })
-      } else if (state.step === PizzaStep.Perfect) {
-        if (currentPizza === pizza) currentPizza = null
-        handlers?.onSendToDelivery(pizza)
-      }
-    }
-  )
+  const discardSecondary = {
+    hoverText: 'Throw away',
+    callback: () => discardActivePizza()
+  }
+
+  if (state.step === PizzaStep.Topped) {
+    onInteract(
+      pizza,
+      { hoverText: 'Insert into oven', maxDistance: 6, secondary: discardSecondary },
+      () => onInsertClick(pizza)
+    )
+  } else if (state.step === PizzaStep.Perfect) {
+    onInteract(
+      pizza,
+      { hoverText: 'Send to Delivery', maxDistance: 6, secondary: discardSecondary },
+      () => onSendToDeliveryClick(pizza)
+    )
+  } else {
+    // Baking, Burnt, or any other intermediate state — no primary action.
+    onInteract(pizza, { secondary: discardSecondary })
+  }
+}
+
+function onInsertClick(pizza: Entity) {
+  if (currentPizza !== pizza) return
+  if (insertingPizzas.has(pizza)) return
+  const state = PizzaState.getOrNull(pizza)
+  if (!state || state.step !== PizzaStep.Topped) return
+
+  insertingPizzas.add(pizza)
+  sendPizzaAlongPath(pizza, [FRONT_SLOT, INSIDE_SLOT], () => {
+    insertingPizzas.delete(pizza)
+    const s = PizzaState.getMutableOrNull(pizza)
+    if (!s) return
+    s.bakeStartTime = Date.now() / 1000
+    updatePizzaStep(pizza, PizzaStep.Baking)
+    refreshHandler(pizza)
+    console.log('[Horno] pizza in the oven — baking…')
+  })
+}
+
+function onSendToDeliveryClick(pizza: Entity) {
+  if (currentPizza !== pizza) return
+  const state = PizzaState.getOrNull(pizza)
+  if (!state || state.step !== PizzaStep.Perfect) return
+
+  const sent = handlers?.onSendToDelivery(pizza) ?? false
+  if (sent) {
+    currentPizza = null
+  } else {
+    showFloatingText(pizza, 'Delivery busy!')
+    console.log('[Horno] delivery is busy — wait until it is free')
+  }
 }
 
 function bakingTimerSystem(_dt: number) {
@@ -89,9 +136,11 @@ function bakingTimerSystem(_dt: number) {
 
   if (state.step === PizzaStep.Baking && elapsed >= BAKE_TIME_PERFECT) {
     updatePizzaStep(currentPizza, PizzaStep.Perfect)
+    refreshHandler(currentPizza)
     console.log('[Horno] pizza is perfect — take it out before it burns!')
   } else if (state.step === PizzaStep.Perfect && elapsed >= BAKE_TIME_BURNT) {
     updatePizzaStep(currentPizza, PizzaStep.Burnt)
+    refreshHandler(currentPizza)
     console.log('[Horno] pizza burnt!')
   }
 }

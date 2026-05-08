@@ -342,27 +342,6 @@
             "parent": 0
           }
         },
-        "524": {
-          "json": {
-            "position": {
-              "x": 29,
-              "y": 0.6,
-              "z": 26
-            },
-            "scale": {
-              "x": 1,
-              "y": 1.2,
-              "z": 1
-            },
-            "rotation": {
-              "x": 0,
-              "y": 0,
-              "z": 0,
-              "w": 1
-            },
-            "parent": 0
-          }
-        },
         "525": {
           "json": {
             "position": {
@@ -537,27 +516,6 @@
               "x": 16,
               "y": 3,
               "z": 14
-            },
-            "scale": {
-              "x": 1,
-              "y": 1,
-              "z": 1
-            },
-            "rotation": {
-              "x": 0,
-              "y": 0,
-              "z": 0,
-              "w": 1
-            },
-            "parent": 0
-          }
-        },
-        "535": {
-          "json": {
-            "position": {
-              "x": 29,
-              "y": 1.5,
-              "z": 26
             },
             "scale": {
               "x": 1,
@@ -1027,23 +985,6 @@
                 },
                 "metallic": 0,
                 "roughness": 0.7
-              }
-            }
-          }
-        },
-        "524": {
-          "json": {
-            "material": {
-              "$case": "pbr",
-              "pbr": {
-                "albedoColor": {
-                  "r": 0.3,
-                  "g": 0.3,
-                  "b": 0.32,
-                  "a": 1
-                },
-                "metallic": 0.4,
-                "roughness": 0.6
               }
             }
           }
@@ -1558,18 +1499,6 @@
             }
           }
         },
-        "524": {
-          "json": {
-            "collisionMask": 3,
-            "mesh": {
-              "$case": "cylinder",
-              "cylinder": {
-                "radiusTop": 0.5,
-                "radiusBottom": 0.5
-              }
-            }
-          }
-        },
         "526": {
           "json": {
             "collisionMask": 3,
@@ -1687,17 +1616,6 @@
               "$case": "box",
               "box": {
                 "uvs": []
-              }
-            }
-          }
-        },
-        "524": {
-          "json": {
-            "mesh": {
-              "$case": "cylinder",
-              "cylinder": {
-                "radiusTop": 0.5,
-                "radiusBottom": 0.5
               }
             }
           }
@@ -1837,11 +1755,6 @@
             "value": "Counter_Delivery"
           }
         },
-        "524": {
-          "json": {
-            "value": "Trash_Bin"
-          }
-        },
         "525": {
           "json": {
             "value": "Audio_Ambient"
@@ -1885,11 +1798,6 @@
         "534": {
           "json": {
             "value": "Anchor_Order_Board"
-          }
-        },
-        "535": {
-          "json": {
-            "value": "Anchor_Trash"
           }
         },
         "536": {
@@ -2041,7 +1949,6 @@
                   521,
                   522,
                   523,
-                  524,
                   525,
                   526,
                   527,
@@ -2055,7 +1962,6 @@
                   543,
                   533,
                   534,
-                  535,
                   1,
                   2
                 ]
@@ -2114,10 +2020,6 @@
                 "children": []
               },
               {
-                "entity": 524,
-                "children": []
-              },
-              {
                 "entity": 525,
                 "children": []
               },
@@ -2151,10 +2053,6 @@
               },
               {
                 "entity": 534,
-                "children": []
-              },
-              {
-                "entity": 535,
                 "children": []
               },
               {
@@ -2255,9 +2153,6 @@
         "523": {
           "json": {}
         },
-        "524": {
-          "json": {}
-        },
         "525": {
           "json": {}
         },
@@ -2283,9 +2178,6 @@
           "json": {}
         },
         "534": {
-          "json": {}
-        },
-        "535": {
           "json": {}
         },
         "536": {
