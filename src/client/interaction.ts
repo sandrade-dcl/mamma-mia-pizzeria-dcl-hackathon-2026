@@ -94,7 +94,14 @@ export function onInteract(
 }
 
 function interactionSystem(_dt: number) {
-  for (const entry of entries) {
+  if (entries.length === 0) return
+  // Snapshot the list before iterating: callbacks may re-attach a handler
+  // (which splices the old entry out and pushes a new one), and we must NOT
+  // let the iterator pick up the just-pushed entry on the same frame — that
+  // would dispatch the same click twice. Snapshot guarantees one callback
+  // per entity per frame.
+  const snapshot = entries.slice()
+  for (const entry of snapshot) {
     if (
       entry.primaryCallback &&
       inputSystem.isTriggered(InputAction.IA_POINTER, PointerEventType.PET_DOWN, entry.entity)

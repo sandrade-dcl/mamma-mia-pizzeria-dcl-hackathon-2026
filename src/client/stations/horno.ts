@@ -1,11 +1,12 @@
-import { Entity, Transform, engine } from '@dcl/sdk/ecs'
+import { Entity, LightSource, Transform, engine } from '@dcl/sdk/ecs'
+import { Color3 } from '@dcl/sdk/math'
 import { EntityNames } from '../../../assets/scene/entity-names'
 import { sendPizzaAlongPath } from '../conveyor'
 import { showFloatingText } from '../feedback'
 import { onInteract } from '../interaction'
 import { BAKE_TIME_BURNT, BAKE_TIME_PERFECT, PizzaState, PizzaStep } from '../pizza/pizzaTypes'
 import { despawnPizza, discardPizzaWithAnimation, updatePizzaStep } from '../pizza/pizzaVisual'
-import { getSlotPosition } from '../slots'
+import { getEntityByName, getSlotPosition } from '../slots'
 
 type HornoHandlers = {
   onSendToDelivery: (pizza: Entity) => boolean
@@ -40,7 +41,28 @@ export function setupHornoStation(h: HornoHandlers) {
   handlers = h
   // No pre-stock — the oven starts empty and waits for the first topped pizza
   // to arrive from the toppings station.
+  setOvenLight('off')
   engine.addSystem(bakingTimerSystem)
+}
+
+// The light hanging inside Station_Horno reflects what's going on with the
+// pizza: warm orange while it bakes normally, red when it has burnt, and off
+// whenever the oven is empty.
+type OvenLightState = 'off' | 'fire' | 'burnt'
+
+const FIRE_COLOR = Color3.create(1, 0.647, 0)
+const BURNT_COLOR = Color3.create(1, 0.1, 0.1)
+
+function setOvenLight(state: OvenLightState) {
+  const light = getEntityByName(EntityNames.Horno_Light)
+  const ls = LightSource.getMutableOrNull(light)
+  if (!ls) return
+  if (state === 'off') {
+    ls.active = false
+    return
+  }
+  ls.active = true
+  ls.color = state === 'burnt' ? BURNT_COLOR : FIRE_COLOR
 }
 
 // Called by the conveyor when a pizza arrives from toppings. Replaces the
@@ -60,6 +82,7 @@ export function discardActivePizza(): boolean {
   if (!currentPizza) return false
   discardPizzaWithAnimation(currentPizza)
   currentPizza = null
+  setOvenLight('off')
   console.log('[Horno] pizza discarded')
   return true
 }
@@ -107,6 +130,7 @@ function onInsertClick(pizza: Entity) {
     if (!s) return
     s.bakeStartTime = Date.now() / 1000
     updatePizzaStep(pizza, PizzaStep.Baking)
+    setOvenLight('fire')
     refreshHandler(pizza)
     console.log('[Horno] pizza in the oven — baking…')
   })
@@ -120,6 +144,7 @@ function onSendToDeliveryClick(pizza: Entity) {
   const sent = handlers?.onSendToDelivery(pizza) ?? false
   if (sent) {
     currentPizza = null
+    setOvenLight('off')
   } else {
     showFloatingText(pizza, 'Delivery busy!')
     console.log('[Horno] delivery is busy — wait until it is free')
@@ -140,6 +165,7 @@ function bakingTimerSystem(_dt: number) {
     console.log('[Horno] pizza is perfect — take it out before it burns!')
   } else if (state.step === PizzaStep.Perfect && elapsed >= BAKE_TIME_BURNT) {
     updatePizzaStep(currentPizza, PizzaStep.Burnt)
+    setOvenLight('burnt')
     refreshHandler(currentPizza)
     console.log('[Horno] pizza burnt!')
   }
