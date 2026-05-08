@@ -29,6 +29,7 @@ export enum EntityNames {
   Slot_Toppings = "Slot_Toppings",
   Slot_Toppings_To_Horno_Conveyor_1 = "Slot_Toppings_To_Horno_Conveyor_1",
   Slot_Toppings_To_Horno_Conveyor_2 = "Slot_Toppings_To_Horno_Conveyor_2",
+  SmokeEmitter = "SmokeEmitter",
   Station_Delivery = "Station_Delivery",
   Station_Horno = "Station_Horno",
   Station_Masa = "Station_Masa",

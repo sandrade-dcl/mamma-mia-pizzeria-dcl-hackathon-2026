@@ -1,5 +1,13 @@
-import { Entity, LightSource, Transform, engine } from '@dcl/sdk/ecs'
-import { Color3 } from '@dcl/sdk/math'
+import {
+  Entity,
+  LightSource,
+  PBParticleSystem_BlendMode,
+  PBParticleSystem_PlaybackState,
+  ParticleSystem,
+  Transform,
+  engine
+} from '@dcl/sdk/ecs'
+import { Color3, Color4 } from '@dcl/sdk/math'
 import { EntityNames } from '../../../assets/scene/entity-names'
 import { sendPizzaAlongPath } from '../conveyor'
 import { showFloatingText } from '../feedback'
@@ -41,28 +49,80 @@ export function setupHornoStation(h: HornoHandlers) {
   handlers = h
   // No pre-stock — the oven starts empty and waits for the first topped pizza
   // to arrive from the toppings station.
-  setOvenLight('off')
+  initSmokeEmitter()
+  setOvenAmbience('off')
   engine.addSystem(bakingTimerSystem)
 }
 
-// The light hanging inside Station_Horno reflects what's going on with the
-// pizza: warm orange while it bakes normally, red when it has burnt, and off
-// whenever the oven is empty.
-type OvenLightState = 'off' | 'fire' | 'burnt'
+// Both the light hanging inside Station_Horno and the smoke wisp above it
+// reflect what's happening to the pizza: warm orange + light grey smoke
+// while baking normally, red light + dark dense smoke once it's burnt, and
+// off whenever the oven is empty.
+type OvenState = 'off' | 'fire' | 'burnt'
 
-const FIRE_COLOR = Color3.create(1, 0.647, 0)
-const BURNT_COLOR = Color3.create(1, 0.1, 0.1)
+const FIRE_LIGHT_COLOR = Color3.create(1, 0.647, 0)
+const BURNT_LIGHT_COLOR = Color3.create(1, 0.1, 0.1)
 
-function setOvenLight(state: OvenLightState) {
+const SMOKE_FIRE_START = Color4.create(0.6, 0.6, 0.6, 0.5)
+const SMOKE_FIRE_END = Color4.create(0.4, 0.4, 0.4, 0)
+const SMOKE_BURNT_START = Color4.create(0.15, 0.15, 0.15, 0.7)
+const SMOKE_BURNT_END = Color4.create(0.05, 0.05, 0.05, 0)
+
+const SMOKE_RATE_NORMAL = 20
+const SMOKE_RATE_BURNT = SMOKE_RATE_NORMAL * 2
+
+// Attach the ParticleSystem to the SmokeEmitter child entity (which lives in
+// the composite under Station_Horno). Called once at setup so we just mutate
+// the component afterwards. The emitter starts stopped — setOvenAmbience
+// turns it on/off as pizzas come and go.
+function initSmokeEmitter() {
+  const smoke = getEntityByName(EntityNames.SmokeEmitter)
+  ParticleSystem.createOrReplace(smoke, {
+    rate: SMOKE_RATE_NORMAL,
+    lifetime: 2.5,
+    maxParticles: 150,
+    initialSize: { start: 0.15, end: 0.3 },
+    sizeOverTime: { start: 1.0, end: 2.5 },
+    initialColor: { start: SMOKE_FIRE_START, end: SMOKE_FIRE_START },
+    colorOverTime: { start: SMOKE_FIRE_START, end: SMOKE_FIRE_END },
+    initialVelocitySpeed: { start: 0.3, end: 0.6 },
+    gravity: -0.15,
+    blendMode: PBParticleSystem_BlendMode.PSB_ALPHA,
+    shape: ParticleSystem.Shape.Cone({ angle: 15, radius: 0.15 }),
+    loop: true,
+    playbackState: PBParticleSystem_PlaybackState.PS_STOPPED
+  })
+}
+
+function setOvenAmbience(state: OvenState) {
+  // Light
   const light = getEntityByName(EntityNames.Horno_Light)
   const ls = LightSource.getMutableOrNull(light)
-  if (!ls) return
-  if (state === 'off') {
-    ls.active = false
-    return
+  if (ls) {
+    if (state === 'off') {
+      ls.active = false
+    } else {
+      ls.active = true
+      ls.color = state === 'burnt' ? BURNT_LIGHT_COLOR : FIRE_LIGHT_COLOR
+    }
   }
-  ls.active = true
-  ls.color = state === 'burnt' ? BURNT_COLOR : FIRE_COLOR
+
+  // Smoke
+  const smoke = getEntityByName(EntityNames.SmokeEmitter)
+  const ps = ParticleSystem.getMutableOrNull(smoke)
+  if (ps) {
+    if (state === 'off') {
+      ps.playbackState = PBParticleSystem_PlaybackState.PS_STOPPED
+    } else {
+      ps.playbackState = PBParticleSystem_PlaybackState.PS_PLAYING
+      const burnt = state === 'burnt'
+      ps.rate = burnt ? SMOKE_RATE_BURNT : SMOKE_RATE_NORMAL
+      const startC = burnt ? SMOKE_BURNT_START : SMOKE_FIRE_START
+      const endC = burnt ? SMOKE_BURNT_END : SMOKE_FIRE_END
+      ps.initialColor = { start: startC, end: startC }
+      ps.colorOverTime = { start: startC, end: endC }
+    }
+  }
 }
 
 // Called by the conveyor when a pizza arrives from toppings. Replaces the
@@ -82,7 +142,7 @@ export function discardActivePizza(): boolean {
   if (!currentPizza) return false
   discardPizzaWithAnimation(currentPizza)
   currentPizza = null
-  setOvenLight('off')
+  setOvenAmbience('off')
   console.log('[Horno] pizza discarded')
   return true
 }
@@ -130,7 +190,7 @@ function onInsertClick(pizza: Entity) {
     if (!s) return
     s.bakeStartTime = Date.now() / 1000
     updatePizzaStep(pizza, PizzaStep.Baking)
-    setOvenLight('fire')
+    setOvenAmbience('fire')
     refreshHandler(pizza)
     console.log('[Horno] pizza in the oven — baking…')
   })
@@ -144,7 +204,7 @@ function onSendToDeliveryClick(pizza: Entity) {
   const sent = handlers?.onSendToDelivery(pizza) ?? false
   if (sent) {
     currentPizza = null
-    setOvenLight('off')
+    setOvenAmbience('off')
   } else {
     showFloatingText(pizza, 'Delivery busy!')
     console.log('[Horno] delivery is busy — wait until it is free')
@@ -165,7 +225,7 @@ function bakingTimerSystem(_dt: number) {
     console.log('[Horno] pizza is perfect — take it out before it burns!')
   } else if (state.step === PizzaStep.Perfect && elapsed >= BAKE_TIME_BURNT) {
     updatePizzaStep(currentPizza, PizzaStep.Burnt)
-    setOvenLight('burnt')
+    setOvenAmbience('burnt')
     refreshHandler(currentPizza)
     console.log('[Horno] pizza burnt!')
   }
