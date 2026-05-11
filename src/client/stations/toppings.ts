@@ -9,10 +9,11 @@ import {
 } from '@dcl/sdk/ecs'
 import { Color4, Quaternion, Vector3 } from '@dcl/sdk/math'
 import { EntityNames } from '../../../assets/scene/entity-names'
-import { showFloatingText } from '../feedback'
+import { FEEDBACK_COLOR_PENALTY, showFloatingText } from '../feedback'
 import { onInteract } from '../interaction'
 import { PizzaState, PizzaStep, Topping } from '../pizza/pizzaTypes'
 import { despawnPizza, discardPizzaWithAnimation, spawnTopping } from '../pizza/pizzaVisual'
+import { addPoints, penaltyForDiscard } from '../scoring'
 import { getSlotPosition } from '../slots'
 
 type IngredientDef = {
@@ -75,12 +76,27 @@ export function receivePizza(pizza: Entity) {
   refreshHandler(pizza)
 }
 
+// Wipe the station between rounds.
+export function resetToppingsStation(): void {
+  if (currentPizza !== null) {
+    discardPizzaWithAnimation(currentPizza)
+    currentPizza = null
+  }
+  pendingIncoming = false
+}
+
 // Discard the pizza currently sitting on the toppings table, if any.
 export function discardActivePizza(): boolean {
   if (!currentPizza) return false
+  const state = PizzaState.getOrNull(currentPizza)
+  const penalty = state ? penaltyForDiscard(state.step, state.toppings.length) : 0
+  if (penalty !== 0) {
+    addPoints(penalty)
+    showFloatingText(currentPizza, `${penalty}`, 1.2, 1.0, FEEDBACK_COLOR_PENALTY)
+  }
   discardPizzaWithAnimation(currentPizza)
   currentPizza = null
-  console.log('[Toppings] pizza discarded')
+  console.log(`[Toppings] pizza discarded (${penalty})`)
   return true
 }
 

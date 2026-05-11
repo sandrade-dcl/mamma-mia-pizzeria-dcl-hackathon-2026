@@ -1,27 +1,64 @@
-import { Entity } from '@dcl/sdk/ecs'
+import { Entity, engine } from '@dcl/sdk/ecs'
 import { EntityNames } from '../../../assets/scene/entity-names'
 import { showFloatingText } from '../feedback'
 import { onInteract } from '../interaction'
 import { MASA_CLICKS_REQUIRED, PizzaState, PizzaStep } from '../pizza/pizzaTypes'
-import { applyDoughClickVisual, discardPizzaWithAnimation, spawnPizza } from '../pizza/pizzaVisual'
+import {
+  applyDoughClickVisual,
+  discardPizzaWithAnimation,
+  playSpawnAnimation,
+  spawnPizza
+} from '../pizza/pizzaVisual'
 import { getSlotPosition } from '../slots'
 
 type MasaHandlers = {
   onSendToToppings: (pizza: Entity) => boolean
 }
 
+// Delay between sending a pizza off and the new dough ball appearing, so the
+// player feels the rhythm of a kitchen rather than an instant teleport.
+const RESPAWN_DELAY_MS = 1000
+
 let currentPizza: Entity | null = null
 let handlers: MasaHandlers | null = null
+let nextDoughAt = 0 // Date.now() ms timestamp; 0 = nothing scheduled
 
 export function setupMasaStation(h: MasaHandlers) {
   handlers = h
+  engine.addSystem(doughScheduleSystem)
   spawnFreshDough()
 }
 
 function spawnFreshDough() {
   const slotPos = getSlotPosition(EntityNames.Slot_Masa)
   currentPizza = spawnPizza(slotPos, PizzaStep.RawDough)
+  playSpawnAnimation(currentPizza)
   refreshHandler(currentPizza)
+}
+
+function scheduleNextDough(delayMs: number) {
+  nextDoughAt = Date.now() + delayMs
+}
+
+function doughScheduleSystem(_dt: number) {
+  if (nextDoughAt === 0) return
+  if (Date.now() < nextDoughAt) return
+  // Only spawn if the station is actually empty (a discard during the delay
+  // already produced one).
+  nextDoughAt = 0
+  if (currentPizza !== null) return
+  spawnFreshDough()
+}
+
+// Wipe the station between rounds: remove whatever dough is on the table
+// and immediately re-stock a fresh ball so the new round starts clean.
+export function resetMasaStation(): void {
+  if (currentPizza !== null) {
+    discardPizzaWithAnimation(currentPizza)
+    currentPizza = null
+  }
+  nextDoughAt = 0
+  spawnFreshDough()
 }
 
 // Drop the current dough and spawn a fresh ball. Always succeeds because
@@ -71,7 +108,7 @@ function onSendClick(pizza: Entity) {
   const sent = handlers?.onSendToToppings(pizza) ?? false
   if (sent) {
     currentPizza = null
-    spawnFreshDough()
+    scheduleNextDough(RESPAWN_DELAY_MS)
   } else {
     showFloatingText(pizza, 'Toppings busy!')
     console.log('[Masa] toppings is busy — wait until it is free')

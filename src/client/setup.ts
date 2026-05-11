@@ -1,5 +1,9 @@
+import { ReactEcsRenderer } from '@dcl/sdk/react-ecs'
 import { EntityNames } from '../../assets/scene/entity-names'
 import { sendPizzaAlongPath } from './conveyor'
+// Side-effect import: registers the game-state system at module load.
+import './gameState'
+import { OrdersUi } from './orders/orderUi'
 import {
   isOccupied as deliveryIsOccupied,
   notifyIncoming as deliveryNotifyIncoming,
@@ -29,7 +33,11 @@ import {
 // keep its current pizza and let the player retry later.
 
 export function initClient() {
-  console.log('[CLIENT] Mamma Mia\'s Pizzeria — booting Hito 2 mechanics')
+  console.log('[CLIENT] Mamma Mia\'s Pizzeria — booting Hito 3 mechanics')
+
+  // The HUD owns the Start/End screens — order generation is gated by the
+  // "Start Game" button now.
+  ReactEcsRenderer.setUiRenderer(OrdersUi, { virtualWidth: 1920, virtualHeight: 1080 })
 
   setupMasaStation({
     onSendToToppings: (pizza) => {

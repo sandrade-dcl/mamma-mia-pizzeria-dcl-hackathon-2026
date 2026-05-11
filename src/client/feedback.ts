@@ -4,7 +4,9 @@ import { Color4, Quaternion, Vector3 } from '@dcl/sdk/math'
 const DEFAULT_WORLD_HEIGHT_M = 1.0
 const DEFAULT_DURATION_S = 2.0
 const FONT_SIZE = 2
-const TEXT_COLOR = Color4.create(1, 0.25, 0.25, 1)
+const DEFAULT_COLOR = Color4.create(1, 0.25, 0.25, 1)
+export const FEEDBACK_COLOR_REWARD = Color4.create(0.2, 0.85, 0.3, 1)
+export const FEEDBACK_COLOR_PENALTY = Color4.create(1, 0.25, 0.25, 1)
 
 type Pending = {
   label: Entity
@@ -24,7 +26,8 @@ export function showFloatingText(
   parent: Entity,
   text: string,
   duration: number = DEFAULT_DURATION_S,
-  worldHeight: number = DEFAULT_WORLD_HEIGHT_M
+  worldHeight: number = DEFAULT_WORLD_HEIGHT_M,
+  color: Color4 = DEFAULT_COLOR
 ) {
   const parentPos = Transform.getOrNull(parent)?.position ?? Vector3.Zero()
 
@@ -37,7 +40,7 @@ export function showFloatingText(
   TextShape.create(label, {
     text,
     fontSize: FONT_SIZE,
-    textColor: TEXT_COLOR
+    textColor: color
   })
   Billboard.create(label, { billboardMode: BillboardMode.BM_ALL })
 

@@ -7,13 +7,14 @@ import {
   Transform,
   engine
 } from '@dcl/sdk/ecs'
-import { Color3, Color4 } from '@dcl/sdk/math'
+import { Color3, Color4, Vector3 } from '@dcl/sdk/math'
 import { EntityNames } from '../../../assets/scene/entity-names'
 import { sendPizzaAlongPath } from '../conveyor'
-import { showFloatingText } from '../feedback'
+import { FEEDBACK_COLOR_PENALTY, showFloatingText } from '../feedback'
 import { onInteract } from '../interaction'
 import { BAKE_TIME_BURNT, BAKE_TIME_PERFECT, PizzaState, PizzaStep } from '../pizza/pizzaTypes'
 import { despawnPizza, discardPizzaWithAnimation, updatePizzaStep } from '../pizza/pizzaVisual'
+import { addPoints, penaltyForDiscard } from '../scoring'
 import { getEntityByName, getSlotPosition } from '../slots'
 
 type HornoHandlers = {
@@ -94,7 +95,60 @@ function initSmokeEmitter() {
   })
 }
 
+// "About to explode" pulse on Station_Horno while a burnt pizza is sitting
+// inside. The original Transform.scale is captured the first time we run and
+// the system writes scale = original + sin-based pulse each frame. Toggle
+// off restores the captured scale exactly.
+const BURNT_PULSE_FREQ_RAD_S = 18
+const BURNT_PULSE_AMPLITUDE = 0.005
+let hornoOriginalScale: { x: number; y: number; z: number } | null = null
+let burntPulseActive = false
+
+function ensureHornoOriginalScale() {
+  if (hornoOriginalScale !== null) return
+  const transform = Transform.getOrNull(getEntityByName(EntityNames.Station_Horno))
+  if (!transform) return
+  hornoOriginalScale = {
+    x: transform.scale.x,
+    y: transform.scale.y,
+    z: transform.scale.z
+  }
+}
+
+function setHornoBurntPulse(active: boolean) {
+  ensureHornoOriginalScale()
+  burntPulseActive = active
+  if (!active && hornoOriginalScale) {
+    const transform = Transform.getMutableOrNull(getEntityByName(EntityNames.Station_Horno))
+    if (transform) {
+      transform.scale = Vector3.create(
+        hornoOriginalScale.x,
+        hornoOriginalScale.y,
+        hornoOriginalScale.z
+      )
+    }
+  }
+}
+
+function burntPulseSystem(_dt: number) {
+  if (!burntPulseActive || !hornoOriginalScale) return
+  const transform = Transform.getMutableOrNull(getEntityByName(EntityNames.Station_Horno))
+  if (!transform) return
+  const t = Date.now() / 1000
+  const pulse = ((Math.sin(t * BURNT_PULSE_FREQ_RAD_S) + 1) / 2) * BURNT_PULSE_AMPLITUDE
+  transform.scale = Vector3.create(
+    hornoOriginalScale.x + pulse,
+    hornoOriginalScale.y + pulse,
+    hornoOriginalScale.z + pulse
+  )
+}
+
+engine.addSystem(burntPulseSystem)
+
 function setOvenAmbience(state: OvenState) {
+  // Burnt pulse on the station mesh — only while a burnt pizza is inside.
+  setHornoBurntPulse(state === 'burnt')
+
   // Light
   const light = getEntityByName(EntityNames.Horno_Light)
   const ls = LightSource.getMutableOrNull(light)
@@ -137,13 +191,31 @@ export function receivePizza(pizza: Entity) {
   refreshHandler(pizza)
 }
 
+// Wipe the station between rounds, including any in-flight insert tween
+// and the oven ambience.
+export function resetHornoStation(): void {
+  if (currentPizza !== null) {
+    discardPizzaWithAnimation(currentPizza)
+    currentPizza = null
+  }
+  pendingIncoming = false
+  insertingPizzas.clear()
+  setOvenAmbience('off')
+}
+
 // Discard the pizza currently in the oven (front or inside), if any.
 export function discardActivePizza(): boolean {
   if (!currentPizza) return false
+  const state = PizzaState.getOrNull(currentPizza)
+  const penalty = state ? penaltyForDiscard(state.step, state.toppings.length) : 0
+  if (penalty !== 0) {
+    addPoints(penalty)
+    showFloatingText(currentPizza, `${penalty}`, 1.2, 1.0, FEEDBACK_COLOR_PENALTY)
+  }
   discardPizzaWithAnimation(currentPizza)
   currentPizza = null
   setOvenAmbience('off')
-  console.log('[Horno] pizza discarded')
+  console.log(`[Horno] pizza discarded (${penalty})`)
   return true
 }
 

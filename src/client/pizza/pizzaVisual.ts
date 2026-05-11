@@ -210,3 +210,153 @@ function discardAnimationSystem(_dt: number) {
 }
 
 engine.addSystem(discardAnimationSystem)
+
+// ---------------------------------------------------------------------------
+// Serve animation
+// ---------------------------------------------------------------------------
+// Different feel from discard: the pizza shoots south (towards the front of
+// the pizzeria) with a parabolic arc, scaling down to nothing as it flies out
+// of the counter. Conceptually it's being delivered to a customer's table.
+
+const SERVE_DURATION_MS = 800
+const SERVE_DX = 0
+const SERVE_DZ = -10
+const SERVE_ARC_PEAK_M = 1.5
+
+type ServePending = {
+  pizza: Entity
+  startTime: number
+  originalScale: { x: number; y: number; z: number }
+  startPosition: { x: number; y: number; z: number }
+}
+
+const pendingServes: ServePending[] = []
+
+export function serveAnimationOnPizza(pizza: Entity): void {
+  const transform = Transform.getOrNull(pizza)
+  if (!transform) {
+    engine.removeEntityWithChildren(pizza)
+    return
+  }
+  Tween.deleteFrom(pizza)
+  pendingServes.push({
+    pizza,
+    startTime: Date.now(),
+    originalScale: {
+      x: transform.scale.x,
+      y: transform.scale.y,
+      z: transform.scale.z
+    },
+    startPosition: {
+      x: transform.position.x,
+      y: transform.position.y,
+      z: transform.position.z
+    }
+  })
+}
+
+function serveAnimationSystem(_dt: number) {
+  if (pendingServes.length === 0) return
+  const now = Date.now()
+  for (let i = pendingServes.length - 1; i >= 0; i--) {
+    const p = pendingServes[i]
+    const elapsed = now - p.startTime
+    if (elapsed >= SERVE_DURATION_MS) {
+      engine.removeEntityWithChildren(p.pizza)
+      pendingServes.splice(i, 1)
+      continue
+    }
+    const transform = Transform.getMutableOrNull(p.pizza)
+    if (!transform) {
+      pendingServes.splice(i, 1)
+      continue
+    }
+    const t = elapsed / SERVE_DURATION_MS
+    // Position: linear horizontal travel + sin-arc on Y.
+    transform.position = Vector3.create(
+      p.startPosition.x + SERVE_DX * t,
+      p.startPosition.y + Math.sin(t * Math.PI) * SERVE_ARC_PEAK_M,
+      p.startPosition.z + SERVE_DZ * t
+    )
+    // Scale: ease-in shrink to nothing.
+    const scaleFactor = 1 - t * t
+    transform.scale = Vector3.create(
+      p.originalScale.x * scaleFactor,
+      p.originalScale.y * scaleFactor,
+      p.originalScale.z * scaleFactor
+    )
+  }
+}
+
+engine.addSystem(serveAnimationSystem)
+
+// ---------------------------------------------------------------------------
+// Spawn animation
+// ---------------------------------------------------------------------------
+// Snaps the pizza from 0 to its real scale with an "ease-out-back" curve —
+// crosses the target, overshoots ~10%, then settles. Used right after
+// spawnPizza() so a new dough ball pops into existence rather than appearing
+// flat.
+
+const SPAWN_DURATION_MS = 400
+const EASE_OUT_BACK_C1 = 1.70158
+const EASE_OUT_BACK_C3 = EASE_OUT_BACK_C1 + 1
+
+type SpawnPending = {
+  pizza: Entity
+  startTime: number
+  targetScale: { x: number; y: number; z: number }
+}
+
+const pendingSpawns: SpawnPending[] = []
+
+export function playSpawnAnimation(pizza: Entity): void {
+  const transform = Transform.getMutableOrNull(pizza)
+  if (!transform) return
+
+  const targetScale = {
+    x: transform.scale.x,
+    y: transform.scale.y,
+    z: transform.scale.z
+  }
+  // Start from near-zero. The system below grows it back to targetScale with
+  // the elastic curve.
+  transform.scale = Vector3.create(0.001, 0.001, 0.001)
+
+  pendingSpawns.push({
+    pizza,
+    startTime: Date.now(),
+    targetScale
+  })
+}
+
+function spawnAnimationSystem(_dt: number) {
+  if (pendingSpawns.length === 0) return
+  const now = Date.now()
+  for (let i = pendingSpawns.length - 1; i >= 0; i--) {
+    const p = pendingSpawns[i]
+    const elapsed = now - p.startTime
+    const transform = Transform.getMutableOrNull(p.pizza)
+    if (!transform) {
+      pendingSpawns.splice(i, 1)
+      continue
+    }
+    if (elapsed >= SPAWN_DURATION_MS) {
+      // Pin to exact target so we don't leave the overshoot hanging.
+      transform.scale = Vector3.create(p.targetScale.x, p.targetScale.y, p.targetScale.z)
+      pendingSpawns.splice(i, 1)
+      continue
+    }
+    const t = elapsed / SPAWN_DURATION_MS
+    // ease-out-back: f(t) = 1 + c3·(t-1)^3 + c1·(t-1)^2
+    const tm1 = t - 1
+    const factor = 1 + EASE_OUT_BACK_C3 * tm1 * tm1 * tm1 + EASE_OUT_BACK_C1 * tm1 * tm1
+    transform.scale = Vector3.create(
+      p.targetScale.x * factor,
+      p.targetScale.y * factor,
+      p.targetScale.z * factor
+    )
+  }
+}
+
+engine.addSystem(spawnAnimationSystem)
