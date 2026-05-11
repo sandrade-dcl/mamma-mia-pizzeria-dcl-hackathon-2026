@@ -107,7 +107,7 @@ Z=1   ├──[Wall_Front_L]──┤  ├──[Wall_Front_R]──┤
 |---|---|---|---|
 | **1. Foundation** | Setup, composite, walls, stations placeholder, audio ambient, walkable scene | ~3.5h | ✅ Completed |
 | **2. Mechanics core (single-player)** | Station interactions, conveyor tweens, dough/toppings/oven flow, F-key discard | ~5h | ✅ Completed |
-| **3. Game loop complete** | Orders, tickets UI, scoring, timer, start/end states. **MVP single-player playable.** | ~3.5h | ⏳ Pending |
+| **3. Game loop complete** | Orders, tickets UI, scoring, timer, start/end states. **MVP single-player playable.** | ~3.5h | ✅ Completed |
 | **4. Auth Server + multiplayer** | `isServer()` branching, `registerMessages`, server-authoritative orders/scoring, `Storage` leaderboard | ~6h | ⏳ Pending |
 | **5. Polish** | Particles (flour, smoke), SFX, feedback on success/fail, bug fixing | ~2h | ⏳ Pending |
 
@@ -137,7 +137,42 @@ Total ≈ 20h.
 
 These are **invisible** entities (just `Transform` + `Name`, no MeshRenderer). They use local positions relative to their parent so a parent swap (cube → GLB) only needs the slot's local Y/Z fine-tuned.
 
-## 9. Current state — Hitos 1 & 2 completed
+## 9. Current state — Hitos 1, 2 & 3 completed
+
+### Hito 3 — full game loop (single-player MVP playable)
+
+Round state machine in `gameState.ts`:
+- **idle** — Start screen overlay with a centred "Mamma Mia's Pizzeria" panel and a Start Game button.
+- **playing** — 4-minute round; tickets generate, scoring is live, the top-right HUD shows Score / Best / Time / a Quit Round button.
+- **end** — End screen overlay with final score and Best, plus Play Again / Close buttons.
+
+Hitting Play Again or Start Game runs a full reset: every station is wiped (active pizzas discarded with their animation, oven light & smoke off, masa re-stocked with a fresh ball), score resets to 0, the order generator starts from scratch.
+
+Orders + tickets (`src/client/orders/`):
+- 4 recipes as **multisets** of toppings, so the player has to place the right COUNTS, not just the right kinds. Margherita = 1×Tomato + 2×Mozzarella; Diavola = 1+1+2 Salami; Funghi = 1+1+2 Mushroom; Quattro Stagioni = 1 of each.
+- Generator runs at a ramped cadence (22 s → 10 s over the 4-min round) into 3 fixed slots. Empty slots show a "Waiting for order…" placeholder so the HUD never reshuffles.
+- Tickets expire after 25 s; on expiry the card briefly turns red ("Time's up! −100") for 1.5 s before the slot frees up. Expired tickets cannot be served retroactively.
+- HUD detects when a pizza on the delivery counter matches an open ticket and flashes that ticket green with "✓ Ready to serve!".
+
+Scoring (`src/client/scoring.ts`):
+- +100 base + up to +50 speed bonus (scaled by remaining ticket time) for serving a correct pizza.
+- −100 expired ticket, −50 burnt pizza discarded, −25 other discards that had toppings, 0 for empty-dough discards.
+- Floating "+N" / "−N" labels appear above the pizza (green / red) for non-ticket events.
+
+UI (React-ECS at 1920×1080):
+- Top-centre row of 3 ticket cards (Active / Ready / Expired / Waiting).
+- Top-right info panel with Score, Best, Time, Quit Round.
+- Centred Start / End overlay panels.
+
+Polish from Hito 5 already in:
+- Dough ball pops in with an ease-out-back curve (sphere → flat yellow disc).
+- Discard animation = puff up + collapse + Y-sine jump (~400 ms).
+- Serve animation = south-bound parabolic arc + shrink (~800 ms) — pizza "flies to the customer".
+- Oven `Horno_Light` toggles warm orange (baking) → red (burnt) → off (empty).
+- `SmokeEmitter` `ParticleSystem` switches between off / light grey baking smoke / dense dark burnt smoke.
+- Station_Horno pulses (~3 Hz, ±0.005 scale) while a pizza inside is burnt.
+
+### Hitos 1 & 2 reference
 
 ### Hito 2 — single-player sandbox
 
