@@ -108,7 +108,7 @@ Z=1   ├──[Wall_Front_L]──┤  ├──[Wall_Front_R]──┤
 | **1. Foundation** | Setup, composite, walls, stations placeholder, audio ambient, walkable scene | ~3.5h | ✅ Completed |
 | **2. Mechanics core (single-player)** | Station interactions, conveyor tweens, dough/toppings/oven flow, F-key discard | ~5h | ✅ Completed |
 | **3. Game loop complete** | Orders, tickets UI, scoring, timer, start/end states. **MVP single-player playable.** | ~3.5h | ✅ Completed |
-| **4. Auth Server + multiplayer** | `isServer()` branching, `registerMessages`, server-authoritative orders/scoring, `Storage` leaderboard | ~6h | ⏳ Pending |
+| **4. Auth Server + multiplayer** | `isServer()` branching, `registerMessages`, server-authoritative orders/scoring, `Storage` leaderboard | ~6h | ✅ Completed |
 | **5. Polish** | Particles (flour, smoke), SFX, feedback on success/fail, bug fixing | ~2h | ⏳ Pending |
 
 Total ≈ 20h.
@@ -137,7 +137,95 @@ Total ≈ 20h.
 
 These are **invisible** entities (just `Transform` + `Name`, no MeshRenderer). They use local positions relative to their parent so a parent swap (cube → GLB) only needs the slot's local Y/Z fine-tuned.
 
-## 9. Current state — Hitos 1, 2 & 3 completed
+## 9. Current state — Hitos 1, 2, 3 & 4 completed
+
+### Hito 4 — authoritative server + multiplayer
+
+The whole round (timer, orders, scoring) moved to a headless server running
+the same codebase under `isServer()`. The client is a pure reader+sender:
+buttons emit messages, the HUD renders synced state.
+
+Architecture:
+- **`src/shared/syncedState.ts`** defines three synced ECS components:
+  - `RoundState` (singleton) — phase / roundEndsAt / score / bestScore.
+  - `OrderSlot` (one per ticket slot, 3 entities) — recipe + lifetime
+    timestamps + `expiredSince` for the red-flash window.
+  - `Leaderboard` (singleton) — top-N team scores.
+  Every component has a `validateBeforeChange` guard so the auth server is
+  the only legal writer.
+- **`src/shared/messages.ts`** registers the client→server commands
+  (`CmdStartRound`, `CmdQuitRound`, `CmdBackToIdle`, `CmdAttemptServe`,
+  `CmdReportScore`) and the server→client ACK (`EvtServeResult`).
+- **`src/server/server.ts`** owns the round state machine, the order
+  generator (ramp from 22s→10s), expiry+penalty, serve validation, the
+  +base+bonus credit, and the leaderboard sort+persist. Reads/writes
+  Top-N from `Storage` under key `leaderboard`.
+
+Client wiring:
+- `gameState.ts`, `scoring.ts`, `orderManager.ts` are now read-through
+  facades over the synced components — the public API (`getScore`,
+  `getOrderSlots`, `startRound`, …) is unchanged for `orderUi.tsx`.
+- `delivery.ts` sends `CmdAttemptServe` on click and runs the serve
+  animation only when the server replies `ok=true`; on rejection it shows
+  "No order matches" and leaves the pizza in place.
+- All non-serve scoring deltas (discard penalties from masa / toppings /
+  horno / delivery) flow through `addPoints(delta, reason)` →
+  `CmdReportScore`, which the server allow-lists against the legal
+  penalty values before applying.
+
+Server-owned kitchen (`src/server/kitchen.ts`):
+- The server is the single owner of every pizza entity. It allocates an
+  explicit `syncId` (starting at 200), creates Transform + PizzaState,
+  protects Transform writes per-entity with `validateBeforeChange`, and
+  drives the conveyor by setting `Tween` components — the tween-completion
+  callback fires the next segment via a Date.now() based queue.
+- `PizzaState` carries a `currentStation` enum (Masa, MasaToToppings,
+  Toppings, ToppingsToHorno, HornoFront, Horno, HornoToDelivery, Delivery)
+  + a `disposing` enum (None / Discard / Serve) so the client can pick
+  the right hover label / click action and ignore clicks on pizzas that
+  are mid-animation.
+- The bake timer runs on the server (Baking → Perfect → Burnt at the
+  same intervals as Hito 3). Masa respawns 1 s after a send.
+- Discard / serve flows flip `disposing` and call `discardPizzaWithAnimation`
+  / `serveAnimationOnPizza` from `pizzaVisual.ts`. Those animation systems
+  run on the server too (module-level `engine.addSystem`); they mutate
+  the synced Transform every frame and remove the entity at the end of
+  the clip. Clients see the animation through CRDT Transform updates.
+
+Client reconciler (`src/client/pizza/pizzaSync.ts`):
+- Watches every entity with `PizzaState` (server creates them, sync
+  delivers them) and on first sight attaches MeshRenderer + MeshCollider
+  + Material + PointerEvents locally.
+- Hover label and primary action are derived from `step + currentStation`;
+  the click handler emits the matching Cmd* (`CmdKnead`, `CmdSendToToppings`,
+  `CmdSendToHorno`, `CmdInsertHorno`, `CmdSendToDelivery`, `CmdAttemptServe`).
+  Secondary action (F) always sends `CmdDiscard` except on the masa
+  station.
+- `state.toppings` grows → spawn local topping cubes (Vogel sunflower).
+- Pizza entity removed by the server → drop the local children.
+
+Messages:
+- Client→server: `CmdStartRound`, `CmdQuitRound`, `CmdBackToIdle`,
+  `CmdKnead`, `CmdSendToToppings`, `CmdAddTopping`, `CmdSendToHorno`,
+  `CmdInsertHorno`, `CmdSendToDelivery`, `CmdDiscard`, `CmdAttemptServe`.
+- Server→client (per-player): `EvtServeResult` (`+N` or "No order matches")
+  and `EvtActionRejected` (e.g. "Oven busy!"). `CmdReportScore` is gone —
+  the server already knows step + toppings of every pizza, so it computes
+  discard penalties itself.
+
+Client stations are now ~10 lines each: `masa.ts` and the reset helpers
+are no-ops; `toppings.ts` only creates the ingredient boxes (clicks emit
+`CmdAddTopping`); `horno.ts` keeps the oven ambience watcher that flips
+light + smoke based on the observed inside pizza's step; `delivery.ts`
+exposes the `EvtServeResult` / `EvtActionRejected` listeners and the
+HUD's `getReadyPizzaToppings()` reading from synced `PizzaState`.
+
+Leaderboard:
+- Server reads Top-10 from `Storage.get('leaderboard')` on init and pushes
+  it into the synced `Leaderboard` component.
+- On every round end, the team score is inserted (sorted desc, capped at
+  10) and persisted back via `Storage.set` (fire-and-forget).
+- HUD renders Top-5 inside both Start and End overlays.
 
 ### Hito 3 — full game loop (single-player MVP playable)
 

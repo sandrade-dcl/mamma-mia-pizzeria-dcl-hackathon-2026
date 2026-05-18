@@ -1,96 +1,29 @@
 import { ReactEcsRenderer } from '@dcl/sdk/react-ecs'
-import { EntityNames } from '../../assets/scene/entity-names'
-import { sendPizzaAlongPath } from './conveyor'
-// Side-effect import: registers the game-state system at module load.
+// Side-effect imports: register the client-side systems on module load.
 import './gameState'
+import './pizza/pizzaSync'
+import './pizza/pizzaVisual'
 import { OrdersUi } from './orders/orderUi'
-import {
-  isOccupied as deliveryIsOccupied,
-  notifyIncoming as deliveryNotifyIncoming,
-  receivePizza as deliveryReceive
-} from './stations/delivery'
-import {
-  isOccupied as hornoIsOccupied,
-  notifyIncoming as hornoNotifyIncoming,
-  receivePizza as hornoReceive,
-  setupHornoStation
-} from './stations/horno'
+import { registerDeliveryServeListener } from './stations/delivery'
+import { setupHornoStation } from './stations/horno'
 import { setupMasaStation } from './stations/masa'
-import {
-  isOccupied as toppingsIsOccupied,
-  notifyIncoming as toppingsNotifyIncoming,
-  receivePizza as toppingsReceive,
-  setupToppingsStation
-} from './stations/toppings'
+import { setupToppingsStation } from './stations/toppings'
 
-// Client-side entry point. Wires up every station's interactivity and the
-// shared systems. Stations don't import each other — they receive their
-// "send to next" handlers here, which call the conveyor and then the
-// destination station's `receivePizza`.
+// Client bootstrap — Hito 4 Option A.
 //
-// Each handler returns `false` if the destination is already busy (a pizza
-// is on its slot or one is travelling there), so the upstream station can
-// keep its current pizza and let the player retry later.
+// Almost nothing happens on the client other than setting up the HUD, the
+// ingredient boxes, and the oven ambience watcher. The authoritative
+// kitchen lives on the server (`src/server/kitchen.ts`); the client's
+// reconciler (`pizza/pizzaSync.ts`) turns synced pizzas into rendered,
+// clickable entities that emit Cmd* messages.
 
 export function initClient() {
-  console.log('[CLIENT] Mamma Mia\'s Pizzeria — booting Hito 3 mechanics')
+  console.log('[CLIENT] Mamma Mia\'s Pizzeria — booting Hito 4 (server-owned kitchen)')
 
-  // The HUD owns the Start/End screens — order generation is gated by the
-  // "Start Game" button now.
   ReactEcsRenderer.setUiRenderer(OrdersUi, { virtualWidth: 1920, virtualHeight: 1080 })
+  registerDeliveryServeListener()
 
-  setupMasaStation({
-    onSendToToppings: (pizza) => {
-      if (toppingsIsOccupied()) return false
-      toppingsNotifyIncoming()
-      sendPizzaAlongPath(
-        pizza,
-        // Drop onto the belt, slide along its two waypoints, lift to the toppings slot.
-        [
-          EntityNames.Slot_Masa,
-          EntityNames.Slot_Masa_To_Toppings_Conveyor_1,
-          EntityNames.Slot_Masa_To_Toppings_Conveyor_2,
-          EntityNames.Slot_Toppings
-        ],
-        () => toppingsReceive(pizza)
-      )
-      return true
-    }
-  })
-
-  setupToppingsStation({
-    // Pizza rides the belt all the way to the oven's mouth (Conveyor_2) and
-    // waits there for the player to insert it. The oven owns the mouth → inside tween.
-    onSendToHorno: (pizza) => {
-      if (hornoIsOccupied()) return false
-      hornoNotifyIncoming()
-      sendPizzaAlongPath(
-        pizza,
-        [
-          EntityNames.Slot_Toppings,
-          EntityNames.Slot_Toppings_To_Horno_Conveyor_1,
-          EntityNames.Slot_Toppings_To_Horno_Conveyor_2
-        ],
-        () => hornoReceive(pizza)
-      )
-      return true
-    }
-  })
-
-  setupHornoStation({
-    onSendToDelivery: (pizza) => {
-      if (deliveryIsOccupied()) return false
-      deliveryNotifyIncoming()
-      sendPizzaAlongPath(
-        pizza,
-        [
-          EntityNames.Slot_Horno,
-          EntityNames.Slot_Horno_To_Delivery_Conveyor_1,
-          EntityNames.Slot_Delivery
-        ],
-        () => deliveryReceive(pizza)
-      )
-      return true
-    }
-  })
+  setupMasaStation()
+  setupToppingsStation()
+  setupHornoStation()
 }

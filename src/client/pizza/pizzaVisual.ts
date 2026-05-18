@@ -1,124 +1,26 @@
-import {
-  ColliderLayer,
-  Entity,
-  Material,
-  MeshCollider,
-  MeshRenderer,
-  Transform,
-  Tween,
-  engine
-} from '@dcl/sdk/ecs'
-import { Color4, Quaternion, Vector3 } from '@dcl/sdk/math'
-import { PizzaState, PizzaStep, Topping } from './pizzaTypes'
-
-const STEP_COLORS: Record<PizzaStep, Color4> = {
-  [PizzaStep.RawDough]: Color4.create(0.95, 0.92, 0.85, 1),
-  [PizzaStep.FlatDough]: Color4.create(1.0, 0.92, 0.65, 1),
-  [PizzaStep.Topped]: Color4.create(1.0, 0.80, 0.20, 1),
-  [PizzaStep.Baking]: Color4.create(1.0, 0.60, 0.15, 1),
-  [PizzaStep.Perfect]: Color4.create(0.85, 0.55, 0.10, 1),
-  [PizzaStep.Burnt]: Color4.create(0.15, 0.08, 0.05, 1)
-}
-
-const TOPPING_COLORS: Record<Topping, Color4> = {
-  [Topping.Tomato]: Color4.create(0.85, 0.15, 0.10, 1),
-  [Topping.Mozzarella]: Color4.create(0.95, 0.92, 0.85, 1),
-  [Topping.Salami]: Color4.create(0.55, 0.10, 0.10, 1),
-  [Topping.Mushroom]: Color4.create(0.65, 0.55, 0.45, 1)
-}
-
-export function spawnPizza(position: Vector3, step: PizzaStep): Entity {
-  const pizza = engine.addEntity()
-  Transform.create(pizza, {
-    position,
-    // Raw dough starts as a small ball; later steps are flat discs.
-    scale: step === PizzaStep.RawDough ? Vector3.create(0.7, 0.7, 0.7) : Vector3.create(1, 0.075, 1),
-    rotation: Quaternion.Identity()
-  })
-
-  if (step === PizzaStep.RawDough) {
-    MeshRenderer.setSphere(pizza)
-    MeshCollider.setSphere(pizza, ColliderLayer.CL_POINTER)
-  } else {
-    MeshRenderer.setCylinder(pizza, 0.5, 0.5)
-    MeshCollider.setCylinder(pizza, 0.5, 0.5, ColliderLayer.CL_POINTER)
-  }
-  Material.setPbrMaterial(pizza, { albedoColor: STEP_COLORS[step] })
-  PizzaState.create(pizza, { step, toppings: [], bakeStartTime: 0, doughClicks: 0 })
-  return pizza
-}
-
-export function updatePizzaStep(pizza: Entity, step: PizzaStep): void {
-  PizzaState.getMutable(pizza).step = step
-  Material.setPbrMaterial(pizza, { albedoColor: STEP_COLORS[step] })
-}
-
-// Visual progression for the dough as the player presses E.
-//   clicks=1 → ball squashes a bit
-//   clicks=2 → squashes more
-//   clicks=3 → snaps to flat cylinder + yellow color (FlatDough)
-export function applyDoughClickVisual(pizza: Entity, clicks: number): void {
-  const transform = Transform.getMutable(pizza)
-  if (clicks === 1) {
-    transform.scale = Vector3.create(0.85, 0.5, 0.85)
-  } else if (clicks === 2) {
-    transform.scale = Vector3.create(1.0, 0.3, 1.0)
-  } else if (clicks >= 3) {
-    transform.scale = Vector3.create(1, 0.075, 1)
-    MeshRenderer.setCylinder(pizza, 0.5, 0.5)
-    MeshCollider.setCylinder(pizza, 0.5, 0.5, ColliderLayer.CL_POINTER)
-    updatePizzaStep(pizza, PizzaStep.FlatDough)
-  }
-}
-
-export function spawnTopping(pizza: Entity, type: Topping, slotIndex: number): Entity {
-  const topping = engine.addEntity()
-  // Vogel sunflower distribution: radius grows with sqrt(n) and angle steps by
-  // the golden angle (137.5°). The first topping lands in the centre and each
-  // new one fills the most-empty spot, covering the whole disc uniformly.
-  // Pizza radius (local) is 0.5 and topping radius is 0.06, so 0.40 is the
-  // largest safe centre radius. Beyond that we cap at 0.40 — extra toppings
-  // pile up near the edge but never spill outside the pizza.
-  const angle = slotIndex * 2.39996
-  const radius = Math.min(Math.sqrt(slotIndex) * 0.1, 0.4)
-  const localX = Math.cos(angle) * radius
-  const localZ = Math.sin(angle) * radius
-
-  Transform.create(topping, {
-    // Pizza top face sits at local Y = 0.5. With local scale (0.12, 0.3, 0.12)
-    // the topping is half-height 0.15, so local Y = 0.65 puts its bottom flush
-    // on the pizza surface after the parent's scale is applied.
-    position: Vector3.create(localX, 0.65, localZ),
-    scale: Vector3.create(0.12, 0.3, 0.12),
-    rotation: Quaternion.Identity(),
-    parent: pizza
-  })
-
-  // All toppings are thin cylindrical slices; only the colour varies.
-  MeshRenderer.setCylinder(topping, 0.5, 0.5)
-  Material.setPbrMaterial(topping, { albedoColor: TOPPING_COLORS[type] })
-  return topping
-}
-
-export function despawnPizza(pizza: Entity): void {
-  // Children (toppings) are removed automatically when the parent is removed.
-  engine.removeEntityWithChildren(pizza)
-}
+import { Entity, Transform, Tween, engine } from '@dcl/sdk/ecs'
+import { Vector3 } from '@dcl/sdk/math'
+import { isServer } from '@dcl/sdk/network'
+import { DisposingState } from '../../shared/syncedState'
+import { hasPendingDisposingPrediction } from './pizzaSync'
+import { PizzaState } from './pizzaTypes'
 
 // ---------------------------------------------------------------------------
-// Discard animation
-// ---------------------------------------------------------------------------
-// Plays a quick "puff up then shrink to nothing" scale animation on the pizza
-// while it also pops up and falls back to its original Y. Both animations run
-// in parallel and finish at the same instant, after which the entity is
-// removed. The Tween component can only host one channel per entity, so the
-// scale and the jump are computed manually each frame in this system.
+// Pizza animations — Hito 4 Option A.
 //
-// The pizza is logically gone the moment this is called — game state stops
-// tracking it; only the visual lingers for ~400 ms while the animation plays.
+// Server-driven. The authoritative kitchen.ts calls these helpers; the
+// matching animation systems run on the server too (module-level
+// engine.addSystem) and mutate the synced Transform every frame, so
+// clients see the animation through CRDT Transform updates.
+//
+// Animation lifecycle owns the entity removal at the end of each clip,
+// keeping the despawn aligned with the visual.
+// ---------------------------------------------------------------------------
 
-const PUFF_UP_RATIO = 0.375 // 150 ms of the 400 ms total spent puffing up
-const TOTAL_MS = 400
+// Discard puff = scale grows then collapses to zero, with a sin-arc jump
+// in Y. ~400 ms total, ends with engine.removeEntityWithChildren.
+const PUFF_UP_RATIO = 0.375
+const DISCARD_TOTAL_MS = 400
 const PUFF_FACTOR = 1.4
 const JUMP_HEIGHT_M = 0.6
 
@@ -137,11 +39,9 @@ export function discardPizzaWithAnimation(pizza: Entity): void {
     engine.removeEntityWithChildren(pizza)
     return
   }
-
-  // Drop any in-flight tween (e.g. conveyor) so it doesn't fight our manual
+  // Drop any in-flight tween (conveyor) so it doesn't fight our manual
   // per-frame updates to position and scale.
   Tween.deleteFrom(pizza)
-
   pendingDiscards.push({
     pizza,
     startTime: Date.now(),
@@ -161,27 +61,41 @@ export function discardPizzaWithAnimation(pizza: Entity): void {
 function discardAnimationSystem(_dt: number) {
   if (pendingDiscards.length === 0) return
   const now = Date.now()
-
   for (let i = pendingDiscards.length - 1; i >= 0; i--) {
     const p = pendingDiscards[i]
+    // Abort only when the authoritative state says "no disposing" AND
+    // the optimistic prediction has been rolled back (or never existed).
+    // Otherwise we'd bail in the first frame after F was pressed,
+    // because the server hasn't acknowledged yet and state.disposing
+    // is still None even though pred.disposing is Discard.
+    if (!isServer()) {
+      const state = PizzaState.getOrNull(p.pizza)
+      if (
+        state &&
+        state.disposing === DisposingState.None &&
+        !hasPendingDisposingPrediction(state.syncId)
+      ) {
+        pendingDiscards.splice(i, 1)
+        continue
+      }
+    }
     const elapsed = now - p.startTime
-
-    if (elapsed >= TOTAL_MS) {
-      engine.removeEntityWithChildren(p.pizza)
+    if (elapsed >= DISCARD_TOTAL_MS) {
+      // Only the authoritative server removes the entity; the client
+      // would race with the server's removeEntity and re-instate via
+      // CRDT, causing a flicker.
+      if (isServer()) {
+        engine.removeEntityWithChildren(p.pizza)
+      }
       pendingDiscards.splice(i, 1)
       continue
     }
-
     const transform = Transform.getMutableOrNull(p.pizza)
     if (!transform) {
       pendingDiscards.splice(i, 1)
       continue
     }
-
-    const t = elapsed / TOTAL_MS
-
-    // Scale curve: puff up to PUFF_FACTOR (ease-out), then collapse to 0
-    // (ease-in). Ends exactly at t=1.
+    const t = elapsed / DISCARD_TOTAL_MS
     let scaleFactor: number
     if (t < PUFF_UP_RATIO) {
       const tNorm = t / PUFF_UP_RATIO
@@ -192,14 +106,11 @@ function discardAnimationSystem(_dt: number) {
       const eased = tNorm * tNorm
       scaleFactor = PUFF_FACTOR * (1 - eased)
     }
-
     transform.scale = Vector3.create(
       p.originalScale.x * scaleFactor,
       p.originalScale.y * scaleFactor,
       p.originalScale.z * scaleFactor
     )
-
-    // Jump: a half-sine peak that returns to the original Y at t=1.
     const jumpProgress = Math.sin(t * Math.PI)
     transform.position = Vector3.create(
       p.originalPosition.x,
@@ -211,13 +122,8 @@ function discardAnimationSystem(_dt: number) {
 
 engine.addSystem(discardAnimationSystem)
 
-// ---------------------------------------------------------------------------
-// Serve animation
-// ---------------------------------------------------------------------------
-// Different feel from discard: the pizza shoots south (towards the front of
-// the pizzeria) with a parabolic arc, scaling down to nothing as it flies out
-// of the counter. Conceptually it's being delivered to a customer's table.
-
+// Serve = parabolic arc southwards while shrinking; "flies to the
+// customer". 800 ms, removes entity at the end.
 const SERVE_DURATION_MS = 800
 const SERVE_DX = 0
 const SERVE_DZ = -10
@@ -260,9 +166,26 @@ function serveAnimationSystem(_dt: number) {
   const now = Date.now()
   for (let i = pendingServes.length - 1; i >= 0; i--) {
     const p = pendingServes[i]
+    // Cancel only after the optimistic prediction has been rolled back
+    // (EvtServeResult ok=false → rollbackPrediction). While the
+    // prediction is still standing, state.disposing will be None until
+    // the server acknowledges — we must not bail on it.
+    if (!isServer()) {
+      const state = PizzaState.getOrNull(p.pizza)
+      if (
+        state &&
+        state.disposing === DisposingState.None &&
+        !hasPendingDisposingPrediction(state.syncId)
+      ) {
+        pendingServes.splice(i, 1)
+        continue
+      }
+    }
     const elapsed = now - p.startTime
     if (elapsed >= SERVE_DURATION_MS) {
-      engine.removeEntityWithChildren(p.pizza)
+      if (isServer()) {
+        engine.removeEntityWithChildren(p.pizza)
+      }
       pendingServes.splice(i, 1)
       continue
     }
@@ -272,13 +195,11 @@ function serveAnimationSystem(_dt: number) {
       continue
     }
     const t = elapsed / SERVE_DURATION_MS
-    // Position: linear horizontal travel + sin-arc on Y.
     transform.position = Vector3.create(
       p.startPosition.x + SERVE_DX * t,
       p.startPosition.y + Math.sin(t * Math.PI) * SERVE_ARC_PEAK_M,
       p.startPosition.z + SERVE_DZ * t
     )
-    // Scale: ease-in shrink to nothing.
     const scaleFactor = 1 - t * t
     transform.scale = Vector3.create(
       p.originalScale.x * scaleFactor,
@@ -290,14 +211,9 @@ function serveAnimationSystem(_dt: number) {
 
 engine.addSystem(serveAnimationSystem)
 
-// ---------------------------------------------------------------------------
-// Spawn animation
-// ---------------------------------------------------------------------------
-// Snaps the pizza from 0 to its real scale with an "ease-out-back" curve —
-// crosses the target, overshoots ~10%, then settles. Used right after
-// spawnPizza() so a new dough ball pops into existence rather than appearing
-// flat.
-
+// Spawn pop = ease-out-back from ~zero to target. Called by the kitchen
+// right after creating a fresh masa pizza. Reads current scale as the
+// target and snaps to 0.001 so the system can grow it back.
 const SPAWN_DURATION_MS = 400
 const EASE_OUT_BACK_C1 = 1.70158
 const EASE_OUT_BACK_C3 = EASE_OUT_BACK_C1 + 1
@@ -313,21 +229,13 @@ const pendingSpawns: SpawnPending[] = []
 export function playSpawnAnimation(pizza: Entity): void {
   const transform = Transform.getMutableOrNull(pizza)
   if (!transform) return
-
   const targetScale = {
     x: transform.scale.x,
     y: transform.scale.y,
     z: transform.scale.z
   }
-  // Start from near-zero. The system below grows it back to targetScale with
-  // the elastic curve.
   transform.scale = Vector3.create(0.001, 0.001, 0.001)
-
-  pendingSpawns.push({
-    pizza,
-    startTime: Date.now(),
-    targetScale
-  })
+  pendingSpawns.push({ pizza, startTime: Date.now(), targetScale })
 }
 
 function spawnAnimationSystem(_dt: number) {
@@ -342,13 +250,11 @@ function spawnAnimationSystem(_dt: number) {
       continue
     }
     if (elapsed >= SPAWN_DURATION_MS) {
-      // Pin to exact target so we don't leave the overshoot hanging.
       transform.scale = Vector3.create(p.targetScale.x, p.targetScale.y, p.targetScale.z)
       pendingSpawns.splice(i, 1)
       continue
     }
     const t = elapsed / SPAWN_DURATION_MS
-    // ease-out-back: f(t) = 1 + c3·(t-1)^3 + c1·(t-1)^2
     const tm1 = t - 1
     const factor = 1 + EASE_OUT_BACK_C3 * tm1 * tm1 * tm1 + EASE_OUT_BACK_C1 * tm1 * tm1
     transform.scale = Vector3.create(

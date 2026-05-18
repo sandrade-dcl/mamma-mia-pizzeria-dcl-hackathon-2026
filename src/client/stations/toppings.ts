@@ -8,13 +8,15 @@ import {
   engine
 } from '@dcl/sdk/ecs'
 import { Color4, Quaternion, Vector3 } from '@dcl/sdk/math'
-import { EntityNames } from '../../../assets/scene/entity-names'
-import { FEEDBACK_COLOR_PENALTY, showFloatingText } from '../feedback'
+import { room } from '../../shared/messages'
 import { onInteract } from '../interaction'
-import { PizzaState, PizzaStep, Topping } from '../pizza/pizzaTypes'
-import { despawnPizza, discardPizzaWithAnimation, spawnTopping } from '../pizza/pizzaVisual'
-import { addPoints, penaltyForDiscard } from '../scoring'
-import { getSlotPosition } from '../slots'
+import { Topping } from '../pizza/pizzaTypes'
+import { predictAddTopping } from '../pizza/pizzaSync'
+
+// Hito 4 — Option A: only the ingredient boxes live on the client. Each
+// click sends CmdAddTopping to the server; the server picks "the pizza
+// currently at the toppings station" and appends to its toppings array,
+// which clients then observe via PizzaState sync.
 
 type IngredientDef = {
   type: Topping
@@ -34,107 +36,14 @@ const STATION_CENTER_X = 16
 const BOX_Y = 1.2
 const BOX_Z = 26.7
 
-type ToppingsHandlers = {
-  onSendToHorno: (pizza: Entity) => boolean
-}
-
-let currentPizza: Entity | null = null
-let pendingIncoming = false
-let handlers: ToppingsHandlers | null = null
-
-// True while a pizza is sitting on the table OR while one is travelling on
-// the belt towards us. Used by the upstream station to decide whether it can
-// send another pizza yet.
-export function isOccupied(): boolean {
-  return currentPizza !== null || pendingIncoming
-}
-
-// Reserve the slot so further sends are rejected until the conveyor delivers
-// the pizza (at which point `receivePizza` clears the flag).
-export function notifyIncoming() {
-  pendingIncoming = true
-}
-
-export function setupToppingsStation(h: ToppingsHandlers) {
-  handlers = h
-  // No pre-stock — the toppings station starts empty and waits for the first
-  // flat dough to arrive from masa. Only the ingredient boxes are visible up front.
+export function setupToppingsStation(): void {
   for (const ingredient of INGREDIENTS) {
     createIngredientBox(ingredient)
   }
 }
 
-// Called by the conveyor when a pizza arrives from masa. Replaces the current
-// (pre-stock or stale) pizza in this station's slot.
-export function receivePizza(pizza: Entity) {
-  if (currentPizza !== null) {
-    despawnPizza(currentPizza)
-  }
-  currentPizza = pizza
-  pendingIncoming = false
-  Transform.getMutable(pizza).position = getSlotPosition(EntityNames.Slot_Toppings)
-  refreshHandler(pizza)
-}
-
-// Wipe the station between rounds.
 export function resetToppingsStation(): void {
-  if (currentPizza !== null) {
-    discardPizzaWithAnimation(currentPizza)
-    currentPizza = null
-  }
-  pendingIncoming = false
-}
-
-// Discard the pizza currently sitting on the toppings table, if any.
-export function discardActivePizza(): boolean {
-  if (!currentPizza) return false
-  const state = PizzaState.getOrNull(currentPizza)
-  const penalty = state ? penaltyForDiscard(state.step, state.toppings.length) : 0
-  if (penalty !== 0) {
-    addPoints(penalty)
-    showFloatingText(currentPizza, `${penalty}`, 1.2, 1.0, FEEDBACK_COLOR_PENALTY)
-  }
-  discardPizzaWithAnimation(currentPizza)
-  currentPizza = null
-  console.log(`[Toppings] pizza discarded (${penalty})`)
-  return true
-}
-
-// Wires the pizza's click handlers based on its current step. Called when the
-// pizza arrives, and again when its step changes (FlatDough → Topped).
-function refreshHandler(pizza: Entity) {
-  const state = PizzaState.getOrNull(pizza)
-  if (!state) return
-
-  const discardSecondary = {
-    hoverText: 'Throw away',
-    callback: () => discardActivePizza()
-  }
-
-  if (state.step === PizzaStep.FlatDough) {
-    // No primary action — the pizza isn't sendable yet, only F to discard.
-    onInteract(pizza, { secondary: discardSecondary })
-  } else if (state.step === PizzaStep.Topped) {
-    onInteract(
-      pizza,
-      { hoverText: 'Send to Oven', maxDistance: 6, secondary: discardSecondary },
-      () => onSendClick(pizza)
-    )
-  }
-}
-
-function onSendClick(pizza: Entity) {
-  if (currentPizza !== pizza) return
-  const state = PizzaState.getOrNull(pizza)
-  if (!state || state.step !== PizzaStep.Topped) return
-
-  const sent = handlers?.onSendToHorno(pizza) ?? false
-  if (sent) {
-    currentPizza = null
-  } else {
-    showFloatingText(pizza, 'Oven busy!')
-    console.log('[Toppings] horno is busy — wait until it is free')
-  }
+  // Server-owned — nothing for the client to reset.
 }
 
 function createIngredientBox(ingredient: IngredientDef) {
@@ -147,28 +56,16 @@ function createIngredientBox(ingredient: IngredientDef) {
   MeshRenderer.setBox(box)
   MeshCollider.setBox(box, ColliderLayer.CL_POINTER)
   Material.setPbrMaterial(box, { albedoColor: ingredient.color })
-
-  onInteract(box, { hoverText: ingredient.label, maxDistance: 6 }, () =>
-    addToppingToActivePizza(ingredient.type)
+  onInteract(
+    box as Entity,
+    { hoverText: ingredient.label, maxDistance: 6 },
+    () => {
+      // Optimistic: append the topping locally so the cube pops onto the
+      // pizza at click-time, then let the server confirm. Server-side
+      // validation may still reject (e.g. wrong station/step); the
+      // EvtActionRejected listener in delivery.ts rolls back.
+      predictAddTopping(ingredient.type)
+      room.send('CmdAddTopping', { topping: ingredient.type as number })
+    }
   )
-}
-
-function addToppingToActivePizza(type: Topping) {
-  if (!currentPizza) return
-  const state = PizzaState.getMutableOrNull(currentPizza)
-  if (!state) return
-  if (state.step !== PizzaStep.FlatDough && state.step !== PizzaStep.Topped) return
-
-  const wasFlatDough = state.step === PizzaStep.FlatDough
-  const slotIndex = state.toppings.length
-  spawnTopping(currentPizza, type, slotIndex)
-  state.toppings = [...state.toppings, type as number]
-  state.step = PizzaStep.Topped
-
-  // Going from FlatDough → Topped enables the "Send to Oven" primary action.
-  if (wasFlatDough) {
-    refreshHandler(currentPizza)
-  }
-
-  console.log(`[Toppings] added ${Topping[type]} (${state.toppings.length} total)`)
 }

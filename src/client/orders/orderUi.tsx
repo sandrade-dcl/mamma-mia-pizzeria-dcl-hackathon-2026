@@ -4,6 +4,7 @@ import {
   backToIdle,
   endRound,
   getGameState,
+  getLeaderboardScores,
   getRoundRemainingMs,
   ROUND_DURATION_MS,
   startRound
@@ -260,20 +261,57 @@ function InfoPanel(showTimer: boolean) {
   )
 }
 
+// Inner panel used for the Start and End modals — rendered inside the
+// shared OrdersUi root which already provides the absolute-positioned,
+// flex-centered backdrop. We don't wrap it in its own absolute container
+// (the way an old CenterOverlay helper would) because React-ECS preserved
+// some layout state when OrdersUi's root changed between PlayingHud and
+// the overlay, so the End modal showed up at the top of the screen after
+// the first Quit. Keeping the OrdersUi root constant fixes that.
 function CenterOverlay(children: ReactEcs.JSX.Element) {
+  return children
+}
+
+// Compact Top-5 leaderboard rendered below the main panel content on the
+// Start / End overlays. Reads from the synced Leaderboard singleton via
+// getLeaderboardScores(); shows a muted "No scores yet" line if empty.
+function LeaderboardPanel() {
+  const scores = getLeaderboardScores().slice(0, 5)
   return (
     <UiEntity
       uiTransform={{
         width: '100%',
-        height: '100%',
-        positionType: 'absolute',
-        position: { top: 0, left: 0 },
-        justifyContent: 'center',
-        alignItems: 'center'
+        flexDirection: 'column',
+        alignItems: 'center',
+        margin: { top: 16 }
       }}
-      uiBackground={{ color: COLOR_OVERLAY_BG }}
     >
-      {children}
+      <Label
+        value="Top scores"
+        fontSize={18}
+        color={Color4.create(1, 0.85, 0.4, 1)}
+        textAlign="middle-center"
+        uiTransform={{ width: '100%', height: 28 }}
+      />
+      {scores.length === 0 ? (
+        <Label
+          value="No scores yet — be the first!"
+          fontSize={14}
+          color={COLOR_TEXT_MUTED}
+          textAlign="middle-center"
+          uiTransform={{ width: '100%', height: 22 }}
+        />
+      ) : (
+        scores.map((score, i) => (
+          <Label
+            value={`${i + 1}. ${score}`}
+            fontSize={16}
+            color={Color4.create(0.95, 0.92, 0.85, 1)}
+            textAlign="middle-center"
+            uiTransform={{ width: '100%', height: 22 }}
+          />
+        ))
+      )}
     </UiEntity>
   )
 }
@@ -398,9 +436,31 @@ function PlayingHud() {
 
 export function OrdersUi() {
   const state = getGameState()
-  if (state === 'idle') return StartScreen()
-  if (state === 'end') return EndScreen()
-  return PlayingHud()
+  // Single stable root for every game state. React-ECS preserved part of
+  // the previous render's layout when the root element changed between
+  // PlayingHud (relative, no flex centring) and CenterOverlay (absolute,
+  // flex centred) — so once the player had pressed Start and Quit once
+  // the End modal stuck to the top of the screen. With one constant
+  // root that's already absolute + flex-centred, the inner children can
+  // swap freely without re-triggering layout re-computation issues.
+  const showOverlayBackdrop = state === 'idle' || state === 'end'
+  return (
+    <UiEntity
+      uiTransform={{
+        width: '100%',
+        height: '100%',
+        positionType: 'absolute',
+        position: { top: 0, left: 0 },
+        justifyContent: 'center',
+        alignItems: 'center'
+      }}
+      uiBackground={showOverlayBackdrop ? { color: COLOR_OVERLAY_BG } : undefined}
+    >
+      {state === 'idle' ? StartScreen() : null}
+      {state === 'end' ? EndScreen() : null}
+      {state === 'playing' ? PlayingHud() : null}
+    </UiEntity>
+  )
 }
 
 // Eslint placeholder so ROUND_DURATION_MS stays imported (used implicitly by
