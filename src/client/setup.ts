@@ -3,6 +3,7 @@ import { ReactEcsRenderer } from '@dcl/sdk/react-ecs'
 import './gameState'
 import './pizza/pizzaSync'
 import './pizza/pizzaVisual'
+import { setupLeaderboardWall } from './leaderboardWall'
 import { OrdersUi } from './orders/orderUi'
 import { registerDeliveryServeListener } from './stations/delivery'
 import { setupHornoStation } from './stations/horno'
@@ -26,4 +27,5 @@ export function initClient() {
   setupMasaStation()
   setupToppingsStation()
   setupHornoStation()
+  setupLeaderboardWall()
 }

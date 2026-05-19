@@ -1,5 +1,6 @@
 import { Entity, PlayerIdentityData, engine, executeTask } from '@dcl/sdk/ecs'
 import { syncEntity } from '@dcl/sdk/network'
+import { getPlayer } from '@dcl/sdk/players'
 import { Storage } from '@dcl/sdk/server'
 import {
   EXPIRED_DISPLAY_MS,
@@ -49,6 +50,12 @@ const LEADERBOARD_STORAGE_KEY = 'leaderboard'
 let ROUND_SINGLETON: Entity = 0 as Entity
 let LEADERBOARD_SINGLETON: Entity = 0 as Entity
 const orderSlotEntities: Entity[] = []
+// Wallet address + cached avatar name of whoever last pressed "Start
+// Game" — used to attribute the next round-end's score to a player on
+// the leaderboard. We capture the name at round start so we don't lose
+// it if the player disconnects before the round ends.
+let roundStarter: string | null = null
+let roundStarterName: string | null = null
 
 let generationStartedAt = 0
 let lastGenerationAt = 0
@@ -82,15 +89,23 @@ export function initServer() {
   }
 
   LEADERBOARD_SINGLETON = engine.addEntity()
-  Leaderboard.create(LEADERBOARD_SINGLETON, { scores: [] })
+  Leaderboard.create(LEADERBOARD_SINGLETON, { entries: [] })
   syncEntity(LEADERBOARD_SINGLETON, [Leaderboard.componentId], SyncIds.Leaderboard)
   executeTask(async () => {
     try {
-      const saved = await Storage.get<{ scores: number[] }>(LEADERBOARD_STORAGE_KEY)
-      if (saved && Array.isArray(saved.scores)) {
+      const saved = await Storage.get<{ entries?: { name: string; score: number }[] }>(
+        LEADERBOARD_STORAGE_KEY
+      )
+      if (saved && Array.isArray(saved.entries) && saved.entries.length > 0) {
+        const entries = saved.entries.slice(0, LEADERBOARD_MAX)
         const lb = Leaderboard.getMutable(LEADERBOARD_SINGLETON)
-        lb.scores = saved.scores.slice(0, LEADERBOARD_MAX)
-        console.log(`[SERVER] leaderboard loaded (${lb.scores.length} entries)`)
+        lb.entries = entries
+        console.log(`[SERVER] leaderboard loaded (${entries.length} entries)`)
+      } else if (saved) {
+        // Any other shape (e.g. legacy `scores: number[]` from early Hito 4
+        // builds) is stale junk — overwrite once with a clean empty store.
+        await Storage.set(LEADERBOARD_STORAGE_KEY, { entries: [] })
+        console.log('[SERVER] leaderboard storage cleared (legacy/empty format)')
       }
     } catch (err) {
       console.log(`[SERVER] leaderboard load failed: ${String(err)}`)
@@ -100,7 +115,16 @@ export function initServer() {
   initKitchen()
 
   // Round state machine
-  room.onMessage('CmdStartRound', () => startRoundServerSide())
+  room.onMessage('CmdStartRound', (_data, ctx) => {
+    // Remember who started this round — the leaderboard entry on round
+    // end is attributed to them (best-score-per-player semantics).
+    if (ctx?.from) {
+      roundStarter = ctx.from
+      const player = getPlayer({ userId: ctx.from })
+      roundStarterName = player?.name && player.name.length > 0 ? player.name : null
+    }
+    startRoundServerSide()
+  })
   room.onMessage('CmdQuitRound', () => endRoundServerSide())
   room.onMessage('CmdBackToIdle', () => backToIdleServerSide())
 
@@ -164,14 +188,31 @@ function backToIdleServerSide() {
   onRoundEnd()
 }
 
+function shortenAddress(addr: string): string {
+  if (!addr) return 'Anonymous'
+  if (addr.length <= 10) return addr
+  return `${addr.slice(0, 6)}…${addr.slice(-4)}`
+}
+
 function recordLeaderboardScore(score: number) {
-  if (score <= 0) return
+  const name = roundStarterName ?? shortenAddress(roundStarter ?? 'Anonymous')
   const lb = Leaderboard.getMutable(LEADERBOARD_SINGLETON)
-  const updated = [...lb.scores, score].sort((a, b) => b - a).slice(0, LEADERBOARD_MAX)
-  lb.scores = updated
+  // Best-score-per-player semantics: keep at most one entry per name
+  // and replace it only if the new score is strictly higher.
+  const existing = lb.entries.find((e) => e.name === name)
+  if (existing && existing.score >= score) {
+    console.log(`[SERVER] leaderboard skip (${name} already at ${existing.score} >= ${score})`)
+    return
+  }
+  const filtered = lb.entries.filter((e) => e.name !== name)
+  const updated = [...filtered, { name, score }]
+    .sort((a, b) => b.score - a.score)
+    .slice(0, LEADERBOARD_MAX)
+  lb.entries = updated
+  console.log(`[SERVER] leaderboard updated (${name}: ${score})`)
   executeTask(async () => {
     try {
-      await Storage.set(LEADERBOARD_STORAGE_KEY, { scores: updated })
+      await Storage.set(LEADERBOARD_STORAGE_KEY, { entries: updated })
     } catch (err) {
       console.log(`[SERVER] leaderboard save failed: ${String(err)}`)
     }

@@ -4,7 +4,6 @@ import {
   backToIdle,
   endRound,
   getGameState,
-  getLeaderboardScores,
   getRoundRemainingMs,
   ROUND_DURATION_MS,
   startRound
@@ -272,49 +271,10 @@ function CenterOverlay(children: ReactEcs.JSX.Element) {
   return children
 }
 
-// Compact Top-5 leaderboard rendered below the main panel content on the
-// Start / End overlays. Reads from the synced Leaderboard singleton via
-// getLeaderboardScores(); shows a muted "No scores yet" line if empty.
-function LeaderboardPanel() {
-  const scores = getLeaderboardScores().slice(0, 5)
-  return (
-    <UiEntity
-      uiTransform={{
-        width: '100%',
-        flexDirection: 'column',
-        alignItems: 'center',
-        margin: { top: 16 }
-      }}
-    >
-      <Label
-        value="Top scores"
-        fontSize={18}
-        color={Color4.create(1, 0.85, 0.4, 1)}
-        textAlign="middle-center"
-        uiTransform={{ width: '100%', height: 28 }}
-      />
-      {scores.length === 0 ? (
-        <Label
-          value="No scores yet — be the first!"
-          fontSize={14}
-          color={COLOR_TEXT_MUTED}
-          textAlign="middle-center"
-          uiTransform={{ width: '100%', height: 22 }}
-        />
-      ) : (
-        scores.map((score, i) => (
-          <Label
-            value={`${i + 1}. ${score}`}
-            fontSize={16}
-            color={Color4.create(0.95, 0.92, 0.85, 1)}
-            textAlign="middle-center"
-            uiTransform={{ width: '100%', height: 22 }}
-          />
-        ))
-      )}
-    </UiEntity>
-  )
-}
+// (LeaderboardPanel removed — the Top-10 scoreboard now lives as a
+// 3D TextShape on the back wall of the pizzeria via `leaderboardWall.ts`,
+// so it's visible at all times rather than only on the Start / End
+// modals.)
 
 function StartScreen() {
   return CenterOverlay(

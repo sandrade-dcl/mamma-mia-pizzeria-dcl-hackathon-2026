@@ -53,9 +53,11 @@ export function getRoundRemainingMs(): number {
   return Math.max(0, Number(r.roundEndsAt) - Date.now())
 }
 
-export function getLeaderboardScores(): readonly number[] {
+export type LeaderboardEntry = { name: string; score: number }
+
+export function getLeaderboardEntries(): readonly LeaderboardEntry[] {
   for (const [entity] of engine.getEntitiesWith(Leaderboard)) {
-    return Leaderboard.getOrNull(entity)?.scores ?? []
+    return Leaderboard.getOrNull(entity)?.entries ?? []
   }
   return []
 }

@@ -824,6 +824,69 @@
             },
             "parent": 524
           }
+        },
+        "548": {
+          "json": {
+            "position": {
+              "x": 16,
+              "y": 3.200000047683716,
+              "z": 30.700000762939453
+            },
+            "scale": {
+              "x": 1,
+              "y": 1,
+              "z": 1
+            },
+            "rotation": {
+              "x": 0,
+              "y": 0,
+              "z": 0,
+              "w": 1
+            },
+            "parent": 0
+          }
+        },
+        "549": {
+          "json": {
+            "position": {
+              "x": 0,
+              "y": 0,
+              "z": 0.04
+            },
+            "scale": {
+              "x": 7,
+              "y": 2.6,
+              "z": 0.05
+            },
+            "rotation": {
+              "x": 0,
+              "y": 0,
+              "z": 0,
+              "w": 1
+            },
+            "parent": 548
+          }
+        },
+        "550": {
+          "json": {
+            "position": {
+              "x": 0,
+              "y": 0,
+              "z": 0
+            },
+            "scale": {
+              "x": 1,
+              "y": 1,
+              "z": 1
+            },
+            "rotation": {
+              "x": 0,
+              "y": 0,
+              "z": 0,
+              "w": 1
+            },
+            "parent": 548
+          }
         }
       }
     },
@@ -1517,6 +1580,23 @@
               }
             }
           }
+        },
+        "549": {
+          "json": {
+            "material": {
+              "$case": "pbr",
+              "pbr": {
+                "albedoColor": {
+                  "r": 0.12,
+                  "g": 0.07,
+                  "b": 0.04,
+                  "a": 1
+                },
+                "metallic": 0,
+                "roughness": 0.8
+              }
+            }
+          }
         }
       }
     },
@@ -1816,6 +1896,16 @@
               }
             }
           }
+        },
+        "549": {
+          "json": {
+            "mesh": {
+              "$case": "box",
+              "box": {
+                "uvs": []
+              }
+            }
+          }
         }
       }
     },
@@ -2006,6 +2096,51 @@
           "json": {
             "value": "Horno_Light"
           }
+        },
+        "548": {
+          "json": {
+            "value": "Anchor_Leaderboard"
+          }
+        },
+        "549": {
+          "json": {
+            "value": "Leaderboard_Backboard"
+          }
+        },
+        "550": {
+          "json": {
+            "value": "Leaderboard_Text"
+          }
+        }
+      }
+    },
+    {
+      "name": "core::TextShape",
+      "jsonSchema": {
+        "type": "object",
+        "properties": {},
+        "serializationType": "protocol-buffer",
+        "protocolBuffer": "PBTextShape"
+      },
+      "data": {
+        "550": {
+          "json": {
+            "text": "Top 10 Scoreboard\n\nNo scores yet — be the first!",
+            "fontSize": 1.6,
+            "textColor": {
+              "r": 0.95,
+              "g": 0.92,
+              "b": 0.85,
+              "a": 1
+            },
+            "outlineColor": {
+              "r": 0.05,
+              "g": 0.03,
+              "b": 0.02
+            },
+            "outlineWidth": 0.15,
+            "textAlign": 4
+          }
         }
       }
     },
@@ -2150,6 +2285,7 @@
                   531,
                   525,
                   534,
+                  548,
                   1,
                   2
                 ]
@@ -2320,6 +2456,21 @@
                 "children": []
               },
               {
+                "entity": 548,
+                "children": [
+                  549,
+                  550
+                ]
+              },
+              {
+                "entity": 549,
+                "children": []
+              },
+              {
+                "entity": 550,
+                "children": []
+              },
+              {
                 "entity": 521,
                 "children": []
               }
@@ -2448,6 +2599,15 @@
           "json": {}
         },
         "547": {
+          "json": {}
+        },
+        "548": {
+          "json": {}
+        },
+        "549": {
+          "json": {}
+        },
+        "550": {
           "json": {}
         }
       }

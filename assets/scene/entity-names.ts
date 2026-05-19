@@ -5,6 +5,7 @@
  * Object containing all entity names in the scene for autocomplete support.
  */
 export enum EntityNames {
+  Anchor_Leaderboard = "Anchor_Leaderboard",
   Anchor_Order_Board = "Anchor_Order_Board",
   Audio_Ambient = "Audio_Ambient",
   Collider = "Collider",
@@ -20,6 +21,8 @@ export enum EntityNames {
   Floor_SE = "Floor_SE",
   Floor_SW = "Floor_SW",
   Horno_Light = "Horno_Light",
+  Leaderboard_Backboard = "Leaderboard_Backboard",
+  Leaderboard_Text = "Leaderboard_Text",
   Slot_Delivery = "Slot_Delivery",
   Slot_Horno = "Slot_Horno",
   Slot_Horno_To_Delivery_Conveyor_1 = "Slot_Horno_To_Delivery_Conveyor_1",

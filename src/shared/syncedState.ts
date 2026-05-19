@@ -76,15 +76,15 @@ export const OrderSlot = engine.defineComponent('mamma::orderSlot', {
   expiredSince: Schemas.Int64
 })
 
-// Top-N team scores, sorted descending. Persisted to Storage.world by the
+// Top-N team scores, sorted descending. Persisted to Storage by the
 // server on every round end and broadcast to all clients via the usual
-// component sync so the Start / End screens can render it. `scores` is
-// fixed-length up to LEADERBOARD_MAX (default 10); blank entries are
-// represented as 0.
+// component sync. Each entry pairs a player display label (the
+// truncated wallet address of whoever started the round) with their
+// best score across rounds.
 export const LEADERBOARD_MAX = 10
 
 export const Leaderboard = engine.defineComponent('mamma::leaderboard', {
-  scores: Schemas.Array(Schemas.Int)
+  entries: Schemas.Array(Schemas.Map({ name: Schemas.String, score: Schemas.Int }))
 })
 
 // Server-only writes for both. Custom components use global validation, no
