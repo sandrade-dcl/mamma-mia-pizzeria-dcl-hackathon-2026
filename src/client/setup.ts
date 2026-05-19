@@ -3,6 +3,7 @@ import { ReactEcsRenderer } from '@dcl/sdk/react-ecs'
 import './gameState'
 import './pizza/pizzaSync'
 import './pizza/pizzaVisual'
+import { setupAvatarVisibility } from './avatarVisibility'
 import { setupLeaderboardWall } from './leaderboardWall'
 import { OrdersUi } from './orders/orderUi'
 import { setupSpectatorCamera } from './spectatorCamera'
@@ -30,4 +31,5 @@ export function initClient() {
   setupHornoStation()
   setupLeaderboardWall()
   setupSpectatorCamera()
+  setupAvatarVisibility()
 }
