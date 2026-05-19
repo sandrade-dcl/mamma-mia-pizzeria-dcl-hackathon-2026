@@ -19,7 +19,7 @@ import { setupToppingsStation } from './stations/toppings'
 // clickable entities that emit Cmd* messages.
 
 export function initClient() {
-  console.log('[CLIENT] Mamma Mia\'s Pizzeria — booting Hito 4 (server-owned kitchen)')
+  console.log('[CLIENT] Crazy Pizza! — booting Hito 4 (server-owned kitchen)')
 
   ReactEcsRenderer.setUiRenderer(OrdersUi, { virtualWidth: 1920, virtualHeight: 1080 })
   registerDeliveryServeListener()

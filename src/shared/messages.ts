@@ -2,7 +2,7 @@ import { Schemas } from '@dcl/sdk/ecs'
 import { registerMessages } from '@dcl/sdk/network'
 
 // ------------------------------------------------------------------------
-// Mamma Mia's network messages — typed schemas registered at module load.
+// Crazy Pizza! network messages — typed schemas registered at module load.
 //
 // Convention:
 //   • Cmd*  — client → server requests for an authoritative action

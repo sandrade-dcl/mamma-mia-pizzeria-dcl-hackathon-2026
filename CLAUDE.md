@@ -1,4 +1,4 @@
-# Mamma Mia's Pizzeria — Hackathon 2026
+# Crazy Pizza! — Hackathon 2026
 
 Italian cooperative pizza-making game built in Decentraland SDK7, themed for the company hackathon.
 

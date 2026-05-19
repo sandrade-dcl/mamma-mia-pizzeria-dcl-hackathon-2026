@@ -1,7 +1,7 @@
 {
   "name": "dcl-project",
   "version": "1.0.0",
-  "description": "Mamma Mia's Pizzeria - Hackathon 2026 SDK7 scene",
+  "description": "Crazy Pizza! - Hackathon 2026 SDK7 scene",
   "scripts": {
     "start": "sdk-commands start",
     "deploy": "sdk-commands deploy",

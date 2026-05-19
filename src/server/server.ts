@@ -62,7 +62,7 @@ let lastGenerationAt = 0
 let nextOrderId = 1
 
 export function initServer() {
-  console.log('[SERVER] Mamma Mia\'s Pizzeria — booting authoritative server (Hito 4)')
+  console.log('[SERVER] Crazy Pizza! — booting authoritative server (Hito 4)')
 
   ROUND_SINGLETON = engine.addEntity()
   RoundState.create(ROUND_SINGLETON, {

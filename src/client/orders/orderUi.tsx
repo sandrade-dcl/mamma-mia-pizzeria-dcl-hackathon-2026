@@ -290,7 +290,7 @@ function StartScreen() {
       uiBackground={{ color: COLOR_OVERLAY_PANEL }}
     >
       <Label
-        value="Mamma Mia's Pizzeria"
+        value="Crazy Pizza!"
         fontSize={42}
         color={COLOR_PANEL_LIGHT}
         textAlign="middle-center"

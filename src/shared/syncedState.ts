@@ -2,7 +2,7 @@ import { Schemas, engine } from '@dcl/sdk/ecs'
 import { AUTH_SERVER_PEER_ID } from '@dcl/sdk/network/message-bus-sync'
 
 // ------------------------------------------------------------------------
-// Mamma Mia's authoritative state — shared component definitions.
+// Crazy Pizza! authoritative state — shared component definitions.
 //
 // The server is the single writer for every component here. Clients read,
 // the HUD reflects, and any change comes from a message sent up to the

@@ -1,4 +1,4 @@
-# Mamma Mia's Pizzeria — Game Design Document
+# Crazy Pizza! — Game Design Document
 
 > Italian pizza-making cooperative game for the Decentraland Hackathon 2026.
 > Theme: **Italy** (cuisine angle). Style: **Cartoon**. Parcel: **2x2 (32×32m)**.
@@ -230,7 +230,7 @@ Leaderboard:
 ### Hito 3 — full game loop (single-player MVP playable)
 
 Round state machine in `gameState.ts`:
-- **idle** — Start screen overlay with a centred "Mamma Mia's Pizzeria" panel and a Start Game button.
+- **idle** — Start screen overlay with a centred "Crazy Pizza!" panel and a Start Game button.
 - **playing** — 4-minute round; tickets generate, scoring is live, the top-right HUD shows Score / Best / Time / a Quit Round button.
 - **end** — End screen overlay with final score and Best, plus Play Again / Close buttons.
 
