@@ -21,6 +21,11 @@ import { getReadyPizzaToppings } from '../stations/delivery'
 import { LOBBY_MAX_PLAYERS } from '../../shared/syncedState'
 import { getOrderSlots, toppingsMatch } from './orderManager'
 import { Order, TICKET_LIFETIME_MS } from './orderTypes'
+import {
+  enterSpectatorMode,
+  exitSpectatorMode,
+  isSpectatorCameraActive
+} from '../spectatorCamera'
 
 function shortenAddress(addr: string): string {
   if (!addr) return 'Anonymous'
@@ -498,12 +503,12 @@ function LobbyScreen() {
   )
 }
 
-function SpectatorOverlay(message: string, sub?: string) {
+function SpectatorOverlay(message: string, sub?: string, allowSpectatorCamera?: boolean) {
   return CenterOverlay(
     <UiEntity
       uiTransform={{
-        width: 520,
-        height: 240,
+        width: 560,
+        height: 320,
         flexDirection: 'column',
         justifyContent: 'center',
         alignItems: 'center',
@@ -527,6 +532,50 @@ function SpectatorOverlay(message: string, sub?: string) {
           uiTransform={{ width: '100%', height: 32, margin: { top: 8 } }}
         />
       ) : null}
+      {allowSpectatorCamera ? (
+        <Button
+          key="enter-spec"
+          value="SPECTATOR MODE"
+          variant="primary"
+          fontSize={22}
+          onMouseDown={() => enterSpectatorMode()}
+          uiTransform={{ width: 280, height: 56, margin: { top: 24 } }}
+        />
+      ) : null}
+    </UiEntity>
+  )
+}
+
+// Compact widget shown in the corner while the spectator camera is
+// active. Keeps the screen mostly clear (no backdrop) and offers the
+// exit button so the player can return to their avatar view anytime.
+function SpectatorWidget() {
+  return (
+    <UiEntity
+      uiTransform={{
+        positionType: 'absolute',
+        position: { top: 24, right: 24 },
+        width: 280,
+        height: 110,
+        flexDirection: 'column',
+        padding: 14
+      }}
+      uiBackground={{ color: Color4.create(0.12, 0.07, 0.05, 0.82) }}
+    >
+      <Label
+        value="Spectating"
+        fontSize={20}
+        color={COLOR_PANEL_LIGHT}
+        textAlign="middle-left"
+        uiTransform={{ width: '100%', height: 28 }}
+      />
+      <Button
+        value="EXIT SPECTATOR"
+        variant="secondary"
+        fontSize={16}
+        onMouseDown={() => exitSpectatorMode()}
+        uiTransform={{ width: '100%', height: 44, margin: { top: 10 } }}
+      />
     </UiEntity>
   )
 }
@@ -607,6 +656,9 @@ function PlayingHud() {
 export function OrdersUi() {
   const state = getGameState()
   const inLobby = isLocalInLobby()
+  const spectatorCamera = isSpectatorCameraActive()
+  const isSpectatorPlaying = state === 'playing' && !inLobby
+  const isSpectatorEnded = state === 'end' && !inLobby
   // Single stable root for every game state. React-ECS preserved part of
   // the previous render's layout when the root element changed between
   // PlayingHud (relative, no flex centring) and CenterOverlay (absolute,
@@ -614,10 +666,12 @@ export function OrdersUi() {
   // the End modal stuck to the top of the screen. With one constant
   // root that's already absolute + flex-centred, the inner children can
   // swap freely without re-triggering layout re-computation issues.
-  // Backdrop applies whenever we show a modal: idle (lobby), end, or a
-  // spectator-side panel while a round is in progress.
-  const showSpectatorPanel = (state === 'playing' || state === 'end') && !inLobby
-  const showOverlayBackdrop = state === 'idle' || state === 'end' || showSpectatorPanel
+  // Backdrop applies whenever we show a centred modal — but NOT while
+  // the spectator camera is active, since we want the player to see the
+  // scene from above with just a small EXIT widget on the corner.
+  const showCenteredSpectatorOverlay = (isSpectatorPlaying || isSpectatorEnded) && !spectatorCamera
+  const showOverlayBackdrop =
+    state === 'idle' || (state === 'end' && inLobby) || showCenteredSpectatorOverlay
   return (
     <UiEntity
       uiTransform={{
@@ -632,13 +686,14 @@ export function OrdersUi() {
     >
       {state === 'idle' ? LobbyScreen() : null}
       {state === 'playing' && inLobby ? PlayingHud() : null}
-      {state === 'playing' && !inLobby
-        ? SpectatorOverlay('Game in progress', 'Wait for the next round to join.')
+      {isSpectatorPlaying && !spectatorCamera
+        ? SpectatorOverlay('Game in progress', 'Wait for the next round to join.', true)
         : null}
       {state === 'end' && inLobby ? EndScreen() : null}
-      {state === 'end' && !inLobby
+      {isSpectatorEnded && !spectatorCamera
         ? SpectatorOverlay('Round finished', 'A new lobby will open shortly.')
         : null}
+      {spectatorCamera ? SpectatorWidget() : null}
     </UiEntity>
   )
 }

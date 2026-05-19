@@ -5,6 +5,7 @@ import './pizza/pizzaSync'
 import './pizza/pizzaVisual'
 import { setupLeaderboardWall } from './leaderboardWall'
 import { OrdersUi } from './orders/orderUi'
+import { setupSpectatorCamera } from './spectatorCamera'
 import { registerDeliveryServeListener } from './stations/delivery'
 import { setupHornoStation } from './stations/horno'
 import { setupMasaStation } from './stations/masa'
@@ -28,4 +29,5 @@ export function initClient() {
   setupToppingsStation()
   setupHornoStation()
   setupLeaderboardWall()
+  setupSpectatorCamera()
 }
