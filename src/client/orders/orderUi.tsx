@@ -1,18 +1,38 @@
 import ReactEcs, { Button, Label, UiEntity } from '@dcl/sdk/react-ecs'
 import { Color4 } from '@dcl/sdk/math'
+import { getPlayer } from '@dcl/sdk/players'
 import {
   backToIdle,
+  createGame,
   endRound,
   getGameState,
+  getLobby,
   getRoundRemainingMs,
+  isLocalHost,
+  isLocalInLobby,
+  joinLobby,
+  leaveLobby,
   ROUND_DURATION_MS,
   startRound
 } from '../gameState'
 import { Topping } from '../pizza/pizzaTypes'
 import { getBestScore, getScore, SCORE_EXPIRED_TICKET } from '../scoring'
 import { getReadyPizzaToppings } from '../stations/delivery'
+import { LOBBY_MAX_PLAYERS } from '../../shared/syncedState'
 import { getOrderSlots, toppingsMatch } from './orderManager'
 import { Order, TICKET_LIFETIME_MS } from './orderTypes'
+
+function shortenAddress(addr: string): string {
+  if (!addr) return 'Anonymous'
+  if (addr.length <= 10) return addr
+  return `${addr.slice(0, 6)}…${addr.slice(-4)}`
+}
+
+function displayNameFor(addr: string): string {
+  const player = getPlayer({ userId: addr })
+  if (player?.name && player.name.length > 0) return player.name
+  return shortenAddress(addr)
+}
 
 // HUD layout
 //   Top centre  – 3 order ticket cards (always-visible slots).
@@ -276,14 +296,42 @@ function CenterOverlay(children: ReactEcs.JSX.Element) {
 // so it's visible at all times rather than only on the Start / End
 // modals.)
 
-function StartScreen() {
+function PlayerListRow(addr: string, isHost: boolean) {
+  return (
+    <UiEntity
+      key={`lobbyrow-${addr}`}
+      uiTransform={{
+        width: '100%',
+        height: 30,
+        margin: { top: 4 }
+      }}
+    >
+      <Label
+        value={`• ${displayNameFor(addr)}${isHost ? '  (host)' : ''}`}
+        fontSize={18}
+        color={isHost ? Color4.create(1, 0.85, 0.4, 1) : COLOR_PANEL_LIGHT}
+        textAlign="middle-center"
+        uiTransform={{ width: '100%', height: 30 }}
+      />
+    </UiEntity>
+  )
+}
+
+function LobbyScreen() {
+  const lobby = getLobby()
+  const hasHost = lobby.host !== ''
+  const inLobby = isLocalInLobby()
+  const localIsHost = isLocalHost()
+  const playerCount = lobby.players.length
+  const lobbyFull = playerCount >= LOBBY_MAX_PLAYERS
+
   return CenterOverlay(
     <UiEntity
       uiTransform={{
-        width: 520,
-        height: 320,
+        width: 560,
+        height: 460,
         flexDirection: 'column',
-        justifyContent: 'center',
+        justifyContent: 'flex-start',
         alignItems: 'center',
         padding: 24
       }}
@@ -298,18 +346,187 @@ function StartScreen() {
       />
       <Label
         value="Serve as many pizzas as you can in 4 minutes."
-        fontSize={20}
+        fontSize={18}
         color={Color4.create(0.85, 0.78, 0.65, 1)}
         textAlign="middle-center"
-        uiTransform={{ width: '100%', height: 50, margin: { top: 8 } }}
+        uiTransform={{ width: '100%', height: 36, margin: { top: 4 } }}
       />
-      <Button
-        value="Start Game"
-        variant="primary"
-        fontSize={26}
-        onMouseDown={() => startRound()}
-        uiTransform={{ width: 220, height: 64, margin: { top: 24 } }}
+
+      {!hasHost ? (
+        <UiEntity
+          key="no-host"
+          uiTransform={{
+            width: '100%',
+            height: 220,
+            flexDirection: 'column',
+            justifyContent: 'center',
+            alignItems: 'center',
+            margin: { top: 16 }
+          }}
+        >
+          <Label
+            value="No game running yet."
+            fontSize={20}
+            color={COLOR_PANEL_LIGHT}
+            textAlign="middle-center"
+            uiTransform={{ width: '100%', height: 36 }}
+          />
+          <Label
+            value="Create a lobby and others can join in."
+            fontSize={16}
+            color={Color4.create(0.78, 0.72, 0.62, 1)}
+            textAlign="middle-center"
+            uiTransform={{ width: '100%', height: 30, margin: { top: 2 } }}
+          />
+          <Button
+            value="CREATE GAME"
+            variant="primary"
+            fontSize={24}
+            onMouseDown={() => createGame()}
+            uiTransform={{ width: 240, height: 60, margin: { top: 20 } }}
+          />
+        </UiEntity>
+      ) : (
+        <UiEntity
+          key="has-host"
+          uiTransform={{
+            width: '100%',
+            height: 320,
+            flexDirection: 'column',
+            justifyContent: 'flex-start',
+            alignItems: 'center',
+            margin: { top: 12 }
+          }}
+        >
+          <Label
+            value={`Players (${playerCount}/${LOBBY_MAX_PLAYERS})`}
+            fontSize={18}
+            color={Color4.create(0.85, 0.78, 0.65, 1)}
+            textAlign="middle-center"
+            uiTransform={{ width: '100%', height: 28 }}
+          />
+          {lobby.players.map((addr) => PlayerListRow(addr, addr === lobby.host))}
+
+          {localIsHost ? (
+            <UiEntity
+              key="host-actions"
+              uiTransform={{
+                width: '100%',
+                height: 120,
+                flexDirection: 'column',
+                alignItems: 'center',
+                margin: { top: 16 }
+              }}
+            >
+              <Button
+                key="start"
+                value="START GAME"
+                variant="primary"
+                fontSize={26}
+                onMouseDown={() => startRound()}
+                uiTransform={{ width: 240, height: 60 }}
+              />
+              <Button
+                key="cancel"
+                value="Cancel Lobby"
+                variant="secondary"
+                fontSize={16}
+                onMouseDown={() => leaveLobby()}
+                uiTransform={{ width: 240, height: 38, margin: { top: 8 } }}
+              />
+            </UiEntity>
+          ) : inLobby ? (
+            <UiEntity
+              key="member-actions"
+              uiTransform={{
+                width: '100%',
+                height: 120,
+                flexDirection: 'column',
+                alignItems: 'center',
+                margin: { top: 16 }
+              }}
+            >
+              <Label
+                value="Waiting for host to start the game..."
+                fontSize={16}
+                color={Color4.create(0.78, 0.72, 0.62, 1)}
+                textAlign="middle-center"
+                uiTransform={{ width: '100%', height: 28 }}
+              />
+              <Button
+                key="leave"
+                value="Leave Lobby"
+                variant="secondary"
+                fontSize={18}
+                onMouseDown={() => leaveLobby()}
+                uiTransform={{ width: 240, height: 50, margin: { top: 12 } }}
+              />
+            </UiEntity>
+          ) : (
+            <UiEntity
+              key="join-actions"
+              uiTransform={{
+                width: '100%',
+                height: 120,
+                flexDirection: 'column',
+                alignItems: 'center',
+                margin: { top: 16 }
+              }}
+            >
+              {lobbyFull ? (
+                <Label
+                  value="Lobby is full — wait for the next round."
+                  fontSize={18}
+                  color={Color4.create(0.95, 0.6, 0.5, 1)}
+                  textAlign="middle-center"
+                  uiTransform={{ width: '100%', height: 36 }}
+                />
+              ) : (
+                <Button
+                  value="JOIN GAME"
+                  variant="primary"
+                  fontSize={24}
+                  onMouseDown={() => joinLobby()}
+                  uiTransform={{ width: 240, height: 60 }}
+                />
+              )}
+            </UiEntity>
+          )}
+        </UiEntity>
+      )}
+    </UiEntity>
+  )
+}
+
+function SpectatorOverlay(message: string, sub?: string) {
+  return CenterOverlay(
+    <UiEntity
+      uiTransform={{
+        width: 520,
+        height: 240,
+        flexDirection: 'column',
+        justifyContent: 'center',
+        alignItems: 'center',
+        padding: 24
+      }}
+      uiBackground={{ color: COLOR_OVERLAY_PANEL }}
+    >
+      <Label
+        value={message}
+        fontSize={28}
+        color={COLOR_PANEL_LIGHT}
+        textAlign="middle-center"
+        uiTransform={{ width: '100%', height: 48 }}
       />
+      {sub ? (
+        <Label
+          value={sub}
+          fontSize={18}
+          color={Color4.create(0.85, 0.78, 0.65, 1)}
+          textAlign="middle-center"
+          uiTransform={{ width: '100%', height: 32, margin: { top: 8 } }}
+        />
+      ) : null}
     </UiEntity>
   )
 }
@@ -349,18 +566,11 @@ function EndScreen() {
         uiTransform={{ width: '100%', height: 36, margin: { top: 4 } }}
       />
       <Button
-        value="Play Again"
+        value="Back to Menu"
         variant="primary"
-        fontSize={24}
-        onMouseDown={() => startRound()}
-        uiTransform={{ width: 220, height: 56, margin: { top: 24 } }}
-      />
-      <Button
-        value="Close"
-        variant="secondary"
-        fontSize={18}
+        fontSize={22}
         onMouseDown={() => backToIdle()}
-        uiTransform={{ width: 220, height: 40, margin: { top: 10 } }}
+        uiTransform={{ width: 240, height: 56, margin: { top: 24 } }}
       />
     </UiEntity>
   )
@@ -396,6 +606,7 @@ function PlayingHud() {
 
 export function OrdersUi() {
   const state = getGameState()
+  const inLobby = isLocalInLobby()
   // Single stable root for every game state. React-ECS preserved part of
   // the previous render's layout when the root element changed between
   // PlayingHud (relative, no flex centring) and CenterOverlay (absolute,
@@ -403,7 +614,10 @@ export function OrdersUi() {
   // the End modal stuck to the top of the screen. With one constant
   // root that's already absolute + flex-centred, the inner children can
   // swap freely without re-triggering layout re-computation issues.
-  const showOverlayBackdrop = state === 'idle' || state === 'end'
+  // Backdrop applies whenever we show a modal: idle (lobby), end, or a
+  // spectator-side panel while a round is in progress.
+  const showSpectatorPanel = (state === 'playing' || state === 'end') && !inLobby
+  const showOverlayBackdrop = state === 'idle' || state === 'end' || showSpectatorPanel
   return (
     <UiEntity
       uiTransform={{
@@ -416,9 +630,15 @@ export function OrdersUi() {
       }}
       uiBackground={showOverlayBackdrop ? { color: COLOR_OVERLAY_BG } : undefined}
     >
-      {state === 'idle' ? StartScreen() : null}
-      {state === 'end' ? EndScreen() : null}
-      {state === 'playing' ? PlayingHud() : null}
+      {state === 'idle' ? LobbyScreen() : null}
+      {state === 'playing' && inLobby ? PlayingHud() : null}
+      {state === 'playing' && !inLobby
+        ? SpectatorOverlay('Game in progress', 'Wait for the next round to join.')
+        : null}
+      {state === 'end' && inLobby ? EndScreen() : null}
+      {state === 'end' && !inLobby
+        ? SpectatorOverlay('Round finished', 'A new lobby will open shortly.')
+        : null}
     </UiEntity>
   )
 }

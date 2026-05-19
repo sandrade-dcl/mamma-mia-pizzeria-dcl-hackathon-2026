@@ -87,6 +87,19 @@ export const Leaderboard = engine.defineComponent('mamma::leaderboard', {
   entries: Schemas.Array(Schemas.Map({ name: Schemas.String, score: Schemas.Int }))
 })
 
+// Pre-round lobby. While phase==Idle, anyone in the scene can become host
+// by pressing CREATE GAME (sets `host` and adds themselves to `players`).
+// Other players can JOIN until `players.length == LOBBY_MAX_PLAYERS`. Only
+// the host can press START GAME. Once the round goes Playing the lobby is
+// frozen — late joiners must wait for the next Idle. Phase BackToIdle
+// clears the lobby completely.
+export const LOBBY_MAX_PLAYERS = 3
+
+export const Lobby = engine.defineComponent('mamma::lobby', {
+  host: Schemas.String,
+  players: Schemas.Array(Schemas.String)
+})
+
 // Server-only writes for both. Custom components use global validation, no
 // per-entity registration needed.
 const serverOnly = (value: { senderAddress: string }): boolean =>
@@ -95,6 +108,7 @@ const serverOnly = (value: { senderAddress: string }): boolean =>
 RoundState.validateBeforeChange(serverOnly)
 OrderSlot.validateBeforeChange(serverOnly)
 Leaderboard.validateBeforeChange(serverOnly)
+Lobby.validateBeforeChange(serverOnly)
 
 // Stable numeric IDs for syncEntity so both sides agree on which entity is
 // which singleton. 100 is well above the user-entity base (512) in the
@@ -104,7 +118,8 @@ export enum SyncIds {
   OrderSlot0 = 101,
   OrderSlot1 = 102,
   OrderSlot2 = 103,
-  Leaderboard = 104
+  Leaderboard = 104,
+  Lobby = 105
 }
 
 export const ORDER_SLOT_SYNC_IDS: SyncIds[] = [

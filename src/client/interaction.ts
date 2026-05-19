@@ -6,6 +6,7 @@ import {
   engine,
   inputSystem
 } from '@dcl/sdk/ecs'
+import { isLocalInLobby, isPlaying } from './gameState'
 
 // Click handler that fires on the left mouse button (IA_POINTER) and,
 // optionally, on the F key (IA_SECONDARY) for a contextual second action like
@@ -13,6 +14,16 @@ import {
 // a single button per entity; using PointerEvents directly + an inputSystem
 // dispatcher lets us bind two distinct actions per entity with their own
 // hover text labels.
+
+type PointerEventDef = {
+  eventType: PointerEventType
+  eventInfo: {
+    button: InputAction
+    hoverText?: string
+    maxDistance?: number
+    showFeedback: boolean
+  }
+}
 
 type SecondaryAction = {
   hoverText?: string
@@ -27,26 +38,36 @@ type InteractionOptions = {
 
 type Entry = {
   entity: Entity
+  pointerEvents: PointerEventDef[]
   primaryCallback?: () => void
   secondaryCallback?: () => void
 }
 
 const entries: Entry[] = []
 
+// Cursor + hover feedback are only active for players who are part of the
+// current round (i.e. in the lobby AND the round is in Playing). Spectators
+// and everyone in Idle/End see the kitchen but cannot click on it.
+function localCanInteract(): boolean {
+  return isPlaying() && isLocalInLobby()
+}
+
+let lastCanInteract = false
+
+function applyPointerEvents(entry: Entry, enabled: boolean) {
+  if (enabled && entry.pointerEvents.length > 0) {
+    PointerEvents.createOrReplace(entry.entity, { pointerEvents: entry.pointerEvents })
+  } else {
+    PointerEvents.deleteFrom(entry.entity)
+  }
+}
+
 export function onInteract(
   entity: Entity,
   opts: InteractionOptions,
   primaryCallback?: () => void
 ) {
-  const pointerEvents: {
-    eventType: PointerEventType
-    eventInfo: {
-      button: InputAction
-      hoverText?: string
-      maxDistance?: number
-      showFeedback: boolean
-    }
-  }[] = []
+  const pointerEvents: PointerEventDef[] = []
 
   if (primaryCallback) {
     pointerEvents.push({
@@ -72,12 +93,6 @@ export function onInteract(
     })
   }
 
-  if (pointerEvents.length === 0) {
-    PointerEvents.deleteFrom(entity)
-  } else {
-    PointerEvents.createOrReplace(entity, { pointerEvents })
-  }
-
   // Replace any previous entry for this entity so re-attaching a handler
   // (e.g. after a pizza moves to a new station) doesn't fire stale logic.
   const existingIndex = entries.findIndex((e) => e.entity === entity)
@@ -85,16 +100,30 @@ export function onInteract(
     entries.splice(existingIndex, 1)
   }
   if (primaryCallback || opts.secondary) {
-    entries.push({
+    const entry: Entry = {
       entity,
+      pointerEvents,
       primaryCallback,
       secondaryCallback: opts.secondary?.callback
-    })
+    }
+    entries.push(entry)
+    applyPointerEvents(entry, lastCanInteract)
+  } else {
+    PointerEvents.deleteFrom(entity)
   }
 }
 
 function interactionSystem(_dt: number) {
-  if (entries.length === 0) return
+  // Re-evaluate gating once per frame; when the flag flips we add or
+  // remove the PointerEvents component from every registered entity so
+  // the cursor + hover label disappear for spectators in real time.
+  const canInteract = localCanInteract()
+  if (canInteract !== lastCanInteract) {
+    lastCanInteract = canInteract
+    for (const entry of entries) applyPointerEvents(entry, canInteract)
+  }
+
+  if (!canInteract || entries.length === 0) return
   // Snapshot the list before iterating: callbacks may re-attach a handler
   // (which splices the old entry out and pushes a new one), and we must NOT
   // let the iterator pick up the just-pushed entry on the same frame — that

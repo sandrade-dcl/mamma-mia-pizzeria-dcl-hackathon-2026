@@ -14,7 +14,9 @@ import { SCORE_EXPIRED_TICKET } from '../client/scoring'
 import { room } from '../shared/messages'
 import {
   LEADERBOARD_MAX,
+  LOBBY_MAX_PLAYERS,
   Leaderboard,
+  Lobby,
   ORDER_SLOT_SYNC_IDS,
   OrderSlot,
   RoundPhase,
@@ -49,13 +51,12 @@ const LEADERBOARD_STORAGE_KEY = 'leaderboard'
 
 let ROUND_SINGLETON: Entity = 0 as Entity
 let LEADERBOARD_SINGLETON: Entity = 0 as Entity
+let LOBBY_SINGLETON: Entity = 0 as Entity
 const orderSlotEntities: Entity[] = []
-// Wallet address + cached avatar name of whoever last pressed "Start
-// Game" — used to attribute the next round-end's score to a player on
-// the leaderboard. We capture the name at round start so we don't lose
-// it if the player disconnects before the round ends.
-let roundStarter: string | null = null
-let roundStarterName: string | null = null
+// Snapshot of the lobby at round-start: every member gets a leaderboard
+// entry under their avatar name when the round ends. Captured here so
+// that a player disconnecting mid-round still gets attribution.
+let roundParticipants: { address: string; name: string }[] = []
 
 let generationStartedAt = 0
 let lastGenerationAt = 0
@@ -91,6 +92,10 @@ export function initServer() {
   LEADERBOARD_SINGLETON = engine.addEntity()
   Leaderboard.create(LEADERBOARD_SINGLETON, { entries: [] })
   syncEntity(LEADERBOARD_SINGLETON, [Leaderboard.componentId], SyncIds.Leaderboard)
+
+  LOBBY_SINGLETON = engine.addEntity()
+  Lobby.create(LOBBY_SINGLETON, { host: '', players: [] })
+  syncEntity(LOBBY_SINGLETON, [Lobby.componentId], SyncIds.Lobby)
   executeTask(async () => {
     try {
       const saved = await Storage.get<{ entries?: { name: string; score: number }[] }>(
@@ -114,35 +119,83 @@ export function initServer() {
 
   initKitchen()
 
-  // Round state machine
+  // Lobby management — only meaningful during Idle.
+  room.onMessage('CmdCreateGame', (_data, ctx) => {
+    if (!ctx?.from) return
+    if (!isIdle()) return
+    const lobby = Lobby.getMutable(LOBBY_SINGLETON)
+    if (lobby.host !== '') return
+    lobby.host = ctx.from
+    lobby.players = [ctx.from]
+    console.log(`[SERVER] lobby created by ${shortenAddress(ctx.from)}`)
+  })
+  room.onMessage('CmdJoinLobby', (_data, ctx) => {
+    if (!ctx?.from) return
+    if (!isIdle()) return
+    const lobby = Lobby.getMutable(LOBBY_SINGLETON)
+    if (lobby.host === '') return
+    if (lobby.players.includes(ctx.from)) return
+    if (lobby.players.length >= LOBBY_MAX_PLAYERS) return
+    lobby.players = [...lobby.players, ctx.from]
+    console.log(`[SERVER] ${shortenAddress(ctx.from)} joined lobby (${lobby.players.length}/${LOBBY_MAX_PLAYERS})`)
+  })
+  room.onMessage('CmdLeaveLobby', (_data, ctx) => {
+    if (!ctx?.from) return
+    if (!isIdle()) return
+    removeFromLobby(ctx.from)
+  })
+
+  // Round state machine. Only the host may start; anyone in the lobby
+  // (or end-screen) may quit / dismiss back to Idle.
   room.onMessage('CmdStartRound', (_data, ctx) => {
-    // Remember who started this round — the leaderboard entry on round
-    // end is attributed to them (best-score-per-player semantics).
-    if (ctx?.from) {
-      roundStarter = ctx.from
-      const player = getPlayer({ userId: ctx.from })
-      roundStarterName = player?.name && player.name.length > 0 ? player.name : null
-    }
+    if (!ctx?.from) return
+    if (!isIdle()) return
+    const lobby = Lobby.getOrNull(LOBBY_SINGLETON)
+    if (!lobby || lobby.host !== ctx.from || lobby.players.length === 0) return
+    roundParticipants = lobby.players.map((addr) => {
+      const player = getPlayer({ userId: addr })
+      const name = player?.name && player.name.length > 0 ? player.name : shortenAddress(addr)
+      return { address: addr, name }
+    })
     startRoundServerSide()
   })
   room.onMessage('CmdQuitRound', () => endRoundServerSide())
   room.onMessage('CmdBackToIdle', () => backToIdleServerSide())
 
-  // Pizza interactions — delegate to the kitchen module
-  room.onMessage('CmdKnead', (data, ctx) => handleKnead(data.pizzaSyncId, ctx?.from))
-  room.onMessage('CmdSendToToppings', (data, ctx) =>
+  // Pizza interactions — delegate to the kitchen module, but only
+  // accept commands from players who are part of the current round.
+  room.onMessage('CmdKnead', (data, ctx) => {
+    if (!isRoundParticipant(ctx?.from)) return
+    handleKnead(data.pizzaSyncId, ctx?.from)
+  })
+  room.onMessage('CmdSendToToppings', (data, ctx) => {
+    if (!isRoundParticipant(ctx?.from)) return
     handleSendToToppings(data.pizzaSyncId, ctx?.from)
-  )
-  room.onMessage('CmdAddTopping', (data, ctx) => handleAddTopping(data.topping, ctx?.from))
-  room.onMessage('CmdSendToHorno', (data, ctx) => handleSendToHorno(data.pizzaSyncId, ctx?.from))
-  room.onMessage('CmdInsertHorno', (data, ctx) => handleInsertHorno(data.pizzaSyncId, ctx?.from))
-  room.onMessage('CmdSendToDelivery', (data, ctx) =>
+  })
+  room.onMessage('CmdAddTopping', (data, ctx) => {
+    if (!isRoundParticipant(ctx?.from)) return
+    handleAddTopping(data.topping, ctx?.from)
+  })
+  room.onMessage('CmdSendToHorno', (data, ctx) => {
+    if (!isRoundParticipant(ctx?.from)) return
+    handleSendToHorno(data.pizzaSyncId, ctx?.from)
+  })
+  room.onMessage('CmdInsertHorno', (data, ctx) => {
+    if (!isRoundParticipant(ctx?.from)) return
+    handleInsertHorno(data.pizzaSyncId, ctx?.from)
+  })
+  room.onMessage('CmdSendToDelivery', (data, ctx) => {
+    if (!isRoundParticipant(ctx?.from)) return
     handleSendToDelivery(data.pizzaSyncId, ctx?.from)
-  )
-  room.onMessage('CmdDiscard', (data, ctx) => handleDiscard(data.pizzaSyncId, ctx?.from))
-  room.onMessage('CmdAttemptServe', (data, ctx) =>
+  })
+  room.onMessage('CmdDiscard', (data, ctx) => {
+    if (!isRoundParticipant(ctx?.from)) return
+    handleDiscard(data.pizzaSyncId, ctx?.from)
+  })
+  room.onMessage('CmdAttemptServe', (data, ctx) => {
+    if (!isRoundParticipant(ctx?.from)) return
     handleAttemptServe(data.pizzaSyncId, ctx?.from)
-  )
+  })
 
   engine.addSystem(roundTimerSystem)
   engine.addSystem(orderGenerationSystem)
@@ -182,10 +235,42 @@ function endRoundServerSide() {
 
 function backToIdleServerSide() {
   const round = RoundState.getMutable(ROUND_SINGLETON)
+  clearLobby()
+  roundParticipants = []
   if (round.phase === RoundPhase.Idle) return
   round.phase = RoundPhase.Idle
   clearAllSlots()
   onRoundEnd()
+}
+
+function isIdle(): boolean {
+  const round = RoundState.getOrNull(ROUND_SINGLETON)
+  return !!round && round.phase === RoundPhase.Idle
+}
+
+function isRoundParticipant(addr: string | undefined): boolean {
+  if (!addr) return false
+  return roundParticipants.some((p) => p.address === addr)
+}
+
+function clearLobby() {
+  const lobby = Lobby.getMutable(LOBBY_SINGLETON)
+  if (lobby.host === '' && lobby.players.length === 0) return
+  lobby.host = ''
+  lobby.players = []
+}
+
+function removeFromLobby(addr: string) {
+  const lobby = Lobby.getMutable(LOBBY_SINGLETON)
+  if (lobby.host === addr) {
+    // Host leaving disbands the lobby entirely.
+    clearLobby()
+    console.log(`[SERVER] host ${shortenAddress(addr)} left — lobby disbanded`)
+    return
+  }
+  if (!lobby.players.includes(addr)) return
+  lobby.players = lobby.players.filter((p) => p !== addr)
+  console.log(`[SERVER] ${shortenAddress(addr)} left lobby (${lobby.players.length}/${LOBBY_MAX_PLAYERS})`)
 }
 
 function shortenAddress(addr: string): string {
@@ -195,21 +280,28 @@ function shortenAddress(addr: string): string {
 }
 
 function recordLeaderboardScore(score: number) {
-  const name = roundStarterName ?? shortenAddress(roundStarter ?? 'Anonymous')
+  if (roundParticipants.length === 0) return
   const lb = Leaderboard.getMutable(LEADERBOARD_SINGLETON)
-  // Best-score-per-player semantics: keep at most one entry per name
-  // and replace it only if the new score is strictly higher.
-  const existing = lb.entries.find((e) => e.name === name)
-  if (existing && existing.score >= score) {
-    console.log(`[SERVER] leaderboard skip (${name} already at ${existing.score} >= ${score})`)
-    return
+  // Best-score-per-player semantics applied to each participant of the
+  // round: keep at most one entry per display name, and only replace it
+  // when the new shared team score is strictly higher than what was
+  // already recorded for that player.
+  let updated = [...lb.entries]
+  let changed = false
+  for (const participant of roundParticipants) {
+    const name = participant.name
+    const existing = updated.find((e) => e.name === name)
+    if (existing && existing.score >= score) {
+      console.log(`[SERVER] leaderboard skip (${name} already at ${existing.score} >= ${score})`)
+      continue
+    }
+    updated = updated.filter((e) => e.name !== name).concat({ name, score })
+    changed = true
+    console.log(`[SERVER] leaderboard updated (${name}: ${score})`)
   }
-  const filtered = lb.entries.filter((e) => e.name !== name)
-  const updated = [...filtered, { name, score }]
-    .sort((a, b) => b.score - a.score)
-    .slice(0, LEADERBOARD_MAX)
+  if (!changed) return
+  updated = updated.sort((a, b) => b.score - a.score).slice(0, LEADERBOARD_MAX)
   lb.entries = updated
-  console.log(`[SERVER] leaderboard updated (${name}: ${score})`)
   executeTask(async () => {
     try {
       await Storage.set(LEADERBOARD_STORAGE_KEY, { entries: updated })
@@ -235,14 +327,31 @@ function roundTimerSystem(_dt: number) {
 let lastPlayerCount = 0
 
 function playerPresenceSystem(_dt: number) {
-  let count = 0
-  for (const [_entity] of engine.getEntitiesWith(PlayerIdentityData)) {
-    void _entity
-    count++
+  // Collect addresses of everyone currently connected, so we can both
+  // count them and detect anyone who used to be in the lobby but has
+  // since left the scene.
+  const connected = new Set<string>()
+  for (const [entity] of engine.getEntitiesWith(PlayerIdentityData)) {
+    const id = PlayerIdentityData.getOrNull(entity)
+    if (id?.address) connected.add(id.address)
   }
+  const count = connected.size
   if (count > 0 && lastPlayerCount === 0) {
     console.log('[SERVER] first player connected — resetting state to Idle')
     backToIdleServerSide()
+  }
+  // Auto-evict any lobby member who is no longer in the scene. If they
+  // were the host this disbands the lobby; otherwise they're just dropped.
+  if (isIdle()) {
+    const lobby = Lobby.getOrNull(LOBBY_SINGLETON)
+    if (lobby) {
+      const ghosts: string[] = []
+      if (lobby.host !== '' && !connected.has(lobby.host)) ghosts.push(lobby.host)
+      for (const p of lobby.players) {
+        if (!connected.has(p) && !ghosts.includes(p)) ghosts.push(p)
+      }
+      for (const addr of ghosts) removeFromLobby(addr)
+    }
   }
   lastPlayerCount = count
 }

@@ -16,8 +16,17 @@ import { registerMessages } from '@dcl/sdk/network'
 // ------------------------------------------------------------------------
 
 export const Messages = {
-  // Round state machine. Anyone in the scene can request — the server is
-  // idempotent (Idle ↔ Playing ↔ End transitions ignore no-op writes).
+  // Lobby — only meaningful while phase==Idle. Server filters out anything
+  // sent in Playing/End. CreateGame is the entry point: the first sender
+  // becomes the host. JoinLobby adds anyone else up to LOBBY_MAX_PLAYERS.
+  // LeaveLobby removes the sender; if the sender is the host, the lobby
+  // is disbanded entirely.
+  CmdCreateGame: Schemas.Map({}),
+  CmdJoinLobby: Schemas.Map({}),
+  CmdLeaveLobby: Schemas.Map({}),
+
+  // Round state machine. Only the host can StartRound (server enforces).
+  // QuitRound/BackToIdle remain open so anyone in the lobby can bail.
   CmdStartRound: Schemas.Map({}),
   CmdQuitRound: Schemas.Map({}),
   CmdBackToIdle: Schemas.Map({}),

@@ -1,8 +1,10 @@
 import { engine } from '@dcl/sdk/ecs'
 import { isServer } from '@dcl/sdk/network'
+import { getPlayer } from '@dcl/sdk/players'
 import { room } from '../shared/messages'
 import {
   Leaderboard,
+  Lobby,
   ORDER_SLOT_SYNC_IDS,
   OrderSlot,
   RoundPhase,
@@ -75,6 +77,58 @@ export function endRound(): void {
 export function backToIdle(): void {
   console.log('[CLIENT] CmdBackToIdle sent')
   room.send('CmdBackToIdle', {})
+}
+
+// ------------------------------------------------------------------------
+// Lobby — synced state + the four Cmd helpers
+// ------------------------------------------------------------------------
+
+export type LobbyView = {
+  host: string
+  players: readonly string[]
+}
+
+export function getLobby(): LobbyView {
+  for (const [entity] of engine.getEntitiesWith(Lobby)) {
+    const lb = Lobby.getOrNull(entity)
+    if (lb) return { host: lb.host, players: lb.players }
+  }
+  return { host: '', players: [] }
+}
+
+// Local-player address. getPlayer() with no args returns the local
+// avatar in the explorer; on cold load it can briefly be null until
+// the profile propagates, so we tolerate that.
+export function getLocalAddress(): string | null {
+  const player = getPlayer()
+  return player?.userId ?? null
+}
+
+export function isLocalHost(): boolean {
+  const me = getLocalAddress()
+  if (!me) return false
+  return getLobby().host === me
+}
+
+export function isLocalInLobby(): boolean {
+  const me = getLocalAddress()
+  if (!me) return false
+  return getLobby().players.includes(me)
+}
+
+export function createGame(): void {
+  console.log('[CLIENT] CmdCreateGame sent')
+  room.send('CmdCreateGame', {})
+}
+
+export function joinLobby(): void {
+  console.log('[CLIENT] CmdJoinLobby sent')
+  room.send('CmdJoinLobby', {})
+}
+
+export function leaveLobby(): void {
+  console.log('[CLIENT] CmdLeaveLobby sent')
+  room.send('CmdLeaveLobby', {})
 }
 
 // Watcher logs phase transitions so we can confirm sync round-trips during
