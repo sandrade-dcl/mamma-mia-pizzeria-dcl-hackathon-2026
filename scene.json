@@ -61,9 +61,7 @@
   },
   "creator": "0x1b8BA74cC34C2927aac0a8AF9C3B1BA2e61352F2",
   "rating": "T",
-  "skyboxConfig": {
-    "fixedTime": 43200
-  },
+  "skyboxConfig": {},
   "source": {
     "origin": "creator-hub",
     "projectId": "943a8d7f-9995-4c69-b81c-f668f9cdc0c8"
