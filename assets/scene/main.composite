@@ -90,6 +90,48 @@
         "serializationType": "transform"
       },
       "data": {
+        "512": {
+          "json": {
+            "position": {
+              "x": 0.44999998807907104,
+              "y": 1.5,
+              "z": 0.5
+            },
+            "scale": {
+              "x": 0.6000000238418579,
+              "y": 10,
+              "z": 0.6000000238418579
+            },
+            "rotation": {
+              "x": 0,
+              "y": 0,
+              "z": 0,
+              "w": 1
+            },
+            "parent": 535
+          }
+        },
+        "513": {
+          "json": {
+            "position": {
+              "x": 31.450000762939453,
+              "y": 1.5,
+              "z": 0.5
+            },
+            "scale": {
+              "x": 0.6000000238418579,
+              "y": 10,
+              "z": 0.6000000238418579
+            },
+            "rotation": {
+              "x": 0,
+              "y": 0,
+              "z": 0,
+              "w": 1
+            },
+            "parent": 535
+          }
+        },
         "514": {
           "json": {
             "position": {
@@ -971,6 +1013,69 @@
             },
             "parent": 535
           }
+        },
+        "556": {
+          "json": {
+            "position": {
+              "x": 0.4500005841255188,
+              "y": 1.5,
+              "z": 31.5
+            },
+            "scale": {
+              "x": 0.6000000238418579,
+              "y": 10,
+              "z": 0.6000000238418579
+            },
+            "rotation": {
+              "x": 0,
+              "y": 0,
+              "z": 0,
+              "w": 1
+            },
+            "parent": 535
+          }
+        },
+        "557": {
+          "json": {
+            "position": {
+              "x": 31.450000762939453,
+              "y": 1.5,
+              "z": 31.5
+            },
+            "scale": {
+              "x": 0.6000000238418579,
+              "y": 10,
+              "z": 0.6000000238418579
+            },
+            "rotation": {
+              "x": 0,
+              "y": 0,
+              "z": 0,
+              "w": 1
+            },
+            "parent": 535
+          }
+        },
+        "562": {
+          "json": {
+            "position": {
+              "x": -0.6000000238418579,
+              "y": 0.17000000178813934,
+              "z": 0
+            },
+            "rotation": {
+              "x": 0,
+              "y": 0.7071067690849304,
+              "z": 0,
+              "w": 0.7071067690849304
+            },
+            "scale": {
+              "x": 0.30000001192092896,
+              "y": 1,
+              "z": 1
+            },
+            "parent": 518
+          }
         }
       }
     },
@@ -1049,6 +1154,196 @@
         "protocolBuffer": "PBMaterial"
       },
       "data": {
+        "512": {
+          "json": {
+            "material": {
+              "$case": "pbr",
+              "pbr": {
+                "texture": {
+                  "tex": {
+                    "$case": "texture",
+                    "texture": {
+                      "src": "",
+                      "wrapMode": 0,
+                      "filterMode": 0,
+                      "offset": {
+                        "x": 0,
+                        "y": 0
+                      },
+                      "tiling": {
+                        "x": 1,
+                        "y": 1
+                      }
+                    }
+                  }
+                },
+                "alphaTest": 0.5,
+                "castShadows": true,
+                "alphaTexture": {
+                  "tex": {
+                    "$case": "texture",
+                    "texture": {
+                      "src": "",
+                      "wrapMode": 0,
+                      "filterMode": 0,
+                      "offset": {
+                        "x": 0,
+                        "y": 0
+                      },
+                      "tiling": {
+                        "x": 1,
+                        "y": 1
+                      }
+                    }
+                  }
+                },
+                "emissiveTexture": {
+                  "tex": {
+                    "$case": "texture",
+                    "texture": {
+                      "src": "",
+                      "wrapMode": 0,
+                      "filterMode": 0,
+                      "offset": {
+                        "x": 0,
+                        "y": 0
+                      },
+                      "tiling": {
+                        "x": 1,
+                        "y": 1
+                      }
+                    }
+                  }
+                },
+                "bumpTexture": {
+                  "tex": {
+                    "$case": "texture",
+                    "texture": {
+                      "src": "",
+                      "wrapMode": 0,
+                      "filterMode": 0,
+                      "offset": {
+                        "x": 0,
+                        "y": 0
+                      },
+                      "tiling": {
+                        "x": 1,
+                        "y": 1
+                      }
+                    }
+                  }
+                },
+                "albedoColor": {
+                  "r": 1,
+                  "g": 1,
+                  "b": 1,
+                  "a": 1
+                },
+                "transparencyMode": 4,
+                "metallic": 0,
+                "roughness": 0.8500000238418579,
+                "specularIntensity": 1,
+                "emissiveIntensity": 0,
+                "directIntensity": 1
+              }
+            }
+          }
+        },
+        "513": {
+          "json": {
+            "material": {
+              "$case": "pbr",
+              "pbr": {
+                "texture": {
+                  "tex": {
+                    "$case": "texture",
+                    "texture": {
+                      "src": "",
+                      "wrapMode": 0,
+                      "filterMode": 0,
+                      "offset": {
+                        "x": 0,
+                        "y": 0
+                      },
+                      "tiling": {
+                        "x": 1,
+                        "y": 1
+                      }
+                    }
+                  }
+                },
+                "alphaTest": 0.5,
+                "castShadows": true,
+                "alphaTexture": {
+                  "tex": {
+                    "$case": "texture",
+                    "texture": {
+                      "src": "",
+                      "wrapMode": 0,
+                      "filterMode": 0,
+                      "offset": {
+                        "x": 0,
+                        "y": 0
+                      },
+                      "tiling": {
+                        "x": 1,
+                        "y": 1
+                      }
+                    }
+                  }
+                },
+                "emissiveTexture": {
+                  "tex": {
+                    "$case": "texture",
+                    "texture": {
+                      "src": "",
+                      "wrapMode": 0,
+                      "filterMode": 0,
+                      "offset": {
+                        "x": 0,
+                        "y": 0
+                      },
+                      "tiling": {
+                        "x": 1,
+                        "y": 1
+                      }
+                    }
+                  }
+                },
+                "bumpTexture": {
+                  "tex": {
+                    "$case": "texture",
+                    "texture": {
+                      "src": "",
+                      "wrapMode": 0,
+                      "filterMode": 0,
+                      "offset": {
+                        "x": 0,
+                        "y": 0
+                      },
+                      "tiling": {
+                        "x": 1,
+                        "y": 1
+                      }
+                    }
+                  }
+                },
+                "albedoColor": {
+                  "r": 1,
+                  "g": 1,
+                  "b": 1,
+                  "a": 1
+                },
+                "transparencyMode": 4,
+                "metallic": 0,
+                "roughness": 0.8500000238418579,
+                "specularIntensity": 1,
+                "emissiveIntensity": 0,
+                "directIntensity": 1
+              }
+            }
+          }
+        },
         "514": {
           "json": {
             "material": {
@@ -1244,14 +1539,92 @@
             "material": {
               "$case": "pbr",
               "pbr": {
+                "texture": {
+                  "tex": {
+                    "$case": "texture",
+                    "texture": {
+                      "src": "",
+                      "wrapMode": 0,
+                      "filterMode": 0,
+                      "offset": {
+                        "x": 0,
+                        "y": 0
+                      },
+                      "tiling": {
+                        "x": 1,
+                        "y": 1
+                      }
+                    }
+                  }
+                },
+                "alphaTest": 0.5,
+                "castShadows": true,
+                "alphaTexture": {
+                  "tex": {
+                    "$case": "texture",
+                    "texture": {
+                      "src": "",
+                      "wrapMode": 0,
+                      "filterMode": 0,
+                      "offset": {
+                        "x": 0,
+                        "y": 0
+                      },
+                      "tiling": {
+                        "x": 1,
+                        "y": 1
+                      }
+                    }
+                  }
+                },
+                "emissiveTexture": {
+                  "tex": {
+                    "$case": "texture",
+                    "texture": {
+                      "src": "",
+                      "wrapMode": 0,
+                      "filterMode": 0,
+                      "offset": {
+                        "x": 0,
+                        "y": 0
+                      },
+                      "tiling": {
+                        "x": 1,
+                        "y": 1
+                      }
+                    }
+                  }
+                },
+                "bumpTexture": {
+                  "tex": {
+                    "$case": "texture",
+                    "texture": {
+                      "src": "",
+                      "wrapMode": 0,
+                      "filterMode": 0,
+                      "offset": {
+                        "x": 0,
+                        "y": 0
+                      },
+                      "tiling": {
+                        "x": 1,
+                        "y": 1
+                      }
+                    }
+                  }
+                },
                 "albedoColor": {
-                  "r": 0.85,
-                  "g": 0.18,
-                  "b": 0.18,
+                  "r": 0.6745098233222961,
+                  "g": 0.0470588244497776,
+                  "b": 0.0470588244497776,
                   "a": 1
                 },
+                "transparencyMode": 4,
                 "metallic": 0,
-                "roughness": 0.85
+                "roughness": 0.8500000238418579,
+                "specularIntensity": 1,
+                "emissiveIntensity": 0,
+                "directIntensity": 1
               }
             }
           }
@@ -1261,14 +1634,92 @@
             "material": {
               "$case": "pbr",
               "pbr": {
+                "texture": {
+                  "tex": {
+                    "$case": "texture",
+                    "texture": {
+                      "src": "",
+                      "wrapMode": 0,
+                      "filterMode": 0,
+                      "offset": {
+                        "x": 0,
+                        "y": 0
+                      },
+                      "tiling": {
+                        "x": 1,
+                        "y": 1
+                      }
+                    }
+                  }
+                },
+                "alphaTest": 0.5,
+                "castShadows": true,
+                "alphaTexture": {
+                  "tex": {
+                    "$case": "texture",
+                    "texture": {
+                      "src": "",
+                      "wrapMode": 0,
+                      "filterMode": 0,
+                      "offset": {
+                        "x": 0,
+                        "y": 0
+                      },
+                      "tiling": {
+                        "x": 1,
+                        "y": 1
+                      }
+                    }
+                  }
+                },
+                "emissiveTexture": {
+                  "tex": {
+                    "$case": "texture",
+                    "texture": {
+                      "src": "",
+                      "wrapMode": 0,
+                      "filterMode": 0,
+                      "offset": {
+                        "x": 0,
+                        "y": 0
+                      },
+                      "tiling": {
+                        "x": 1,
+                        "y": 1
+                      }
+                    }
+                  }
+                },
+                "bumpTexture": {
+                  "tex": {
+                    "$case": "texture",
+                    "texture": {
+                      "src": "",
+                      "wrapMode": 0,
+                      "filterMode": 0,
+                      "offset": {
+                        "x": 0,
+                        "y": 0
+                      },
+                      "tiling": {
+                        "x": 1,
+                        "y": 1
+                      }
+                    }
+                  }
+                },
                 "albedoColor": {
-                  "r": 0.85,
-                  "g": 0.18,
-                  "b": 0.18,
+                  "r": 0.6745098233222961,
+                  "g": 0.0470588244497776,
+                  "b": 0.0470588244497776,
                   "a": 1
                 },
+                "transparencyMode": 4,
                 "metallic": 0,
-                "roughness": 0.85
+                "roughness": 0.8500000238418579,
+                "specularIntensity": 1,
+                "emissiveIntensity": 0,
+                "directIntensity": 1
               }
             }
           }
@@ -1278,14 +1729,92 @@
             "material": {
               "$case": "pbr",
               "pbr": {
+                "texture": {
+                  "tex": {
+                    "$case": "texture",
+                    "texture": {
+                      "src": "",
+                      "wrapMode": 0,
+                      "filterMode": 0,
+                      "offset": {
+                        "x": 0,
+                        "y": 0
+                      },
+                      "tiling": {
+                        "x": 1,
+                        "y": 1
+                      }
+                    }
+                  }
+                },
+                "alphaTest": 0.5,
+                "castShadows": true,
+                "alphaTexture": {
+                  "tex": {
+                    "$case": "texture",
+                    "texture": {
+                      "src": "",
+                      "wrapMode": 0,
+                      "filterMode": 0,
+                      "offset": {
+                        "x": 0,
+                        "y": 0
+                      },
+                      "tiling": {
+                        "x": 1,
+                        "y": 1
+                      }
+                    }
+                  }
+                },
+                "emissiveTexture": {
+                  "tex": {
+                    "$case": "texture",
+                    "texture": {
+                      "src": "",
+                      "wrapMode": 0,
+                      "filterMode": 0,
+                      "offset": {
+                        "x": 0,
+                        "y": 0
+                      },
+                      "tiling": {
+                        "x": 1,
+                        "y": 1
+                      }
+                    }
+                  }
+                },
+                "bumpTexture": {
+                  "tex": {
+                    "$case": "texture",
+                    "texture": {
+                      "src": "",
+                      "wrapMode": 0,
+                      "filterMode": 0,
+                      "offset": {
+                        "x": 0,
+                        "y": 0
+                      },
+                      "tiling": {
+                        "x": 1,
+                        "y": 1
+                      }
+                    }
+                  }
+                },
                 "albedoColor": {
-                  "r": 0.85,
-                  "g": 0.18,
-                  "b": 0.18,
+                  "r": 0.6745098233222961,
+                  "g": 0.0470588244497776,
+                  "b": 0.0470588244497776,
                   "a": 1
                 },
+                "transparencyMode": 4,
                 "metallic": 0,
-                "roughness": 0.85
+                "roughness": 0.8500000238418579,
+                "specularIntensity": 1,
+                "emissiveIntensity": 0,
+                "directIntensity": 1
               }
             }
           }
@@ -1441,14 +1970,92 @@
             "material": {
               "$case": "pbr",
               "pbr": {
+                "texture": {
+                  "tex": {
+                    "$case": "texture",
+                    "texture": {
+                      "src": "",
+                      "wrapMode": 0,
+                      "filterMode": 0,
+                      "offset": {
+                        "x": 0,
+                        "y": 0
+                      },
+                      "tiling": {
+                        "x": 1,
+                        "y": 1
+                      }
+                    }
+                  }
+                },
+                "alphaTest": 0.5,
+                "castShadows": true,
+                "alphaTexture": {
+                  "tex": {
+                    "$case": "texture",
+                    "texture": {
+                      "src": "",
+                      "wrapMode": 0,
+                      "filterMode": 0,
+                      "offset": {
+                        "x": 0,
+                        "y": 0
+                      },
+                      "tiling": {
+                        "x": 1,
+                        "y": 1
+                      }
+                    }
+                  }
+                },
+                "emissiveTexture": {
+                  "tex": {
+                    "$case": "texture",
+                    "texture": {
+                      "src": "",
+                      "wrapMode": 0,
+                      "filterMode": 0,
+                      "offset": {
+                        "x": 0,
+                        "y": 0
+                      },
+                      "tiling": {
+                        "x": 1,
+                        "y": 1
+                      }
+                    }
+                  }
+                },
+                "bumpTexture": {
+                  "tex": {
+                    "$case": "texture",
+                    "texture": {
+                      "src": "",
+                      "wrapMode": 0,
+                      "filterMode": 0,
+                      "offset": {
+                        "x": 0,
+                        "y": 0
+                      },
+                      "tiling": {
+                        "x": 1,
+                        "y": 1
+                      }
+                    }
+                  }
+                },
                 "albedoColor": {
-                  "r": 0.85,
-                  "g": 0.18,
-                  "b": 0.18,
+                  "r": 0.6745098233222961,
+                  "g": 0.0470588244497776,
+                  "b": 0.0470588244497776,
                   "a": 1
                 },
+                "transparencyMode": 4,
                 "metallic": 0,
-                "roughness": 0.85
+                "roughness": 0.8500000238418579,
+                "specularIntensity": 1,
+                "emissiveIntensity": 0,
+                "directIntensity": 1
               }
             }
           }
@@ -1458,14 +2065,92 @@
             "material": {
               "$case": "pbr",
               "pbr": {
+                "texture": {
+                  "tex": {
+                    "$case": "texture",
+                    "texture": {
+                      "src": "",
+                      "wrapMode": 0,
+                      "filterMode": 0,
+                      "offset": {
+                        "x": 0,
+                        "y": 0
+                      },
+                      "tiling": {
+                        "x": 1,
+                        "y": 1
+                      }
+                    }
+                  }
+                },
+                "alphaTest": 0.5,
+                "castShadows": true,
+                "alphaTexture": {
+                  "tex": {
+                    "$case": "texture",
+                    "texture": {
+                      "src": "",
+                      "wrapMode": 0,
+                      "filterMode": 0,
+                      "offset": {
+                        "x": 0,
+                        "y": 0
+                      },
+                      "tiling": {
+                        "x": 1,
+                        "y": 1
+                      }
+                    }
+                  }
+                },
+                "emissiveTexture": {
+                  "tex": {
+                    "$case": "texture",
+                    "texture": {
+                      "src": "",
+                      "wrapMode": 0,
+                      "filterMode": 0,
+                      "offset": {
+                        "x": 0,
+                        "y": 0
+                      },
+                      "tiling": {
+                        "x": 1,
+                        "y": 1
+                      }
+                    }
+                  }
+                },
+                "bumpTexture": {
+                  "tex": {
+                    "$case": "texture",
+                    "texture": {
+                      "src": "",
+                      "wrapMode": 0,
+                      "filterMode": 0,
+                      "offset": {
+                        "x": 0,
+                        "y": 0
+                      },
+                      "tiling": {
+                        "x": 1,
+                        "y": 1
+                      }
+                    }
+                  }
+                },
                 "albedoColor": {
-                  "r": 0.85,
-                  "g": 0.18,
-                  "b": 0.18,
+                  "r": 0.6745098233222961,
+                  "g": 0.0470588244497776,
+                  "b": 0.0470588244497776,
                   "a": 1
                 },
+                "transparencyMode": 4,
                 "metallic": 0,
-                "roughness": 0.85
+                "roughness": 0.8500000238418579,
+                "specularIntensity": 1,
+                "emissiveIntensity": 0,
+                "directIntensity": 1
               }
             }
           }
@@ -2061,6 +2746,196 @@
               }
             }
           }
+        },
+        "556": {
+          "json": {
+            "material": {
+              "$case": "pbr",
+              "pbr": {
+                "texture": {
+                  "tex": {
+                    "$case": "texture",
+                    "texture": {
+                      "src": "",
+                      "wrapMode": 0,
+                      "filterMode": 0,
+                      "offset": {
+                        "x": 0,
+                        "y": 0
+                      },
+                      "tiling": {
+                        "x": 1,
+                        "y": 1
+                      }
+                    }
+                  }
+                },
+                "alphaTest": 0.5,
+                "castShadows": true,
+                "alphaTexture": {
+                  "tex": {
+                    "$case": "texture",
+                    "texture": {
+                      "src": "",
+                      "wrapMode": 0,
+                      "filterMode": 0,
+                      "offset": {
+                        "x": 0,
+                        "y": 0
+                      },
+                      "tiling": {
+                        "x": 1,
+                        "y": 1
+                      }
+                    }
+                  }
+                },
+                "emissiveTexture": {
+                  "tex": {
+                    "$case": "texture",
+                    "texture": {
+                      "src": "",
+                      "wrapMode": 0,
+                      "filterMode": 0,
+                      "offset": {
+                        "x": 0,
+                        "y": 0
+                      },
+                      "tiling": {
+                        "x": 1,
+                        "y": 1
+                      }
+                    }
+                  }
+                },
+                "bumpTexture": {
+                  "tex": {
+                    "$case": "texture",
+                    "texture": {
+                      "src": "",
+                      "wrapMode": 0,
+                      "filterMode": 0,
+                      "offset": {
+                        "x": 0,
+                        "y": 0
+                      },
+                      "tiling": {
+                        "x": 1,
+                        "y": 1
+                      }
+                    }
+                  }
+                },
+                "albedoColor": {
+                  "r": 1,
+                  "g": 1,
+                  "b": 1,
+                  "a": 1
+                },
+                "transparencyMode": 4,
+                "metallic": 0,
+                "roughness": 0.8500000238418579,
+                "specularIntensity": 1,
+                "emissiveIntensity": 0,
+                "directIntensity": 1
+              }
+            }
+          }
+        },
+        "557": {
+          "json": {
+            "material": {
+              "$case": "pbr",
+              "pbr": {
+                "texture": {
+                  "tex": {
+                    "$case": "texture",
+                    "texture": {
+                      "src": "",
+                      "wrapMode": 0,
+                      "filterMode": 0,
+                      "offset": {
+                        "x": 0,
+                        "y": 0
+                      },
+                      "tiling": {
+                        "x": 1,
+                        "y": 1
+                      }
+                    }
+                  }
+                },
+                "alphaTest": 0.5,
+                "castShadows": true,
+                "alphaTexture": {
+                  "tex": {
+                    "$case": "texture",
+                    "texture": {
+                      "src": "",
+                      "wrapMode": 0,
+                      "filterMode": 0,
+                      "offset": {
+                        "x": 0,
+                        "y": 0
+                      },
+                      "tiling": {
+                        "x": 1,
+                        "y": 1
+                      }
+                    }
+                  }
+                },
+                "emissiveTexture": {
+                  "tex": {
+                    "$case": "texture",
+                    "texture": {
+                      "src": "",
+                      "wrapMode": 0,
+                      "filterMode": 0,
+                      "offset": {
+                        "x": 0,
+                        "y": 0
+                      },
+                      "tiling": {
+                        "x": 1,
+                        "y": 1
+                      }
+                    }
+                  }
+                },
+                "bumpTexture": {
+                  "tex": {
+                    "$case": "texture",
+                    "texture": {
+                      "src": "",
+                      "wrapMode": 0,
+                      "filterMode": 0,
+                      "offset": {
+                        "x": 0,
+                        "y": 0
+                      },
+                      "tiling": {
+                        "x": 1,
+                        "y": 1
+                      }
+                    }
+                  }
+                },
+                "albedoColor": {
+                  "r": 1,
+                  "g": 1,
+                  "b": 1,
+                  "a": 1
+                },
+                "transparencyMode": 4,
+                "metallic": 0,
+                "roughness": 0.8500000238418579,
+                "specularIntensity": 1,
+                "emissiveIntensity": 0,
+                "directIntensity": 1
+              }
+            }
+          }
         }
       }
     },
@@ -2073,6 +2948,24 @@
         "protocolBuffer": "PBMeshCollider"
       },
       "data": {
+        "512": {
+          "json": {
+            "collisionMask": 3,
+            "mesh": {
+              "$case": "box",
+              "box": {}
+            }
+          }
+        },
+        "513": {
+          "json": {
+            "collisionMask": 3,
+            "mesh": {
+              "$case": "box",
+              "box": {}
+            }
+          }
+        },
         "516": {
           "json": {
             "collisionMask": 3,
@@ -2219,6 +3112,24 @@
               "box": {}
             }
           }
+        },
+        "556": {
+          "json": {
+            "collisionMask": 3,
+            "mesh": {
+              "$case": "box",
+              "box": {}
+            }
+          }
+        },
+        "557": {
+          "json": {
+            "collisionMask": 3,
+            "mesh": {
+              "$case": "box",
+              "box": {}
+            }
+          }
         }
       }
     },
@@ -2231,6 +3142,26 @@
         "protocolBuffer": "PBMeshRenderer"
       },
       "data": {
+        "512": {
+          "json": {
+            "mesh": {
+              "$case": "box",
+              "box": {
+                "uvs": []
+              }
+            }
+          }
+        },
+        "513": {
+          "json": {
+            "mesh": {
+              "$case": "box",
+              "box": {
+                "uvs": []
+              }
+            }
+          }
+        },
         "514": {
           "json": {
             "mesh": {
@@ -2410,6 +3341,26 @@
               }
             }
           }
+        },
+        "556": {
+          "json": {
+            "mesh": {
+              "$case": "box",
+              "box": {
+                "uvs": []
+              }
+            }
+          }
+        },
+        "557": {
+          "json": {
+            "mesh": {
+              "$case": "box",
+              "box": {
+                "uvs": []
+              }
+            }
+          }
         }
       }
     },
@@ -2426,6 +3377,16 @@
         "serializationType": "map"
       },
       "data": {
+        "512": {
+          "json": {
+            "value": "Corner01"
+          }
+        },
+        "513": {
+          "json": {
+            "value": "Corner01_2"
+          }
+        },
         "514": {
           "json": {
             "value": "Picture01"
@@ -2635,6 +3596,21 @@
           "json": {
             "value": "Picture04"
           }
+        },
+        "556": {
+          "json": {
+            "value": "Corner01_3"
+          }
+        },
+        "557": {
+          "json": {
+            "value": "Corner01_4"
+          }
+        },
+        "562": {
+          "json": {
+            "value": "Text"
+          }
         }
       }
     },
@@ -2664,6 +3640,32 @@
             },
             "outlineWidth": 0.15,
             "textAlign": 4
+          }
+        },
+        "562": {
+          "json": {
+            "text": "Crazy Pizza!",
+            "font": 1,
+            "fontSize": 3,
+            "fontAutoSize": false,
+            "textAlign": 4,
+            "paddingTop": 0,
+            "paddingRight": 0,
+            "paddingBottom": 0,
+            "paddingLeft": 0,
+            "lineSpacing": 0,
+            "outlineWidth": 0.10000000149011612,
+            "outlineColor": {
+              "r": 0,
+              "g": 0,
+              "b": 0
+            },
+            "textColor": {
+              "r": 1,
+              "g": 1,
+              "b": 1,
+              "a": 1
+            }
           }
         }
       }
@@ -2738,9 +3740,9 @@
         "serializationType": "map"
       },
       "data": {
-        "555": {
+        "519": {
           "json": {
-            "gizmo": 0
+            "gizmo": 1
           }
         }
       }
@@ -2824,7 +3826,10 @@
               },
               {
                 "entity": 518,
-                "children": []
+                "open": true,
+                "children": [
+                  562
+                ]
               },
               {
                 "entity": 519,
@@ -2941,6 +3946,10 @@
                   518,
                   526,
                   527,
+                  512,
+                  513,
+                  556,
+                  557,
                   514,
                   515,
                   532,
@@ -3019,6 +4028,26 @@
               {
                 "entity": 555,
                 "children": []
+              },
+              {
+                "entity": 512,
+                "children": []
+              },
+              {
+                "entity": 513,
+                "children": []
+              },
+              {
+                "entity": 556,
+                "children": []
+              },
+              {
+                "entity": 557,
+                "children": []
+              },
+              {
+                "entity": 562,
+                "children": []
               }
             ]
           }
@@ -3042,6 +4071,12 @@
         "serializationType": "map"
       },
       "data": {
+        "512": {
+          "json": {}
+        },
+        "513": {
+          "json": {}
+        },
         "514": {
           "json": {}
         },
@@ -3151,6 +4186,15 @@
           "json": {}
         },
         "555": {
+          "json": {}
+        },
+        "556": {
+          "json": {}
+        },
+        "557": {
+          "json": {}
+        },
+        "562": {
           "json": {}
         }
       }
@@ -3575,6 +4619,10 @@
             "email": "sandrade@decentraland.org",
             "tags": [],
             "layout": {
+              "base": {
+                "x": 0,
+                "y": 0
+              },
               "parcels": [
                 {
                   "x": 0,
@@ -3592,14 +4640,8 @@
                   "x": 1,
                   "y": 1
                 }
-              ],
-              "base": {
-                "x": 0,
-                "y": 0
-              }
+              ]
             },
-            "silenceVoiceChat": false,
-            "disablePortableExperiences": false,
             "spawnPoints": [
               {
                 "name": "SpawnArea1",
@@ -3634,9 +4676,10 @@
                 }
               }
             ],
-            "skyboxConfig": {},
-            "creator": "0x1b8BA74cC34C2927aac0a8AF9C3B1BA2e61352F2",
-            "disableNearbyVoiceChat": false
+            "skyboxConfig": {
+              "fixedTime": 50400
+            },
+            "creator": "0x1b8BA74cC34C2927aac0a8AF9C3B1BA2e61352F2"
           }
         }
       }
