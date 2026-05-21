@@ -90,88 +90,46 @@
         "serializationType": "transform"
       },
       "data": {
-        "512": {
-          "json": {
-            "position": {
-              "x": 8,
-              "y": 0.009999999776482582,
-              "z": 8
-            },
-            "scale": {
-              "x": 1,
-              "y": 1,
-              "z": 1
-            },
-            "rotation": {
-              "x": 0,
-              "y": 0,
-              "z": 0,
-              "w": 1
-            },
-            "parent": 532
-          }
-        },
-        "513": {
-          "json": {
-            "position": {
-              "x": 24,
-              "y": 0.009999999776482582,
-              "z": 8
-            },
-            "scale": {
-              "x": 1,
-              "y": 1,
-              "z": 1
-            },
-            "rotation": {
-              "x": 0,
-              "y": 0,
-              "z": 0,
-              "w": 1
-            },
-            "parent": 532
-          }
-        },
         "514": {
           "json": {
             "position": {
-              "x": 8,
-              "y": 0.009999999776482582,
-              "z": 24
+              "x": 0.4300000071525574,
+              "y": 3.25,
+              "z": 6.25
             },
             "scale": {
-              "x": 1,
-              "y": 1,
-              "z": 1
+              "x": 2.5,
+              "y": 3,
+              "z": 0.20000000298023224
             },
             "rotation": {
               "x": 0,
-              "y": 0,
+              "y": 0.7071067690849304,
               "z": 0,
-              "w": 1
+              "w": 0.7071067690849304
             },
-            "parent": 532
+            "parent": 535
           }
         },
         "515": {
           "json": {
             "position": {
-              "x": 24,
-              "y": 0.009999999776482582,
-              "z": 24
+              "x": 0.4300000071525574,
+              "y": 3.25,
+              "z": 13
             },
             "scale": {
-              "x": 1,
-              "y": 1,
-              "z": 1
+              "x": 2.5,
+              "y": 3,
+              "z": 0.20000000298023224
             },
             "rotation": {
               "x": 0,
-              "y": 0,
+              "y": 0.7071067690849304,
               "z": 0,
-              "w": 1
+              "w": 0.7071067690849304
             },
-            "parent": 532
+            "parent": 535
           }
         },
         "516": {
@@ -513,22 +471,22 @@
         "532": {
           "json": {
             "position": {
-              "x": 0,
-              "y": 0,
-              "z": 0
+              "x": 0.4300000071525574,
+              "y": 3.25,
+              "z": 19.75
             },
             "scale": {
-              "x": 1,
-              "y": 1,
-              "z": 1
+              "x": 2.5,
+              "y": 3,
+              "z": 0.20000000298023224
             },
             "rotation": {
               "x": 0,
-              "y": 0,
+              "y": 0.7071067690849304,
               "z": 0,
-              "w": 1
+              "w": 0.7071067690849304
             },
-            "parent": 0
+            "parent": 535
           }
         },
         "533": {
@@ -804,6 +762,27 @@
             "parent": 524
           }
         },
+        "546": {
+          "json": {
+            "position": {
+              "x": 0,
+              "y": 0,
+              "z": 0
+            },
+            "scale": {
+              "x": 1,
+              "y": 1,
+              "z": 1
+            },
+            "rotation": {
+              "x": 0,
+              "y": 0,
+              "z": 0,
+              "w": 1
+            },
+            "parent": 0
+          }
+        },
         "547": {
           "json": {
             "position": {
@@ -887,6 +866,111 @@
             },
             "parent": 548
           }
+        },
+        "551": {
+          "json": {
+            "position": {
+              "x": 8,
+              "y": 0,
+              "z": 8
+            },
+            "scale": {
+              "x": 1,
+              "y": 1,
+              "z": 1
+            },
+            "rotation": {
+              "x": 0,
+              "y": 0,
+              "z": 0,
+              "w": 1
+            },
+            "parent": 546
+          }
+        },
+        "552": {
+          "json": {
+            "position": {
+              "x": 24,
+              "y": 0,
+              "z": 8
+            },
+            "scale": {
+              "x": 1,
+              "y": 1,
+              "z": 1
+            },
+            "rotation": {
+              "x": 0,
+              "y": 0,
+              "z": 0,
+              "w": 1
+            },
+            "parent": 546
+          }
+        },
+        "553": {
+          "json": {
+            "position": {
+              "x": 8,
+              "y": 0,
+              "z": 24
+            },
+            "scale": {
+              "x": 1,
+              "y": 1,
+              "z": 1
+            },
+            "rotation": {
+              "x": 0,
+              "y": 0,
+              "z": 0,
+              "w": 1
+            },
+            "parent": 546
+          }
+        },
+        "554": {
+          "json": {
+            "position": {
+              "x": 24,
+              "y": 0,
+              "z": 24
+            },
+            "scale": {
+              "x": 1,
+              "y": 1,
+              "z": 1
+            },
+            "rotation": {
+              "x": 0,
+              "y": 0,
+              "z": 0,
+              "w": 1
+            },
+            "parent": 546
+          }
+        },
+        "555": {
+          "json": {
+            "position": {
+              "x": 0.4300000071525574,
+              "y": 3.25,
+              "z": 26.5
+            },
+            "scale": {
+              "x": 2.5,
+              "y": 3,
+              "z": 0.20000000298023224
+            },
+            "rotation": {
+              "x": 0,
+              "y": 0.7071067690849304,
+              "z": 0,
+              "w": 0.7071067690849304
+            },
+            "parent": 535
+          }
         }
       }
     },
@@ -919,39 +1003,39 @@
         "protocolBuffer": "PBGltfContainer"
       },
       "data": {
-        "512": {
-          "json": {
-            "src": "assets/Models/floor-base-concrete-01.glb",
-            "visibleMeshesCollisionMask": 0,
-            "invisibleMeshesCollisionMask": 3
-          }
-        },
-        "513": {
-          "json": {
-            "src": "assets/Models/floor-base-concrete-01.glb",
-            "visibleMeshesCollisionMask": 0,
-            "invisibleMeshesCollisionMask": 3
-          }
-        },
-        "514": {
-          "json": {
-            "src": "assets/Models/floor-base-concrete-01.glb",
-            "visibleMeshesCollisionMask": 0,
-            "invisibleMeshesCollisionMask": 3
-          }
-        },
-        "515": {
-          "json": {
-            "src": "assets/Models/floor-base-concrete-01.glb",
-            "visibleMeshesCollisionMask": 0,
-            "invisibleMeshesCollisionMask": 3
-          }
-        },
         "524": {
           "json": {
             "src": "assets/Models/pizza_oven.glb",
             "visibleMeshesCollisionMask": 0,
             "invisibleMeshesCollisionMask": 0
+          }
+        },
+        "551": {
+          "json": {
+            "src": "assets/asset-packs/concrete/FloorBaseConcrete_01/FloorBaseConcrete_01.glb",
+            "visibleMeshesCollisionMask": 1,
+            "invisibleMeshesCollisionMask": 2
+          }
+        },
+        "552": {
+          "json": {
+            "src": "assets/asset-packs/concrete/FloorBaseConcrete_01/FloorBaseConcrete_01.glb",
+            "visibleMeshesCollisionMask": 1,
+            "invisibleMeshesCollisionMask": 2
+          }
+        },
+        "553": {
+          "json": {
+            "src": "assets/asset-packs/concrete/FloorBaseConcrete_01/FloorBaseConcrete_01.glb",
+            "visibleMeshesCollisionMask": 1,
+            "invisibleMeshesCollisionMask": 2
+          }
+        },
+        "554": {
+          "json": {
+            "src": "assets/asset-packs/concrete/FloorBaseConcrete_01/FloorBaseConcrete_01.glb",
+            "visibleMeshesCollisionMask": 1,
+            "invisibleMeshesCollisionMask": 2
           }
         }
       }
@@ -965,6 +1049,196 @@
         "protocolBuffer": "PBMaterial"
       },
       "data": {
+        "514": {
+          "json": {
+            "material": {
+              "$case": "pbr",
+              "pbr": {
+                "texture": {
+                  "tex": {
+                    "$case": "texture",
+                    "texture": {
+                      "src": "assets/images/Picture01.png",
+                      "wrapMode": 0,
+                      "filterMode": 0,
+                      "offset": {
+                        "x": 0,
+                        "y": 0
+                      },
+                      "tiling": {
+                        "x": -1,
+                        "y": 1
+                      }
+                    }
+                  }
+                },
+                "alphaTest": 0.5,
+                "castShadows": true,
+                "alphaTexture": {
+                  "tex": {
+                    "$case": "texture",
+                    "texture": {
+                      "src": "",
+                      "wrapMode": 0,
+                      "filterMode": 0,
+                      "offset": {
+                        "x": 0,
+                        "y": 0
+                      },
+                      "tiling": {
+                        "x": 1,
+                        "y": 1
+                      }
+                    }
+                  }
+                },
+                "emissiveTexture": {
+                  "tex": {
+                    "$case": "texture",
+                    "texture": {
+                      "src": "",
+                      "wrapMode": 0,
+                      "filterMode": 0,
+                      "offset": {
+                        "x": 0,
+                        "y": 0
+                      },
+                      "tiling": {
+                        "x": 1,
+                        "y": 1
+                      }
+                    }
+                  }
+                },
+                "bumpTexture": {
+                  "tex": {
+                    "$case": "texture",
+                    "texture": {
+                      "src": "",
+                      "wrapMode": 0,
+                      "filterMode": 0,
+                      "offset": {
+                        "x": 0,
+                        "y": 0
+                      },
+                      "tiling": {
+                        "x": 1,
+                        "y": 1
+                      }
+                    }
+                  }
+                },
+                "albedoColor": {
+                  "r": 1,
+                  "g": 1,
+                  "b": 1,
+                  "a": 1
+                },
+                "transparencyMode": 0,
+                "metallic": 0.5,
+                "roughness": 0.8999999761581421,
+                "specularIntensity": 1,
+                "emissiveIntensity": 0,
+                "directIntensity": 1
+              }
+            }
+          }
+        },
+        "515": {
+          "json": {
+            "material": {
+              "$case": "pbr",
+              "pbr": {
+                "texture": {
+                  "tex": {
+                    "$case": "texture",
+                    "texture": {
+                      "src": "assets/images/Picture02.png",
+                      "wrapMode": 0,
+                      "filterMode": 0,
+                      "offset": {
+                        "x": 0,
+                        "y": 0
+                      },
+                      "tiling": {
+                        "x": -1,
+                        "y": 1
+                      }
+                    }
+                  }
+                },
+                "alphaTest": 0.5,
+                "castShadows": true,
+                "alphaTexture": {
+                  "tex": {
+                    "$case": "texture",
+                    "texture": {
+                      "src": "",
+                      "wrapMode": 0,
+                      "filterMode": 0,
+                      "offset": {
+                        "x": 0,
+                        "y": 0
+                      },
+                      "tiling": {
+                        "x": 1,
+                        "y": 1
+                      }
+                    }
+                  }
+                },
+                "emissiveTexture": {
+                  "tex": {
+                    "$case": "texture",
+                    "texture": {
+                      "src": "",
+                      "wrapMode": 0,
+                      "filterMode": 0,
+                      "offset": {
+                        "x": 0,
+                        "y": 0
+                      },
+                      "tiling": {
+                        "x": 1,
+                        "y": 1
+                      }
+                    }
+                  }
+                },
+                "bumpTexture": {
+                  "tex": {
+                    "$case": "texture",
+                    "texture": {
+                      "src": "",
+                      "wrapMode": 0,
+                      "filterMode": 0,
+                      "offset": {
+                        "x": 0,
+                        "y": 0
+                      },
+                      "tiling": {
+                        "x": 1,
+                        "y": 1
+                      }
+                    }
+                  }
+                },
+                "albedoColor": {
+                  "r": 1,
+                  "g": 1,
+                  "b": 1,
+                  "a": 1
+                },
+                "transparencyMode": 0,
+                "metallic": 0.5,
+                "roughness": 0.8999999761581421,
+                "specularIntensity": 1,
+                "emissiveIntensity": 0,
+                "directIntensity": 1
+              }
+            }
+          }
+        },
         "516": {
           "json": {
             "material": {
@@ -1192,6 +1466,101 @@
                 },
                 "metallic": 0,
                 "roughness": 0.85
+              }
+            }
+          }
+        },
+        "532": {
+          "json": {
+            "material": {
+              "$case": "pbr",
+              "pbr": {
+                "texture": {
+                  "tex": {
+                    "$case": "texture",
+                    "texture": {
+                      "src": "assets/images/Picture03.png",
+                      "wrapMode": 0,
+                      "filterMode": 0,
+                      "offset": {
+                        "x": 0,
+                        "y": 0
+                      },
+                      "tiling": {
+                        "x": -1,
+                        "y": 1
+                      }
+                    }
+                  }
+                },
+                "alphaTest": 0.5,
+                "castShadows": true,
+                "alphaTexture": {
+                  "tex": {
+                    "$case": "texture",
+                    "texture": {
+                      "src": "",
+                      "wrapMode": 0,
+                      "filterMode": 0,
+                      "offset": {
+                        "x": 0,
+                        "y": 0
+                      },
+                      "tiling": {
+                        "x": 1,
+                        "y": 1
+                      }
+                    }
+                  }
+                },
+                "emissiveTexture": {
+                  "tex": {
+                    "$case": "texture",
+                    "texture": {
+                      "src": "",
+                      "wrapMode": 0,
+                      "filterMode": 0,
+                      "offset": {
+                        "x": 0,
+                        "y": 0
+                      },
+                      "tiling": {
+                        "x": 1,
+                        "y": 1
+                      }
+                    }
+                  }
+                },
+                "bumpTexture": {
+                  "tex": {
+                    "$case": "texture",
+                    "texture": {
+                      "src": "",
+                      "wrapMode": 0,
+                      "filterMode": 0,
+                      "offset": {
+                        "x": 0,
+                        "y": 0
+                      },
+                      "tiling": {
+                        "x": 1,
+                        "y": 1
+                      }
+                    }
+                  }
+                },
+                "albedoColor": {
+                  "r": 1,
+                  "g": 1,
+                  "b": 1,
+                  "a": 1
+                },
+                "transparencyMode": 0,
+                "metallic": 0.5,
+                "roughness": 0.8999999761581421,
+                "specularIntensity": 1,
+                "emissiveIntensity": 0,
+                "directIntensity": 1
               }
             }
           }
@@ -1597,6 +1966,101 @@
               }
             }
           }
+        },
+        "555": {
+          "json": {
+            "material": {
+              "$case": "pbr",
+              "pbr": {
+                "texture": {
+                  "tex": {
+                    "$case": "texture",
+                    "texture": {
+                      "src": "assets/images/Picture04.png",
+                      "wrapMode": 0,
+                      "filterMode": 0,
+                      "offset": {
+                        "x": 0,
+                        "y": 0
+                      },
+                      "tiling": {
+                        "x": -1,
+                        "y": 1
+                      }
+                    }
+                  }
+                },
+                "alphaTest": 0.5,
+                "castShadows": true,
+                "alphaTexture": {
+                  "tex": {
+                    "$case": "texture",
+                    "texture": {
+                      "src": "",
+                      "wrapMode": 0,
+                      "filterMode": 0,
+                      "offset": {
+                        "x": 0,
+                        "y": 0
+                      },
+                      "tiling": {
+                        "x": 1,
+                        "y": 1
+                      }
+                    }
+                  }
+                },
+                "emissiveTexture": {
+                  "tex": {
+                    "$case": "texture",
+                    "texture": {
+                      "src": "",
+                      "wrapMode": 0,
+                      "filterMode": 0,
+                      "offset": {
+                        "x": 0,
+                        "y": 0
+                      },
+                      "tiling": {
+                        "x": 1,
+                        "y": 1
+                      }
+                    }
+                  }
+                },
+                "bumpTexture": {
+                  "tex": {
+                    "$case": "texture",
+                    "texture": {
+                      "src": "",
+                      "wrapMode": 0,
+                      "filterMode": 0,
+                      "offset": {
+                        "x": 0,
+                        "y": 0
+                      },
+                      "tiling": {
+                        "x": 1,
+                        "y": 1
+                      }
+                    }
+                  }
+                },
+                "albedoColor": {
+                  "r": 1,
+                  "g": 1,
+                  "b": 1,
+                  "a": 1
+                },
+                "transparencyMode": 0,
+                "metallic": 0.5,
+                "roughness": 0.8999999761581421,
+                "specularIntensity": 1,
+                "emissiveIntensity": 0,
+                "directIntensity": 1
+              }
+            }
+          }
         }
       }
     },
@@ -1767,6 +2231,26 @@
         "protocolBuffer": "PBMeshRenderer"
       },
       "data": {
+        "514": {
+          "json": {
+            "mesh": {
+              "$case": "plane",
+              "plane": {
+                "uvs": []
+              }
+            }
+          }
+        },
+        "515": {
+          "json": {
+            "mesh": {
+              "$case": "plane",
+              "plane": {
+                "uvs": []
+              }
+            }
+          }
+        },
         "516": {
           "json": {
             "mesh": {
@@ -1857,6 +2341,16 @@
             }
           }
         },
+        "532": {
+          "json": {
+            "mesh": {
+              "$case": "plane",
+              "plane": {
+                "uvs": []
+              }
+            }
+          }
+        },
         "539": {
           "json": {
             "mesh": {
@@ -1906,6 +2400,16 @@
               }
             }
           }
+        },
+        "555": {
+          "json": {
+            "mesh": {
+              "$case": "plane",
+              "plane": {
+                "uvs": []
+              }
+            }
+          }
         }
       }
     },
@@ -1922,24 +2426,14 @@
         "serializationType": "map"
       },
       "data": {
-        "512": {
-          "json": {
-            "value": "Floor_SW"
-          }
-        },
-        "513": {
-          "json": {
-            "value": "Floor_SE"
-          }
-        },
         "514": {
           "json": {
-            "value": "Floor_NW"
+            "value": "Picture01"
           }
         },
         "515": {
           "json": {
-            "value": "Floor_NE"
+            "value": "Picture02"
           }
         },
         "516": {
@@ -2024,7 +2518,7 @@
         },
         "532": {
           "json": {
-            "value": "Floor"
+            "value": "Picture03"
           }
         },
         "533": {
@@ -2092,6 +2586,11 @@
             "value": "Collider_2"
           }
         },
+        "546": {
+          "json": {
+            "value": "Ground"
+          }
+        },
         "547": {
           "json": {
             "value": "Horno_Light"
@@ -2110,6 +2609,31 @@
         "550": {
           "json": {
             "value": "Leaderboard_Text"
+          }
+        },
+        "551": {
+          "json": {
+            "value": "Tile 1"
+          }
+        },
+        "552": {
+          "json": {
+            "value": "Tile 2"
+          }
+        },
+        "553": {
+          "json": {
+            "value": "Tile 3"
+          }
+        },
+        "554": {
+          "json": {
+            "value": "Tile 4"
+          }
+        },
+        "555": {
+          "json": {
+            "value": "Picture04"
           }
         }
       }
@@ -2214,7 +2738,7 @@
         "serializationType": "map"
       },
       "data": {
-        "0": {
+        "555": {
           "json": {
             "gizmo": 0
           }
@@ -2267,7 +2791,6 @@
                 "entity": 0,
                 "open": true,
                 "children": [
-                  532,
                   535,
                   519,
                   528,
@@ -2287,24 +2810,9 @@
                   534,
                   548,
                   1,
-                  2
+                  2,
+                  546
                 ]
-              },
-              {
-                "entity": 512,
-                "children": []
-              },
-              {
-                "entity": 513,
-                "children": []
-              },
-              {
-                "entity": 514,
-                "children": []
-              },
-              {
-                "entity": 515,
-                "children": []
               },
               {
                 "entity": 516,
@@ -2425,22 +2933,18 @@
                 ]
               },
               {
-                "entity": 532,
-                "children": [
-                  512,
-                  513,
-                  514,
-                  515
-                ]
-              },
-              {
                 "entity": 535,
+                "open": true,
                 "children": [
                   516,
                   517,
                   518,
                   526,
-                  527
+                  527,
+                  514,
+                  515,
+                  532,
+                  555
                 ]
               },
               {
@@ -2474,6 +2978,47 @@
               {
                 "entity": 521,
                 "children": []
+              },
+              {
+                "entity": 546,
+                "children": [
+                  551,
+                  552,
+                  553,
+                  554
+                ]
+              },
+              {
+                "entity": 551,
+                "children": []
+              },
+              {
+                "entity": 552,
+                "children": []
+              },
+              {
+                "entity": 553,
+                "children": []
+              },
+              {
+                "entity": 554,
+                "children": []
+              },
+              {
+                "entity": 514,
+                "children": []
+              },
+              {
+                "entity": 515,
+                "children": []
+              },
+              {
+                "entity": 532,
+                "children": []
+              },
+              {
+                "entity": 555,
+                "children": []
               }
             ]
           }
@@ -2497,12 +3042,6 @@
         "serializationType": "map"
       },
       "data": {
-        "512": {
-          "json": {}
-        },
-        "513": {
-          "json": {}
-        },
         "514": {
           "json": {}
         },
@@ -2609,6 +3148,84 @@
           "json": {}
         },
         "550": {
+          "json": {}
+        },
+        "555": {
+          "json": {}
+        }
+      }
+    },
+    {
+      "name": "inspector::Lock",
+      "jsonSchema": {
+        "type": "object",
+        "properties": {
+          "value": {
+            "type": "boolean",
+            "serializationType": "boolean"
+          }
+        },
+        "serializationType": "map"
+      },
+      "data": {
+        "546": {
+          "json": {
+            "value": true
+          }
+        },
+        "551": {
+          "json": {
+            "value": true
+          }
+        },
+        "552": {
+          "json": {
+            "value": true
+          }
+        },
+        "553": {
+          "json": {
+            "value": true
+          }
+        },
+        "554": {
+          "json": {
+            "value": true
+          }
+        }
+      }
+    },
+    {
+      "name": "inspector::Ground",
+      "jsonSchema": {
+        "type": "object",
+        "properties": {},
+        "serializationType": "map"
+      },
+      "data": {
+        "546": {
+          "json": {}
+        }
+      }
+    },
+    {
+      "name": "inspector::Tile",
+      "jsonSchema": {
+        "type": "object",
+        "properties": {},
+        "serializationType": "map"
+      },
+      "data": {
+        "551": {
+          "json": {}
+        },
+        "552": {
+          "json": {}
+        },
+        "553": {
+          "json": {}
+        },
+        "554": {
           "json": {}
         }
       }
