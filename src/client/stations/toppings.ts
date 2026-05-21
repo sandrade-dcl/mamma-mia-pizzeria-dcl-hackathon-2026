@@ -1,13 +1,17 @@
 import {
+  Billboard,
+  BillboardMode,
   ColliderLayer,
   Entity,
   Material,
   MeshCollider,
   MeshRenderer,
+  TextAlignMode,
+  TextShape,
   Transform,
   engine
 } from '@dcl/sdk/ecs'
-import { Color4, Quaternion, Vector3 } from '@dcl/sdk/math'
+import { Color3, Color4, Quaternion, Vector3 } from '@dcl/sdk/math'
 import { room } from '../../shared/messages'
 import { onInteract } from '../interaction'
 import { Topping } from '../pizza/pizzaTypes'
@@ -68,4 +72,27 @@ function createIngredientBox(ingredient: IngredientDef) {
       room.send('CmdAddTopping', { topping: ingredient.type as number })
     }
   )
+  createIngredientLabel(ingredient)
+}
+
+function createIngredientLabel(ingredient: IngredientDef) {
+  // Standalone world-space entity (not parented to the box) so the box's
+  // non-uniform 0.5x0.4x0.5 scale doesn't squash the glyphs vertically.
+  // Billboard.BM_Y keeps the label upright while rotating to face whoever
+  // is reading — works equally well for ground players and the top-down
+  // spectator camera.
+  const label = engine.addEntity()
+  Transform.create(label, {
+    position: Vector3.create(STATION_CENTER_X + ingredient.offsetX, BOX_Y + 0.6, BOX_Z),
+    scale: Vector3.create(1, 1, 1)
+  })
+  TextShape.create(label, {
+    text: ingredient.label,
+    fontSize: 1,
+    textColor: Color4.White(),
+    outlineColor: Color3.Black(),
+    outlineWidth: 0.2,
+    textAlign: TextAlignMode.TAM_MIDDLE_CENTER
+  })
+  Billboard.create(label, { billboardMode: BillboardMode.BM_Y })
 }
