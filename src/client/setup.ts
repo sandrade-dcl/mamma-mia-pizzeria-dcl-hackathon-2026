@@ -7,6 +7,7 @@ import { setupAvatarVisibility } from './avatarVisibility'
 import { setupLeaderboardWall } from './leaderboardWall'
 import { OrdersUi } from './orders/orderUi'
 import { setupSpectatorCamera } from './spectatorCamera'
+import { setupScoreSfx } from './sfx'
 import { registerDeliveryServeListener } from './stations/delivery'
 import { setupHornoStation } from './stations/horno'
 import { setupMasaStation } from './stations/masa'
@@ -32,4 +33,5 @@ export function initClient() {
   setupLeaderboardWall()
   setupSpectatorCamera()
   setupAvatarVisibility()
+  setupScoreSfx()
 }

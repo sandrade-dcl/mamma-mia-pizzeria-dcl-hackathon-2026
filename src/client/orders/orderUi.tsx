@@ -233,7 +233,8 @@ function WaitingCard(slotIndex: number) {
   )
 }
 
-function InfoPanel(showTimer: boolean) {
+function InfoPanel(showTimer: boolean, showQuit: boolean) {
+  const showQuitButton = showTimer && showQuit
   return (
     <UiEntity
       key="info-panel"
@@ -241,7 +242,7 @@ function InfoPanel(showTimer: boolean) {
         positionType: 'absolute',
         position: { top: 24, right: 24 },
         width: 240,
-        height: showTimer ? 188 : 96,
+        height: showQuitButton ? 188 : showTimer ? 140 : 96,
         flexDirection: 'column',
         padding: 14
       }}
@@ -271,7 +272,7 @@ function InfoPanel(showTimer: boolean) {
           uiTransform={{ width: '100%', height: 30, margin: { top: 6 } }}
         />
       ) : null}
-      {showTimer ? (
+      {showQuitButton ? (
         <Button
           key="quit"
           value="Quit round"
@@ -625,11 +626,18 @@ function EndScreen() {
   )
 }
 
-function PlayingHud() {
+function PlayingHud(showQuit: boolean) {
   const slots = getOrderSlots()
   const readyPizzas = getReadyPizzaToppings()
   return (
-    <UiEntity uiTransform={{ width: '100%', height: '100%' }}>
+    <UiEntity
+      uiTransform={{
+        width: '100%',
+        height: '100%',
+        positionType: 'absolute',
+        position: { top: 0, left: 0 }
+      }}
+    >
       <UiEntity
         uiTransform={{
           width: '100%',
@@ -648,7 +656,7 @@ function PlayingHud() {
           return TicketCard(order, isReady)
         })}
       </UiEntity>
-      {InfoPanel(true)}
+      {InfoPanel(true, showQuit)}
     </UiEntity>
   )
 }
@@ -669,9 +677,14 @@ export function OrdersUi() {
   // Backdrop applies whenever we show a centred modal — but NOT while
   // the spectator camera is active, since we want the player to see the
   // scene from above with just a small EXIT widget on the corner.
-  const showCenteredSpectatorOverlay = (isSpectatorPlaying || isSpectatorEnded) && !spectatorCamera
+  // Spectators-during-play see the same tickets + score the players do
+  // (just without the Quit button); we render PlayingHud underneath the
+  // SpectatorOverlay/Widget. Skip the dark backdrop in that case so the
+  // tickets stay readable. The end-of-round modal still gets a backdrop
+  // — there are no live tickets to obscure anyway.
+  const showCenteredSpectatorEndOverlay = isSpectatorEnded && !spectatorCamera
   const showOverlayBackdrop =
-    state === 'idle' || (state === 'end' && inLobby) || showCenteredSpectatorOverlay
+    state === 'idle' || (state === 'end' && inLobby) || showCenteredSpectatorEndOverlay
   return (
     <UiEntity
       uiTransform={{
@@ -685,7 +698,7 @@ export function OrdersUi() {
       uiBackground={showOverlayBackdrop ? { color: COLOR_OVERLAY_BG } : undefined}
     >
       {state === 'idle' ? LobbyScreen() : null}
-      {state === 'playing' && inLobby ? PlayingHud() : null}
+      {state === 'playing' ? PlayingHud(inLobby) : null}
       {isSpectatorPlaying && !spectatorCamera
         ? SpectatorOverlay('Game in progress', 'Wait for the next round to join.', true)
         : null}
