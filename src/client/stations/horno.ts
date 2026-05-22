@@ -21,7 +21,7 @@ import { CurrentStation } from '../../shared/syncedState'
 // the visual based on its step (Baking/Perfect → fire, Burnt → burnt,
 // none → off).
 
-type OvenState = 'off' | 'fire' | 'burnt'
+type OvenState = 'off' | 'fire' | 'ready' | 'burnt'
 
 const FIRE_LIGHT_COLOR = Color3.create(1, 0.647, 0)
 const BURNT_LIGHT_COLOR = Color3.create(1, 0.1, 0.1)
@@ -34,11 +34,11 @@ const SMOKE_BURNT_END = Color4.create(0.05, 0.05, 0.05, 0)
 const SMOKE_RATE_NORMAL = 20
 const SMOKE_RATE_BURNT = SMOKE_RATE_NORMAL * 2
 
-const BURNT_PULSE_FREQ_RAD_S = 18
-const BURNT_PULSE_AMPLITUDE = 0.005
+const READY_PULSE_FREQ_RAD_S = 18
+const READY_PULSE_AMPLITUDE = 0.005
 
 let hornoOriginalScale: { x: number; y: number; z: number } | null = null
-let burntPulseActive = false
+let readyPulseActive = false
 // Start at null so the first setOvenAmbience('off') after setup actually
 // fires its write to LightSource / ParticleSystem — otherwise the dedup
 // check would early-return and the composite's default `active: true`
@@ -49,7 +49,7 @@ export function setupHornoStation(): void {
   initSmokeEmitter()
   setOvenAmbience('off')
   engine.addSystem(hornoAmbienceWatcherSystem)
-  engine.addSystem(burntPulseSystem)
+  engine.addSystem(readyPulseSystem)
 }
 
 export function resetHornoStation(): void {
@@ -87,9 +87,9 @@ function ensureHornoOriginalScale() {
   }
 }
 
-function setHornoBurntPulse(active: boolean) {
+function setHornoReadyPulse(active: boolean) {
   ensureHornoOriginalScale()
-  burntPulseActive = active
+  readyPulseActive = active
   if (!active && hornoOriginalScale) {
     const transform = Transform.getMutableOrNull(getEntityByName(EntityNames.Station_Horno))
     if (transform) {
@@ -102,12 +102,12 @@ function setHornoBurntPulse(active: boolean) {
   }
 }
 
-function burntPulseSystem(_dt: number) {
-  if (!burntPulseActive || !hornoOriginalScale) return
+function readyPulseSystem(_dt: number) {
+  if (!readyPulseActive || !hornoOriginalScale) return
   const transform = Transform.getMutableOrNull(getEntityByName(EntityNames.Station_Horno))
   if (!transform) return
   const t = Date.now() / 1000
-  const pulse = ((Math.sin(t * BURNT_PULSE_FREQ_RAD_S) + 1) / 2) * BURNT_PULSE_AMPLITUDE
+  const pulse = ((Math.sin(t * READY_PULSE_FREQ_RAD_S) + 1) / 2) * READY_PULSE_AMPLITUDE
   transform.scale = Vector3.create(
     hornoOriginalScale.x + pulse,
     hornoOriginalScale.y + pulse,
@@ -118,7 +118,7 @@ function burntPulseSystem(_dt: number) {
 function setOvenAmbience(state: OvenState) {
   if (state === currentAmbience) return
   currentAmbience = state
-  setHornoBurntPulse(state === 'burnt')
+  setHornoReadyPulse(state === 'ready')
 
   const light = getEntityByName(EntityNames.Horno_Light)
   const ls = LightSource.getMutableOrNull(light)
@@ -149,8 +149,9 @@ function setOvenAmbience(state: OvenState) {
 }
 
 // Pick the ambience from whatever pizza is currently inside the oven on
-// the authoritative server — Baking/Perfect → fire, Burnt → burnt, no
-// pizza → off.
+// the authoritative server — Baking → fire, Perfect → ready (pulse),
+// Burnt → burnt, no pizza → off. 'ready' is the only state that pulses
+// the oven shell; that's the "take me out!" signal.
 function hornoAmbienceWatcherSystem(_dt: number) {
   let target: OvenState = 'off'
   for (const [, state] of engine.getEntitiesWith(PizzaState)) {
@@ -159,7 +160,9 @@ function hornoAmbienceWatcherSystem(_dt: number) {
       target = 'burnt'
       break
     }
-    if (state.step === PizzaStep.Baking || state.step === PizzaStep.Perfect) {
+    if (state.step === PizzaStep.Perfect) {
+      target = 'ready'
+    } else if (state.step === PizzaStep.Baking && target !== 'ready') {
       target = 'fire'
     }
   }
