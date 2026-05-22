@@ -64,8 +64,26 @@ export function getLeaderboardEntries(): readonly LeaderboardEntry[] {
   return []
 }
 
+// Production network round-trips for any Cmd* take 1-3 s, so the UI needs
+// to give the player immediate feedback while the synced state catches up.
+// Every lobby action stamps a timestamp here; the matching `isXPending()`
+// returns true until either the synced state confirms the change or the
+// PENDING_TIMEOUT_MS elapses (so we recover from a dropped RPC).
+const PENDING_TIMEOUT_MS = 10_000
+let pendingCreateAt = 0
+let pendingJoinAt = 0
+let pendingStartAt = 0
+let pendingLeaveAt = 0
+
+function clearIfExpired(stampedAt: number): number {
+  if (stampedAt === 0) return 0
+  if (Date.now() - stampedAt > PENDING_TIMEOUT_MS) return 0
+  return stampedAt
+}
+
 export function startRound(): void {
   console.log('[CLIENT] CmdStartRound sent')
+  pendingStartAt = Date.now()
   room.send('CmdStartRound', {})
 }
 
@@ -77,6 +95,51 @@ export function endRound(): void {
 export function backToIdle(): void {
   console.log('[CLIENT] CmdBackToIdle sent')
   room.send('CmdBackToIdle', {})
+}
+
+export function isCreatePending(): boolean {
+  pendingCreateAt = clearIfExpired(pendingCreateAt)
+  if (pendingCreateAt === 0) return false
+  // Confirmed: any lobby host means the create landed.
+  if (getLobby().host !== '') {
+    pendingCreateAt = 0
+    return false
+  }
+  return true
+}
+
+export function isJoinPending(): boolean {
+  pendingJoinAt = clearIfExpired(pendingJoinAt)
+  if (pendingJoinAt === 0) return false
+  // Confirmed: local address shows up in the lobby's player list.
+  if (isLocalInLobby()) {
+    pendingJoinAt = 0
+    return false
+  }
+  return true
+}
+
+export function isStartPending(): boolean {
+  pendingStartAt = clearIfExpired(pendingStartAt)
+  if (pendingStartAt === 0) return false
+  // Confirmed: round phase flipped to Playing.
+  if (isPlaying()) {
+    pendingStartAt = 0
+    return false
+  }
+  return true
+}
+
+export function isLeavePending(): boolean {
+  pendingLeaveAt = clearIfExpired(pendingLeaveAt)
+  if (pendingLeaveAt === 0) return false
+  // Confirmed: the local player is no longer in any lobby (either we
+  // left, or the host disbanded and the whole lobby was wiped).
+  if (!isLocalInLobby() && !isLocalHost()) {
+    pendingLeaveAt = 0
+    return false
+  }
+  return true
 }
 
 // ------------------------------------------------------------------------
@@ -118,16 +181,19 @@ export function isLocalInLobby(): boolean {
 
 export function createGame(): void {
   console.log('[CLIENT] CmdCreateGame sent')
+  pendingCreateAt = Date.now()
   room.send('CmdCreateGame', {})
 }
 
 export function joinLobby(): void {
   console.log('[CLIENT] CmdJoinLobby sent')
+  pendingJoinAt = Date.now()
   room.send('CmdJoinLobby', {})
 }
 
 export function leaveLobby(): void {
   console.log('[CLIENT] CmdLeaveLobby sent')
+  pendingLeaveAt = Date.now()
   room.send('CmdLeaveLobby', {})
 }
 

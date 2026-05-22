@@ -8,8 +8,12 @@ import {
   getGameState,
   getLobby,
   getRoundRemainingMs,
+  isCreatePending,
+  isJoinPending,
+  isLeavePending,
   isLocalHost,
   isLocalInLobby,
+  isStartPending,
   joinLobby,
   leaveLobby,
   ROUND_DURATION_MS,
@@ -31,6 +35,13 @@ function shortenAddress(addr: string): string {
   if (!addr) return 'Anonymous'
   if (addr.length <= 10) return addr
   return `${addr.slice(0, 6)}…${addr.slice(-4)}`
+}
+
+// Animated ellipsis so the pending indicator visibly ticks even while
+// nothing on the network has resolved yet — confirms to the player that
+// the click registered.
+function pendingDots(): string {
+  return '.'.repeat(1 + (Math.floor(Date.now() / 400) % 3))
 }
 
 function displayNameFor(addr: string): string {
@@ -306,6 +317,40 @@ function CenterOverlay(children: ReactEcs.JSX.Element) {
 // so it's visible at all times rather than only on the Start / End
 // modals.)
 
+// Non-interactive placeholder that takes the same footprint as the Button
+// it replaces. The animated label keeps the player aware that something
+// is happening while we wait for the synced state round-trip.
+function PendingButton(
+  key: string,
+  label: string,
+  width: number,
+  height: number,
+  fontSize: number,
+  marginTop: number
+) {
+  return (
+    <UiEntity
+      key={key}
+      uiTransform={{
+        width,
+        height,
+        margin: { top: marginTop },
+        justifyContent: 'center',
+        alignItems: 'center'
+      }}
+      uiBackground={{ color: Color4.create(0.25, 0.18, 0.12, 0.95) }}
+    >
+      <Label
+        value={`${label}${pendingDots()}`}
+        fontSize={fontSize}
+        color={Color4.create(0.85, 0.78, 0.65, 1)}
+        textAlign="middle-center"
+        uiTransform={{ width: '100%', height: '100%' }}
+      />
+    </UiEntity>
+  )
+}
+
 function PlayerListRow(addr: string, isHost: boolean) {
   return (
     <UiEntity
@@ -388,13 +433,17 @@ function LobbyScreen() {
             textAlign="middle-center"
             uiTransform={{ width: '100%', height: 30, margin: { top: 2 } }}
           />
-          <Button
-            value="CREATE GAME"
-            variant="primary"
-            fontSize={24}
-            onMouseDown={() => createGame()}
-            uiTransform={{ width: 240, height: 60, margin: { top: 20 } }}
-          />
+          {isCreatePending()
+            ? PendingButton('create-pending', 'Creating lobby', 240, 60, 22, 20)
+            : (
+              <Button
+                value="CREATE GAME"
+                variant="primary"
+                fontSize={24}
+                onMouseDown={() => createGame()}
+                uiTransform={{ width: 240, height: 60, margin: { top: 20 } }}
+              />
+            )}
         </UiEntity>
       ) : (
         <UiEntity
@@ -428,22 +477,30 @@ function LobbyScreen() {
                 margin: { top: 16 }
               }}
             >
-              <Button
-                key="start"
-                value="START GAME"
-                variant="primary"
-                fontSize={26}
-                onMouseDown={() => startRound()}
-                uiTransform={{ width: 240, height: 60 }}
-              />
-              <Button
-                key="cancel"
-                value="Cancel Lobby"
-                variant="secondary"
-                fontSize={16}
-                onMouseDown={() => leaveLobby()}
-                uiTransform={{ width: 240, height: 38, margin: { top: 8 } }}
-              />
+              {isStartPending()
+                ? PendingButton('start-pending', 'Starting round', 240, 60, 22, 0)
+                : (
+                  <Button
+                    key="start"
+                    value="START GAME"
+                    variant="primary"
+                    fontSize={26}
+                    onMouseDown={() => startRound()}
+                    uiTransform={{ width: 240, height: 60 }}
+                  />
+                )}
+              {isLeavePending()
+                ? PendingButton('cancel-pending', 'Cancelling', 240, 38, 16, 8)
+                : (
+                  <Button
+                    key="cancel"
+                    value="Cancel Lobby"
+                    variant="secondary"
+                    fontSize={16}
+                    onMouseDown={() => leaveLobby()}
+                    uiTransform={{ width: 240, height: 38, margin: { top: 8 } }}
+                  />
+                )}
             </UiEntity>
           ) : inLobby ? (
             <UiEntity
@@ -463,14 +520,18 @@ function LobbyScreen() {
                 textAlign="middle-center"
                 uiTransform={{ width: '100%', height: 28 }}
               />
-              <Button
-                key="leave"
-                value="Leave Lobby"
-                variant="secondary"
-                fontSize={18}
-                onMouseDown={() => leaveLobby()}
-                uiTransform={{ width: 240, height: 50, margin: { top: 12 } }}
-              />
+              {isLeavePending()
+                ? PendingButton('leave-pending', 'Leaving', 240, 50, 18, 12)
+                : (
+                  <Button
+                    key="leave"
+                    value="Leave Lobby"
+                    variant="secondary"
+                    fontSize={18}
+                    onMouseDown={() => leaveLobby()}
+                    uiTransform={{ width: 240, height: 50, margin: { top: 12 } }}
+                  />
+                )}
             </UiEntity>
           ) : (
             <UiEntity
@@ -492,13 +553,17 @@ function LobbyScreen() {
                   uiTransform={{ width: '100%', height: 36 }}
                 />
               ) : (
-                <Button
-                  value="JOIN GAME"
-                  variant="primary"
-                  fontSize={24}
-                  onMouseDown={() => joinLobby()}
-                  uiTransform={{ width: 240, height: 60 }}
-                />
+                isJoinPending()
+                  ? PendingButton('join-pending', 'Joining', 240, 60, 22, 0)
+                  : (
+                    <Button
+                      value="JOIN GAME"
+                      variant="primary"
+                      fontSize={24}
+                      onMouseDown={() => joinLobby()}
+                      uiTransform={{ width: 240, height: 60 }}
+                    />
+                  )
               )}
             </UiEntity>
           )}

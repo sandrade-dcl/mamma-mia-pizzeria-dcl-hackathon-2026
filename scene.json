@@ -17,13 +17,13 @@
     "game"
   ],
   "scene": {
+    "base": "26,20",
     "parcels": [
-      "0,0",
-      "1,0",
-      "0,1",
-      "1,1"
-    ],
-    "base": "0,0"
+      "26,20",
+      "27,20",
+      "26,21",
+      "27,21"
+    ]
   },
   "spawnPoints": [
     {
@@ -68,5 +68,8 @@
     "origin": "creator-hub",
     "projectId": "943a8d7f-9995-4c69-b81c-f668f9cdc0c8"
   },
-  "authoritativeMultiplayer": true
+  "authoritativeMultiplayer": true,
+  "worldConfiguration": {
+    "name": "italy2026.dcl.eth"
+  }
 }
