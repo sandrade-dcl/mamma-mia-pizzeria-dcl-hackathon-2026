@@ -136,12 +136,12 @@
           "json": {
             "position": {
               "x": 0.4300000071525574,
-              "y": 3.25,
+              "y": 4.25,
               "z": 6.25
             },
             "scale": {
-              "x": 2.5,
-              "y": 3,
+              "x": 3.5,
+              "y": 4,
               "z": 0.20000000298023224
             },
             "rotation": {
@@ -157,12 +157,12 @@
           "json": {
             "position": {
               "x": 0.4300000071525574,
-              "y": 3.25,
+              "y": 4.25,
               "z": 13
             },
             "scale": {
-              "x": 2.5,
-              "y": 3,
+              "x": 3.5,
+              "y": 4,
               "z": 0.20000000298023224
             },
             "rotation": {
@@ -183,7 +183,7 @@
             },
             "scale": {
               "x": 32,
-              "y": 10,
+              "y": 15,
               "z": 0.4000000059604645
             },
             "rotation": {
@@ -204,7 +204,7 @@
             },
             "scale": {
               "x": 0.4000000059604645,
-              "y": 10,
+              "y": 15,
               "z": 32
             },
             "rotation": {
@@ -225,7 +225,7 @@
             },
             "scale": {
               "x": 0.4000000059604645,
-              "y": 10,
+              "y": 15,
               "z": 32
             },
             "rotation": {
@@ -393,7 +393,7 @@
             },
             "scale": {
               "x": 13.5,
-              "y": 10,
+              "y": 15,
               "z": 0.4000000059604645
             },
             "rotation": {
@@ -414,7 +414,7 @@
             },
             "scale": {
               "x": 13.5,
-              "y": 10,
+              "y": 15,
               "z": 0.4000000059604645
             },
             "rotation": {
@@ -514,12 +514,12 @@
           "json": {
             "position": {
               "x": 0.4300000071525574,
-              "y": 3.25,
+              "y": 4.25,
               "z": 19.75
             },
             "scale": {
-              "x": 2.5,
-              "y": 3,
+              "x": 3.5,
+              "y": 4,
               "z": 0.20000000298023224
             },
             "rotation": {
@@ -997,12 +997,12 @@
           "json": {
             "position": {
               "x": 0.4300000071525574,
-              "y": 3.25,
+              "y": 4.25,
               "z": 26.5
             },
             "scale": {
-              "x": 2.5,
-              "y": 3,
+              "x": 3.5,
+              "y": 4,
               "z": 0.20000000298023224
             },
             "rotation": {
@@ -1010,6 +1010,48 @@
               "y": 0.7071067690849304,
               "z": 0,
               "w": 0.7071067690849304
+            },
+            "parent": 535
+          }
+        },
+        "556": {
+          "json": {
+            "position": {
+              "x": 6.75,
+              "y": -1.75,
+              "z": 0.5
+            },
+            "rotation": {
+              "x": 0,
+              "y": 0,
+              "z": 0,
+              "w": 1
+            },
+            "scale": {
+              "x": 0.15000000596046448,
+              "y": 0.15000000596046448,
+              "z": 0.15000000596046448
+            },
+            "parent": 535
+          }
+        },
+        "557": {
+          "json": {
+            "position": {
+              "x": 4,
+              "y": 6,
+              "z": 31.25
+            },
+            "scale": {
+              "x": 0.15000000596046448,
+              "y": 0.15000000596046448,
+              "z": 0.15000000596046448
+            },
+            "rotation": {
+              "x": 0.1830127090215683,
+              "y": -0.6830127239227295,
+              "z": 0.6830127239227295,
+              "w": -0.1830127090215683
             },
             "parent": 535
           }
@@ -1023,7 +1065,7 @@
             },
             "scale": {
               "x": 1.5,
-              "y": 1.6299999952316284,
+              "y": 2.25,
               "z": 1.5
             },
             "rotation": {
@@ -1044,7 +1086,7 @@
             },
             "scale": {
               "x": 1.5,
-              "y": 1.6299999952316284,
+              "y": 2.25,
               "z": 1.5
             },
             "rotation": {
@@ -1056,15 +1098,36 @@
             "parent": 535
           }
         },
-        "562": {
+        "560": {
           "json": {
             "position": {
-              "x": -0.6000000238418579,
-              "y": 0.17000000178813934,
+              "x": 25,
+              "y": -1.75,
+              "z": 0.5
+            },
+            "rotation": {
+              "x": 0,
+              "y": 0,
+              "z": 0,
+              "w": 1
+            },
+            "scale": {
+              "x": 0.15000000596046448,
+              "y": 0.15000000596046448,
+              "z": 0.15000000596046448
+            },
+            "parent": 535
+          }
+        },
+        "561": {
+          "json": {
+            "position": {
+              "x": -0.3199999928474426,
+              "y": 0.15000000596046448,
               "z": 0
             },
             "scale": {
-              "x": 0.30000001192092896,
+              "x": 1,
               "y": 1,
               "z": 1
             },
@@ -1072,7 +1135,28 @@
               "x": 0,
               "y": 0.7071067690849304,
               "z": 0,
-              "w": 0.7071067690849304
+              "w": -0.7071067690849304
+            },
+            "parent": 612
+          }
+        },
+        "562": {
+          "json": {
+            "position": {
+              "x": -0.600006103515625,
+              "y": 0.19666670262813568,
+              "z": 0
+            },
+            "scale": {
+              "x": 0.30460160970687866,
+              "y": 0.6666666865348816,
+              "z": 1.000004768371582
+            },
+            "rotation": {
+              "x": 0,
+              "y": 0.673215925693512,
+              "z": 0,
+              "w": 0.7370920181274414
             },
             "parent": 518
           }
@@ -1921,7 +2005,7 @@
           "json": {
             "position": {
               "x": -0.25,
-              "y": 1,
+              "y": 0.9700000286102295,
               "z": -0.25
             },
             "scale": {
@@ -1942,7 +2026,7 @@
           "json": {
             "position": {
               "x": 0.25,
-              "y": 1,
+              "y": 0.9700000286102295,
               "z": 0.25
             },
             "scale": {
@@ -1963,7 +2047,7 @@
           "json": {
             "position": {
               "x": 0.25,
-              "y": 1,
+              "y": 0.9900000095367432,
               "z": 0.25
             },
             "scale": {
@@ -1984,7 +2068,7 @@
           "json": {
             "position": {
               "x": -0.25,
-              "y": 1,
+              "y": 0.9900000095367432,
               "z": -0.25
             },
             "scale": {
@@ -2005,7 +2089,7 @@
           "json": {
             "position": {
               "x": 0,
-              "y": 1,
+              "y": 0.9900000095367432,
               "z": -0.25
             },
             "scale": {
@@ -2031,7 +2115,7 @@
             },
             "scale": {
               "x": 1.5,
-              "y": 1.6299999952316284,
+              "y": 2.25,
               "z": 1.5
             },
             "rotation": {
@@ -2073,7 +2157,7 @@
             },
             "scale": {
               "x": 1.5,
-              "y": 1.6299999952316284,
+              "y": 2.25,
               "z": 1.5
             },
             "rotation": {
@@ -2089,7 +2173,7 @@
           "json": {
             "position": {
               "x": 16,
-              "y": 5.5,
+              "y": 8,
               "z": 0.20999999344348907
             },
             "scale": {
@@ -2104,6 +2188,594 @@
               "w": 1
             },
             "parent": 535
+          }
+        },
+        "612": {
+          "json": {
+            "position": {
+              "x": 1.25,
+              "y": 0,
+              "z": 0
+            },
+            "scale": {
+              "x": 1,
+              "y": 1,
+              "z": 1
+            },
+            "rotation": {
+              "x": 0,
+              "y": 0,
+              "z": 0,
+              "w": 1
+            },
+            "parent": 615
+          }
+        },
+        "613": {
+          "json": {
+            "position": {
+              "x": -0.3199999928474426,
+              "y": 0.15000000596046448,
+              "z": 0
+            },
+            "scale": {
+              "x": 1,
+              "y": 1,
+              "z": 1
+            },
+            "rotation": {
+              "x": 0,
+              "y": 0.7071067690849304,
+              "z": 0,
+              "w": -0.7071067690849304
+            },
+            "parent": 614
+          }
+        },
+        "614": {
+          "json": {
+            "position": {
+              "x": -1.25,
+              "y": 0,
+              "z": 0
+            },
+            "scale": {
+              "x": 1,
+              "y": 1,
+              "z": 1
+            },
+            "rotation": {
+              "x": 0,
+              "y": 1,
+              "z": 0,
+              "w": 0
+            },
+            "parent": 615
+          }
+        },
+        "615": {
+          "json": {
+            "position": {
+              "x": 27.25,
+              "y": 0,
+              "z": 12
+            },
+            "scale": {
+              "x": 1,
+              "y": 1,
+              "z": 1
+            },
+            "rotation": {
+              "x": 0,
+              "y": 0,
+              "z": 0,
+              "w": 1
+            },
+            "parent": 609
+          }
+        },
+        "616": {
+          "json": {
+            "position": {
+              "x": -0.3199999928474426,
+              "y": 0.15000000596046448,
+              "z": 0
+            },
+            "scale": {
+              "x": 1,
+              "y": 1,
+              "z": 1
+            },
+            "rotation": {
+              "x": 0,
+              "y": 0.7071067690849304,
+              "z": 0,
+              "w": -0.7071067690849304
+            },
+            "parent": 617
+          }
+        },
+        "617": {
+          "json": {
+            "position": {
+              "x": 1.25,
+              "y": 0,
+              "z": 0
+            },
+            "scale": {
+              "x": 1,
+              "y": 1,
+              "z": 1
+            },
+            "rotation": {
+              "x": 0,
+              "y": 0,
+              "z": 0,
+              "w": 1
+            },
+            "parent": 621
+          }
+        },
+        "618": {
+          "json": {
+            "position": {
+              "x": -0.3199999928474426,
+              "y": 0.15000000596046448,
+              "z": 0
+            },
+            "scale": {
+              "x": 1,
+              "y": 1,
+              "z": 1
+            },
+            "rotation": {
+              "x": 0,
+              "y": 0.7071067690849304,
+              "z": 0,
+              "w": -0.7071067690849304
+            },
+            "parent": 619
+          }
+        },
+        "619": {
+          "json": {
+            "position": {
+              "x": -1.25,
+              "y": 0,
+              "z": 0
+            },
+            "scale": {
+              "x": 1,
+              "y": 1,
+              "z": 1
+            },
+            "rotation": {
+              "x": 0,
+              "y": 1,
+              "z": 0,
+              "w": 0
+            },
+            "parent": 621
+          }
+        },
+        "620": {
+          "json": {
+            "position": {
+              "x": 0,
+              "y": 0.9900000095367432,
+              "z": -0.25
+            },
+            "scale": {
+              "x": 1,
+              "y": 1,
+              "z": 1
+            },
+            "rotation": {
+              "x": 0,
+              "y": 0,
+              "z": 0,
+              "w": 1
+            },
+            "parent": 621
+          }
+        },
+        "621": {
+          "json": {
+            "position": {
+              "x": 27.25,
+              "y": 0,
+              "z": 15.75
+            },
+            "scale": {
+              "x": 1,
+              "y": 1,
+              "z": 1
+            },
+            "rotation": {
+              "x": 0,
+              "y": 0,
+              "z": 0,
+              "w": 1
+            },
+            "parent": 609
+          }
+        },
+        "622": {
+          "json": {
+            "position": {
+              "x": 7.75,
+              "y": 3.5,
+              "z": 31.25
+            },
+            "scale": {
+              "x": 0.19999995827674866,
+              "y": 0.19999998807907104,
+              "z": 0.19999998807907104
+            },
+            "rotation": {
+              "x": -0.18301266431808472,
+              "y": -0.6830126643180847,
+              "z": 0.6830127239227295,
+              "w": 0.1830127090215683
+            },
+            "parent": 535
+          }
+        },
+        "623": {
+          "json": {
+            "position": {
+              "x": 10.75,
+              "y": 6.75,
+              "z": 31.25
+            },
+            "scale": {
+              "x": 0.25,
+              "y": 0.25,
+              "z": 0.25
+            },
+            "rotation": {
+              "x": 0.3535533845424652,
+              "y": -0.6123724579811096,
+              "z": 0.6123724579811096,
+              "w": -0.3535533845424652
+            },
+            "parent": 535
+          }
+        },
+        "624": {
+          "json": {
+            "position": {
+              "x": 15,
+              "y": 7,
+              "z": 31.25
+            },
+            "scale": {
+              "x": 0.12999999523162842,
+              "y": 0.12999999523162842,
+              "z": 0.12999999523162842
+            },
+            "rotation": {
+              "x": 0.1830127090215683,
+              "y": -0.6830127239227295,
+              "z": 0.6830127239227295,
+              "w": -0.1830127090215683
+            },
+            "parent": 535
+          }
+        },
+        "625": {
+          "json": {
+            "position": {
+              "x": 18.75,
+              "y": 6.5,
+              "z": 31.25
+            },
+            "scale": {
+              "x": 0.2199999988079071,
+              "y": 0.2199999988079071,
+              "z": 0.2199999988079071
+            },
+            "rotation": {
+              "x": 0.27059805393218994,
+              "y": 0.6532815098762512,
+              "z": -0.6532815098762512,
+              "w": -0.27059805393218994
+            },
+            "parent": 535
+          }
+        },
+        "626": {
+          "json": {
+            "position": {
+              "x": 22.25,
+              "y": 5,
+              "z": 31.25
+            },
+            "scale": {
+              "x": 0.15000000596046448,
+              "y": 0.15000000596046448,
+              "z": 0.15000000596046448
+            },
+            "rotation": {
+              "x": -0.27059808373451233,
+              "y": 0.6532815098762512,
+              "z": -0.6532815098762512,
+              "w": 0.27059808373451233
+            },
+            "parent": 535
+          }
+        },
+        "627": {
+          "json": {
+            "position": {
+              "x": 26.75,
+              "y": 6.25,
+              "z": 31.25
+            },
+            "scale": {
+              "x": 0.23000000417232513,
+              "y": 0.23000000417232513,
+              "z": 0.23000000417232513
+            },
+            "rotation": {
+              "x": 0.27059805393218994,
+              "y": 0.6532815098762512,
+              "z": -0.6532815098762512,
+              "w": -0.27059805393218994
+            },
+            "parent": 535
+          }
+        },
+        "628": {
+          "json": {
+            "position": {
+              "x": 29.25,
+              "y": 4,
+              "z": 31.25
+            },
+            "scale": {
+              "x": 0.10000000149011612,
+              "y": 0.10000000149011612,
+              "z": 0.10000000149011612
+            },
+            "rotation": {
+              "x": 0.5609855651855469,
+              "y": 0.4304593503475189,
+              "z": -0.4304593503475189,
+              "w": -0.5609855651855469
+            },
+            "parent": 535
+          }
+        },
+        "633": {
+          "json": {
+            "position": {
+              "x": -0.3199999928474426,
+              "y": 0.15000000596046448,
+              "z": 0
+            },
+            "scale": {
+              "x": 1,
+              "y": 1,
+              "z": 1
+            },
+            "rotation": {
+              "x": 0,
+              "y": 0.7071067690849304,
+              "z": 0,
+              "w": -0.7071067690849304
+            },
+            "parent": 634
+          }
+        },
+        "634": {
+          "json": {
+            "position": {
+              "x": 1.25,
+              "y": 0,
+              "z": 0
+            },
+            "scale": {
+              "x": 1,
+              "y": 1,
+              "z": 1
+            },
+            "rotation": {
+              "x": 0,
+              "y": 0,
+              "z": 0,
+              "w": 1
+            },
+            "parent": 638
+          }
+        },
+        "635": {
+          "json": {
+            "position": {
+              "x": -0.3199999928474426,
+              "y": 0.15000000596046448,
+              "z": 0
+            },
+            "scale": {
+              "x": 1,
+              "y": 1,
+              "z": 1
+            },
+            "rotation": {
+              "x": 0,
+              "y": 0.7071067690849304,
+              "z": 0,
+              "w": -0.7071067690849304
+            },
+            "parent": 636
+          }
+        },
+        "636": {
+          "json": {
+            "position": {
+              "x": -1.25,
+              "y": 0,
+              "z": 0
+            },
+            "scale": {
+              "x": 1,
+              "y": 1,
+              "z": 1
+            },
+            "rotation": {
+              "x": 0,
+              "y": 1,
+              "z": 0,
+              "w": 0
+            },
+            "parent": 638
+          }
+        },
+        "637": {
+          "json": {
+            "position": {
+              "x": 0.25,
+              "y": 0.9700000286102295,
+              "z": 0.25
+            },
+            "scale": {
+              "x": 1,
+              "y": 1,
+              "z": 1
+            },
+            "rotation": {
+              "x": 0,
+              "y": 0,
+              "z": 0,
+              "w": 1
+            },
+            "parent": 638
+          }
+        },
+        "638": {
+          "json": {
+            "position": {
+              "x": 4.5,
+              "y": 0,
+              "z": 12
+            },
+            "scale": {
+              "x": 1,
+              "y": 1,
+              "z": 1
+            },
+            "rotation": {
+              "x": 0,
+              "y": 0,
+              "z": 0,
+              "w": 1
+            },
+            "parent": 609
+          }
+        },
+        "639": {
+          "json": {
+            "position": {
+              "x": -0.3199999928474426,
+              "y": 0.15000000596046448,
+              "z": 0
+            },
+            "scale": {
+              "x": 1,
+              "y": 1,
+              "z": 1
+            },
+            "rotation": {
+              "x": 0,
+              "y": 0.7071067690849304,
+              "z": 0,
+              "w": -0.7071067690849304
+            },
+            "parent": 640
+          }
+        },
+        "640": {
+          "json": {
+            "position": {
+              "x": 1.25,
+              "y": 0,
+              "z": 0
+            },
+            "scale": {
+              "x": 1,
+              "y": 1,
+              "z": 1
+            },
+            "rotation": {
+              "x": 0,
+              "y": 0,
+              "z": 0,
+              "w": 1
+            },
+            "parent": 643
+          }
+        },
+        "641": {
+          "json": {
+            "position": {
+              "x": -0.3199999928474426,
+              "y": 0.15000000596046448,
+              "z": 0
+            },
+            "scale": {
+              "x": 1,
+              "y": 1,
+              "z": 1
+            },
+            "rotation": {
+              "x": 0,
+              "y": 0.7071067690849304,
+              "z": 0,
+              "w": -0.7071067690849304
+            },
+            "parent": 642
+          }
+        },
+        "642": {
+          "json": {
+            "position": {
+              "x": -1.25,
+              "y": 0,
+              "z": 0
+            },
+            "scale": {
+              "x": 1,
+              "y": 1,
+              "z": 1
+            },
+            "rotation": {
+              "x": 0,
+              "y": 1,
+              "z": 0,
+              "w": 0
+            },
+            "parent": 643
+          }
+        },
+        "643": {
+          "json": {
+            "position": {
+              "x": 4.5,
+              "y": 0,
+              "z": 15.75
+            },
+            "scale": {
+              "x": 1,
+              "y": 1,
+              "z": 1
+            },
+            "rotation": {
+              "x": 0,
+              "y": 0,
+              "z": 0,
+              "w": 1
+            },
+            "parent": 609
           }
         }
       }
@@ -2125,6 +2797,12 @@
         "serializationType": "map"
       },
       "data": {
+        "561": {
+          "json": {
+            "networkId": 0,
+            "entityId": 8019
+          }
+        },
         "564": {
           "json": {
             "networkId": 0,
@@ -2220,6 +2898,48 @@
             "networkId": 0,
             "entityId": 8016
           }
+        },
+        "613": {
+          "json": {
+            "networkId": 0,
+            "entityId": 8018
+          }
+        },
+        "616": {
+          "json": {
+            "networkId": 0,
+            "entityId": 8021
+          }
+        },
+        "618": {
+          "json": {
+            "networkId": 0,
+            "entityId": 8020
+          }
+        },
+        "633": {
+          "json": {
+            "networkId": 0,
+            "entityId": 8027
+          }
+        },
+        "635": {
+          "json": {
+            "networkId": 0,
+            "entityId": 8026
+          }
+        },
+        "639": {
+          "json": {
+            "networkId": 0,
+            "entityId": 8029
+          }
+        },
+        "641": {
+          "json": {
+            "networkId": 0,
+            "entityId": 8028
+          }
         }
       }
     },
@@ -2287,6 +3007,20 @@
             "invisibleMeshesCollisionMask": 2
           }
         },
+        "556": {
+          "json": {
+            "src": "assets/Models/letrero_pizza_neon.glb",
+            "visibleMeshesCollisionMask": 0,
+            "invisibleMeshesCollisionMask": 3
+          }
+        },
+        "557": {
+          "json": {
+            "src": "assets/Models/pizza_-_midpoly.glb",
+            "visibleMeshesCollisionMask": 0,
+            "invisibleMeshesCollisionMask": 3
+          }
+        },
         "558": {
           "json": {
             "src": "assets/asset-packs/pillar_-_antique/AntiquePillar.glb",
@@ -2297,6 +3031,13 @@
         "559": {
           "json": {
             "src": "assets/asset-packs/pillar_-_antique/AntiquePillar.glb",
+            "visibleMeshesCollisionMask": 0,
+            "invisibleMeshesCollisionMask": 3
+          }
+        },
+        "560": {
+          "json": {
+            "src": "assets/Models/letrero_pizza_neon.glb",
             "visibleMeshesCollisionMask": 0,
             "invisibleMeshesCollisionMask": 3
           }
@@ -2514,6 +3255,153 @@
         "610": {
           "json": {
             "src": "assets/asset-packs/pillar_-_antique/AntiquePillar.glb",
+            "visibleMeshesCollisionMask": 0,
+            "invisibleMeshesCollisionMask": 3
+          }
+        },
+        "612": {
+          "json": {
+            "src": "assets/asset-packs/classroom_chair/Chair_02.glb",
+            "visibleMeshesCollisionMask": 0,
+            "invisibleMeshesCollisionMask": 3
+          }
+        },
+        "614": {
+          "json": {
+            "src": "assets/asset-packs/classroom_chair/Chair_02.glb",
+            "visibleMeshesCollisionMask": 0,
+            "invisibleMeshesCollisionMask": 3
+          }
+        },
+        "615": {
+          "json": {
+            "src": "assets/asset-packs/square_wood_table/Table_03/Table_03.glb",
+            "visibleMeshesCollisionMask": 0,
+            "invisibleMeshesCollisionMask": 3
+          }
+        },
+        "617": {
+          "json": {
+            "src": "assets/asset-packs/classroom_chair/Chair_02.glb",
+            "visibleMeshesCollisionMask": 0,
+            "invisibleMeshesCollisionMask": 3
+          }
+        },
+        "619": {
+          "json": {
+            "src": "assets/asset-packs/classroom_chair/Chair_02.glb",
+            "visibleMeshesCollisionMask": 0,
+            "invisibleMeshesCollisionMask": 3
+          }
+        },
+        "620": {
+          "json": {
+            "src": "assets/asset-packs/chalice_of_abundance/Chalice_01/Chalice_01.glb",
+            "visibleMeshesCollisionMask": 0,
+            "invisibleMeshesCollisionMask": 3
+          }
+        },
+        "621": {
+          "json": {
+            "src": "assets/asset-packs/square_wood_table/Table_03/Table_03.glb",
+            "visibleMeshesCollisionMask": 0,
+            "invisibleMeshesCollisionMask": 3
+          }
+        },
+        "622": {
+          "json": {
+            "src": "assets/Models/pizza_-_midpoly.glb",
+            "visibleMeshesCollisionMask": 0,
+            "invisibleMeshesCollisionMask": 3
+          }
+        },
+        "623": {
+          "json": {
+            "src": "assets/Models/pizza_-_midpoly.glb",
+            "visibleMeshesCollisionMask": 0,
+            "invisibleMeshesCollisionMask": 3
+          }
+        },
+        "624": {
+          "json": {
+            "src": "assets/Models/pizza_-_midpoly.glb",
+            "visibleMeshesCollisionMask": 0,
+            "invisibleMeshesCollisionMask": 3
+          }
+        },
+        "625": {
+          "json": {
+            "src": "assets/Models/pizza_-_midpoly.glb",
+            "visibleMeshesCollisionMask": 0,
+            "invisibleMeshesCollisionMask": 3
+          }
+        },
+        "626": {
+          "json": {
+            "src": "assets/Models/pizza_-_midpoly.glb",
+            "visibleMeshesCollisionMask": 0,
+            "invisibleMeshesCollisionMask": 3
+          }
+        },
+        "627": {
+          "json": {
+            "src": "assets/Models/pizza_-_midpoly.glb",
+            "visibleMeshesCollisionMask": 0,
+            "invisibleMeshesCollisionMask": 3
+          }
+        },
+        "628": {
+          "json": {
+            "src": "assets/Models/pizza_-_midpoly.glb",
+            "visibleMeshesCollisionMask": 0,
+            "invisibleMeshesCollisionMask": 3
+          }
+        },
+        "634": {
+          "json": {
+            "src": "assets/asset-packs/classroom_chair/Chair_02.glb",
+            "visibleMeshesCollisionMask": 0,
+            "invisibleMeshesCollisionMask": 3
+          }
+        },
+        "636": {
+          "json": {
+            "src": "assets/asset-packs/classroom_chair/Chair_02.glb",
+            "visibleMeshesCollisionMask": 0,
+            "invisibleMeshesCollisionMask": 3
+          }
+        },
+        "637": {
+          "json": {
+            "src": "assets/asset-packs/wine_bottle/WineBottle_01/WineBottle_01.glb",
+            "visibleMeshesCollisionMask": 0,
+            "invisibleMeshesCollisionMask": 3
+          }
+        },
+        "638": {
+          "json": {
+            "src": "assets/asset-packs/square_wood_table/Table_03/Table_03.glb",
+            "visibleMeshesCollisionMask": 0,
+            "invisibleMeshesCollisionMask": 3
+          }
+        },
+        "640": {
+          "json": {
+            "src": "assets/asset-packs/classroom_chair/Chair_02.glb",
+            "visibleMeshesCollisionMask": 0,
+            "invisibleMeshesCollisionMask": 3
+          }
+        },
+        "642": {
+          "json": {
+            "src": "assets/asset-packs/classroom_chair/Chair_02.glb",
+            "visibleMeshesCollisionMask": 0,
+            "invisibleMeshesCollisionMask": 3
+          }
+        },
+        "643": {
+          "json": {
+            "src": "assets/asset-packs/square_wood_table/Table_03/Table_03.glb",
             "visibleMeshesCollisionMask": 0,
             "invisibleMeshesCollisionMask": 3
           }
@@ -4583,6 +5471,18 @@
               "box": {}
             }
           }
+        },
+        "615": {
+          "json": {}
+        },
+        "621": {
+          "json": {}
+        },
+        "638": {
+          "json": {}
+        },
+        "643": {
+          "json": {}
         }
       }
     },
@@ -5040,6 +5940,16 @@
             "value": "Picture04"
           }
         },
+        "556": {
+          "json": {
+            "value": "letrero_pizza_neon.glb"
+          }
+        },
+        "557": {
+          "json": {
+            "value": "pizza_-_midpoly.glb"
+          }
+        },
         "558": {
           "json": {
             "value": "Pillar - Antique"
@@ -5048,6 +5958,16 @@
         "559": {
           "json": {
             "value": "Pillar - Antique_2"
+          }
+        },
+        "560": {
+          "json": {
+            "value": "letrero_pizza_neon.glb_2"
+          }
+        },
+        "561": {
+          "json": {
+            "value": "Sit Spot_10"
           }
         },
         "562": {
@@ -5298,6 +6218,146 @@
         "611": {
           "json": {
             "value": "Wall_Front_Right_2"
+          }
+        },
+        "612": {
+          "json": {
+            "value": "Classroom Chair_10"
+          }
+        },
+        "613": {
+          "json": {
+            "value": "Sit Spot_10"
+          }
+        },
+        "614": {
+          "json": {
+            "value": "Classroom Chair_10"
+          }
+        },
+        "615": {
+          "json": {
+            "value": "Square Wood Table_9"
+          }
+        },
+        "616": {
+          "json": {
+            "value": "Sit Spot_11"
+          }
+        },
+        "617": {
+          "json": {
+            "value": "Classroom Chair_11"
+          }
+        },
+        "618": {
+          "json": {
+            "value": "Sit Spot_11"
+          }
+        },
+        "619": {
+          "json": {
+            "value": "Classroom Chair_11"
+          }
+        },
+        "620": {
+          "json": {
+            "value": "Chalice of Abundance_2"
+          }
+        },
+        "621": {
+          "json": {
+            "value": "Square Wood Table_10"
+          }
+        },
+        "622": {
+          "json": {
+            "value": "pizza_-_midpoly.glb_2"
+          }
+        },
+        "623": {
+          "json": {
+            "value": "pizza_-_midpoly.glb_3"
+          }
+        },
+        "624": {
+          "json": {
+            "value": "pizza_-_midpoly.glb_4"
+          }
+        },
+        "625": {
+          "json": {
+            "value": "pizza_-_midpoly.glb_5"
+          }
+        },
+        "626": {
+          "json": {
+            "value": "pizza_-_midpoly.glb_6"
+          }
+        },
+        "627": {
+          "json": {
+            "value": "pizza_-_midpoly.glb_7"
+          }
+        },
+        "628": {
+          "json": {
+            "value": "pizza_-_midpoly.glb_8"
+          }
+        },
+        "633": {
+          "json": {
+            "value": "Sit Spot_14"
+          }
+        },
+        "634": {
+          "json": {
+            "value": "Classroom Chair_14"
+          }
+        },
+        "635": {
+          "json": {
+            "value": "Sit Spot_14"
+          }
+        },
+        "636": {
+          "json": {
+            "value": "Classroom Chair_14"
+          }
+        },
+        "637": {
+          "json": {
+            "value": "Wine Bottle_3"
+          }
+        },
+        "638": {
+          "json": {
+            "value": "Square Wood Table_13"
+          }
+        },
+        "639": {
+          "json": {
+            "value": "Sit Spot_15"
+          }
+        },
+        "640": {
+          "json": {
+            "value": "Classroom Chair_15"
+          }
+        },
+        "641": {
+          "json": {
+            "value": "Sit Spot_15"
+          }
+        },
+        "642": {
+          "json": {
+            "value": "Classroom Chair_15"
+          }
+        },
+        "643": {
+          "json": {
+            "value": "Square Wood Table_14"
           }
         }
       }
@@ -5566,6 +6626,134 @@
               }
             ]
           }
+        },
+        "612": {
+          "json": {
+            "pointerEvents": [
+              {
+                "eventType": 1,
+                "eventInfo": {
+                  "button": 1,
+                  "hoverText": "Sit Here",
+                  "maxDistance": 10,
+                  "showFeedback": true,
+                  "showHighlight": true
+                }
+              }
+            ]
+          }
+        },
+        "614": {
+          "json": {
+            "pointerEvents": [
+              {
+                "eventType": 1,
+                "eventInfo": {
+                  "button": 1,
+                  "hoverText": "Sit Here",
+                  "maxDistance": 10,
+                  "showFeedback": true,
+                  "showHighlight": true
+                }
+              }
+            ]
+          }
+        },
+        "617": {
+          "json": {
+            "pointerEvents": [
+              {
+                "eventType": 1,
+                "eventInfo": {
+                  "button": 1,
+                  "hoverText": "Sit Here",
+                  "maxDistance": 10,
+                  "showFeedback": true,
+                  "showHighlight": true
+                }
+              }
+            ]
+          }
+        },
+        "619": {
+          "json": {
+            "pointerEvents": [
+              {
+                "eventType": 1,
+                "eventInfo": {
+                  "button": 1,
+                  "hoverText": "Sit Here",
+                  "maxDistance": 10,
+                  "showFeedback": true,
+                  "showHighlight": true
+                }
+              }
+            ]
+          }
+        },
+        "634": {
+          "json": {
+            "pointerEvents": [
+              {
+                "eventType": 1,
+                "eventInfo": {
+                  "button": 1,
+                  "hoverText": "Sit Here",
+                  "maxDistance": 10,
+                  "showFeedback": true,
+                  "showHighlight": true
+                }
+              }
+            ]
+          }
+        },
+        "636": {
+          "json": {
+            "pointerEvents": [
+              {
+                "eventType": 1,
+                "eventInfo": {
+                  "button": 1,
+                  "hoverText": "Sit Here",
+                  "maxDistance": 10,
+                  "showFeedback": true,
+                  "showHighlight": true
+                }
+              }
+            ]
+          }
+        },
+        "640": {
+          "json": {
+            "pointerEvents": [
+              {
+                "eventType": 1,
+                "eventInfo": {
+                  "button": 1,
+                  "hoverText": "Sit Here",
+                  "maxDistance": 10,
+                  "showFeedback": true,
+                  "showHighlight": true
+                }
+              }
+            ]
+          }
+        },
+        "642": {
+          "json": {
+            "pointerEvents": [
+              {
+                "eventType": 1,
+                "eventInfo": {
+                  "button": 1,
+                  "hoverText": "Sit Here",
+                  "maxDistance": 10,
+                  "showFeedback": true,
+                  "showHighlight": true
+                }
+              }
+            ]
+          }
         }
       }
     },
@@ -5586,6 +6774,13 @@
         "serializationType": "map"
       },
       "data": {
+        "561": {
+          "json": {
+            "componentIds": [
+              2709697014
+            ]
+          }
+        },
         "564": {
           "json": {
             "componentIds": [
@@ -5692,6 +6887,55 @@
           }
         },
         "600": {
+          "json": {
+            "componentIds": [
+              2709697014
+            ]
+          }
+        },
+        "613": {
+          "json": {
+            "componentIds": [
+              2709697014
+            ]
+          }
+        },
+        "616": {
+          "json": {
+            "componentIds": [
+              2709697014
+            ]
+          }
+        },
+        "618": {
+          "json": {
+            "componentIds": [
+              2709697014
+            ]
+          }
+        },
+        "633": {
+          "json": {
+            "componentIds": [
+              2709697014
+            ]
+          }
+        },
+        "635": {
+          "json": {
+            "componentIds": [
+              2709697014
+            ]
+          }
+        },
+        "639": {
+          "json": {
+            "componentIds": [
+              2709697014
+            ]
+          }
+        },
+        "641": {
           "json": {
             "componentIds": [
               2709697014
@@ -5730,7 +6974,7 @@
         },
         "562": {
           "json": {
-            "text": "Life is better with pizza!",
+            "text": "La vita è più bella\ncon la pizza!",
             "font": 1,
             "fontSize": 2,
             "fontAutoSize": false,
@@ -5765,6 +7009,11 @@
         "protocolBuffer": "PBVisibilityComponent"
       },
       "data": {
+        "561": {
+          "json": {
+            "visible": false
+          }
+        },
         "564": {
           "json": {
             "visible": false
@@ -5841,6 +7090,41 @@
           }
         },
         "600": {
+          "json": {
+            "visible": false
+          }
+        },
+        "613": {
+          "json": {
+            "visible": false
+          }
+        },
+        "616": {
+          "json": {
+            "visible": false
+          }
+        },
+        "618": {
+          "json": {
+            "visible": false
+          }
+        },
+        "633": {
+          "json": {
+            "visible": false
+          }
+        },
+        "635": {
+          "json": {
+            "visible": false
+          }
+        },
+        "639": {
+          "json": {
+            "visible": false
+          }
+        },
+        "641": {
           "json": {
             "visible": false
           }
@@ -5917,9 +7201,9 @@
         "serializationType": "map"
       },
       "data": {
-        "0": {
+        "560": {
           "json": {
-            "gizmo": 0
+            "gizmo": 1
           }
         }
       }
@@ -6004,6 +7288,7 @@
               },
               {
                 "entity": 518,
+                "open": true,
                 "children": [
                   562
                 ]
@@ -6018,7 +7303,6 @@
               },
               {
                 "entity": 522,
-                "open": true,
                 "children": [
                   539,
                   541,
@@ -6133,7 +7417,17 @@
                   532,
                   555,
                   513,
-                  512
+                  512,
+                  557,
+                  622,
+                  623,
+                  624,
+                  625,
+                  626,
+                  627,
+                  628,
+                  556,
+                  560
                 ]
               },
               {
@@ -6214,6 +7508,7 @@
               },
               {
                 "entity": 563,
+                "open": true,
                 "children": [
                   565,
                   567
@@ -6241,6 +7536,7 @@
               },
               {
                 "entity": 572,
+                "open": true,
                 "children": [
                   571,
                   569,
@@ -6270,6 +7566,7 @@
               },
               {
                 "entity": 577,
+                "open": true,
                 "children": [
                   576,
                   574,
@@ -6298,6 +7595,7 @@
               },
               {
                 "entity": 582,
+                "open": true,
                 "children": [
                   581,
                   579
@@ -6325,6 +7623,7 @@
               },
               {
                 "entity": 587,
+                "open": true,
                 "children": [
                   586,
                   584
@@ -6352,6 +7651,7 @@
               },
               {
                 "entity": 592,
+                "open": true,
                 "children": [
                   591,
                   589,
@@ -6380,6 +7680,7 @@
               },
               {
                 "entity": 597,
+                "open": true,
                 "children": [
                   596,
                   594,
@@ -6408,6 +7709,7 @@
               },
               {
                 "entity": 602,
+                "open": true,
                 "children": [
                   601,
                   599
@@ -6459,11 +7761,15 @@
                   563,
                   572,
                   577,
+                  615,
+                  621,
                   582,
                   587,
                   592,
                   597,
-                  602
+                  602,
+                  638,
+                  643
                 ]
               },
               {
@@ -6492,6 +7798,168 @@
               },
               {
                 "entity": 512,
+                "children": []
+              },
+              {
+                "entity": 615,
+                "open": true,
+                "children": [
+                  614,
+                  612
+                ]
+              },
+              {
+                "entity": 614,
+                "children": [
+                  613
+                ]
+              },
+              {
+                "entity": 613,
+                "children": []
+              },
+              {
+                "entity": 612,
+                "children": [
+                  561
+                ]
+              },
+              {
+                "entity": 561,
+                "children": []
+              },
+              {
+                "entity": 621,
+                "open": true,
+                "children": [
+                  620,
+                  619,
+                  617
+                ]
+              },
+              {
+                "entity": 620,
+                "children": []
+              },
+              {
+                "entity": 619,
+                "children": [
+                  618
+                ]
+              },
+              {
+                "entity": 618,
+                "children": []
+              },
+              {
+                "entity": 617,
+                "children": [
+                  616
+                ]
+              },
+              {
+                "entity": 616,
+                "children": []
+              },
+              {
+                "entity": 638,
+                "open": true,
+                "children": [
+                  637,
+                  636,
+                  634
+                ]
+              },
+              {
+                "entity": 637,
+                "children": []
+              },
+              {
+                "entity": 636,
+                "children": [
+                  635
+                ]
+              },
+              {
+                "entity": 635,
+                "children": []
+              },
+              {
+                "entity": 634,
+                "children": [
+                  633
+                ]
+              },
+              {
+                "entity": 633,
+                "children": []
+              },
+              {
+                "entity": 643,
+                "open": true,
+                "children": [
+                  642,
+                  640
+                ]
+              },
+              {
+                "entity": 642,
+                "children": [
+                  641
+                ]
+              },
+              {
+                "entity": 641,
+                "children": []
+              },
+              {
+                "entity": 640,
+                "children": [
+                  639
+                ]
+              },
+              {
+                "entity": 639,
+                "children": []
+              },
+              {
+                "entity": 557,
+                "children": []
+              },
+              {
+                "entity": 622,
+                "children": []
+              },
+              {
+                "entity": 623,
+                "children": []
+              },
+              {
+                "entity": 624,
+                "children": []
+              },
+              {
+                "entity": 625,
+                "children": []
+              },
+              {
+                "entity": 626,
+                "children": []
+              },
+              {
+                "entity": 627,
+                "children": []
+              },
+              {
+                "entity": 628,
+                "children": []
+              },
+              {
+                "entity": 556,
+                "children": []
+              },
+              {
+                "entity": 560,
                 "children": []
               }
             ]
@@ -6639,10 +8107,19 @@
         "555": {
           "json": {}
         },
+        "556": {
+          "json": {}
+        },
+        "557": {
+          "json": {}
+        },
         "558": {
           "json": {}
         },
         "559": {
+          "json": {}
+        },
+        "560": {
           "json": {}
         },
         "562": {
@@ -6745,6 +8222,69 @@
           "json": {}
         },
         "611": {
+          "json": {}
+        },
+        "612": {
+          "json": {}
+        },
+        "614": {
+          "json": {}
+        },
+        "615": {
+          "json": {}
+        },
+        "617": {
+          "json": {}
+        },
+        "619": {
+          "json": {}
+        },
+        "620": {
+          "json": {}
+        },
+        "621": {
+          "json": {}
+        },
+        "622": {
+          "json": {}
+        },
+        "623": {
+          "json": {}
+        },
+        "624": {
+          "json": {}
+        },
+        "625": {
+          "json": {}
+        },
+        "626": {
+          "json": {}
+        },
+        "627": {
+          "json": {}
+        },
+        "628": {
+          "json": {}
+        },
+        "634": {
+          "json": {}
+        },
+        "636": {
+          "json": {}
+        },
+        "637": {
+          "json": {}
+        },
+        "638": {
+          "json": {}
+        },
+        "640": {
+          "json": {}
+        },
+        "642": {
+          "json": {}
+        },
+        "643": {
           "json": {}
         }
       }
@@ -7253,6 +8793,28 @@
         "serializationType": "map"
       },
       "data": {
+        "561": {
+          "json": {
+            "isBasicViewEnabled": false,
+            "componentName": "Sit Spot",
+            "fields": [
+              {
+                "name": "Hover Text",
+                "type": "core::PointerEvents"
+              },
+              {
+                "name": "When Clicked",
+                "type": "asset-packs::Triggers",
+                "basicViewId": "trigger-when-clicked"
+              }
+            ],
+            "assetId": "b77f481d-184b-4704-b1fb-aaeec14eb738",
+            "helpTooltip": {
+              "text": "Configure the sit spot's hover text and actions. Players can click to sit here. The spot tracks whether it's free or taken and shows a message when occupied."
+            },
+            "version": 1
+          }
+        },
         "564": {
           "json": {
             "isBasicViewEnabled": false,
@@ -7786,6 +9348,256 @@
           }
         },
         "601": {
+          "json": {
+            "isBasicViewEnabled": false,
+            "componentName": "Classroom Chair",
+            "fields": [],
+            "assetId": "b77f481d-184b-4704-b1fb-aaeec14eb738",
+            "helpTooltip": {
+              "text": "A classroom chair that players can sit on. Click to sit down at this location."
+            },
+            "version": 1
+          }
+        },
+        "612": {
+          "json": {
+            "isBasicViewEnabled": false,
+            "componentName": "Classroom Chair",
+            "fields": [],
+            "assetId": "b77f481d-184b-4704-b1fb-aaeec14eb738",
+            "helpTooltip": {
+              "text": "A classroom chair that players can sit on. Click to sit down at this location."
+            },
+            "version": 1
+          }
+        },
+        "613": {
+          "json": {
+            "isBasicViewEnabled": false,
+            "componentName": "Sit Spot",
+            "fields": [
+              {
+                "name": "Hover Text",
+                "type": "core::PointerEvents"
+              },
+              {
+                "name": "When Clicked",
+                "type": "asset-packs::Triggers",
+                "basicViewId": "trigger-when-clicked"
+              }
+            ],
+            "assetId": "b77f481d-184b-4704-b1fb-aaeec14eb738",
+            "helpTooltip": {
+              "text": "Configure the sit spot's hover text and actions. Players can click to sit here. The spot tracks whether it's free or taken and shows a message when occupied."
+            },
+            "version": 1
+          }
+        },
+        "614": {
+          "json": {
+            "isBasicViewEnabled": false,
+            "componentName": "Classroom Chair",
+            "fields": [],
+            "assetId": "b77f481d-184b-4704-b1fb-aaeec14eb738",
+            "helpTooltip": {
+              "text": "A classroom chair that players can sit on. Click to sit down at this location."
+            },
+            "version": 1
+          }
+        },
+        "616": {
+          "json": {
+            "isBasicViewEnabled": false,
+            "componentName": "Sit Spot",
+            "fields": [
+              {
+                "name": "Hover Text",
+                "type": "core::PointerEvents"
+              },
+              {
+                "name": "When Clicked",
+                "type": "asset-packs::Triggers",
+                "basicViewId": "trigger-when-clicked"
+              }
+            ],
+            "assetId": "b77f481d-184b-4704-b1fb-aaeec14eb738",
+            "helpTooltip": {
+              "text": "Configure the sit spot's hover text and actions. Players can click to sit here. The spot tracks whether it's free or taken and shows a message when occupied."
+            },
+            "version": 1
+          }
+        },
+        "617": {
+          "json": {
+            "isBasicViewEnabled": false,
+            "componentName": "Classroom Chair",
+            "fields": [],
+            "assetId": "b77f481d-184b-4704-b1fb-aaeec14eb738",
+            "helpTooltip": {
+              "text": "A classroom chair that players can sit on. Click to sit down at this location."
+            },
+            "version": 1
+          }
+        },
+        "618": {
+          "json": {
+            "isBasicViewEnabled": false,
+            "componentName": "Sit Spot",
+            "fields": [
+              {
+                "name": "Hover Text",
+                "type": "core::PointerEvents"
+              },
+              {
+                "name": "When Clicked",
+                "type": "asset-packs::Triggers",
+                "basicViewId": "trigger-when-clicked"
+              }
+            ],
+            "assetId": "b77f481d-184b-4704-b1fb-aaeec14eb738",
+            "helpTooltip": {
+              "text": "Configure the sit spot's hover text and actions. Players can click to sit here. The spot tracks whether it's free or taken and shows a message when occupied."
+            },
+            "version": 1
+          }
+        },
+        "619": {
+          "json": {
+            "isBasicViewEnabled": false,
+            "componentName": "Classroom Chair",
+            "fields": [],
+            "assetId": "b77f481d-184b-4704-b1fb-aaeec14eb738",
+            "helpTooltip": {
+              "text": "A classroom chair that players can sit on. Click to sit down at this location."
+            },
+            "version": 1
+          }
+        },
+        "633": {
+          "json": {
+            "isBasicViewEnabled": false,
+            "componentName": "Sit Spot",
+            "fields": [
+              {
+                "name": "Hover Text",
+                "type": "core::PointerEvents"
+              },
+              {
+                "name": "When Clicked",
+                "type": "asset-packs::Triggers",
+                "basicViewId": "trigger-when-clicked"
+              }
+            ],
+            "assetId": "b77f481d-184b-4704-b1fb-aaeec14eb738",
+            "helpTooltip": {
+              "text": "Configure the sit spot's hover text and actions. Players can click to sit here. The spot tracks whether it's free or taken and shows a message when occupied."
+            },
+            "version": 1
+          }
+        },
+        "634": {
+          "json": {
+            "isBasicViewEnabled": false,
+            "componentName": "Classroom Chair",
+            "fields": [],
+            "assetId": "b77f481d-184b-4704-b1fb-aaeec14eb738",
+            "helpTooltip": {
+              "text": "A classroom chair that players can sit on. Click to sit down at this location."
+            },
+            "version": 1
+          }
+        },
+        "635": {
+          "json": {
+            "isBasicViewEnabled": false,
+            "componentName": "Sit Spot",
+            "fields": [
+              {
+                "name": "Hover Text",
+                "type": "core::PointerEvents"
+              },
+              {
+                "name": "When Clicked",
+                "type": "asset-packs::Triggers",
+                "basicViewId": "trigger-when-clicked"
+              }
+            ],
+            "assetId": "b77f481d-184b-4704-b1fb-aaeec14eb738",
+            "helpTooltip": {
+              "text": "Configure the sit spot's hover text and actions. Players can click to sit here. The spot tracks whether it's free or taken and shows a message when occupied."
+            },
+            "version": 1
+          }
+        },
+        "636": {
+          "json": {
+            "isBasicViewEnabled": false,
+            "componentName": "Classroom Chair",
+            "fields": [],
+            "assetId": "b77f481d-184b-4704-b1fb-aaeec14eb738",
+            "helpTooltip": {
+              "text": "A classroom chair that players can sit on. Click to sit down at this location."
+            },
+            "version": 1
+          }
+        },
+        "639": {
+          "json": {
+            "isBasicViewEnabled": false,
+            "componentName": "Sit Spot",
+            "fields": [
+              {
+                "name": "Hover Text",
+                "type": "core::PointerEvents"
+              },
+              {
+                "name": "When Clicked",
+                "type": "asset-packs::Triggers",
+                "basicViewId": "trigger-when-clicked"
+              }
+            ],
+            "assetId": "b77f481d-184b-4704-b1fb-aaeec14eb738",
+            "helpTooltip": {
+              "text": "Configure the sit spot's hover text and actions. Players can click to sit here. The spot tracks whether it's free or taken and shows a message when occupied."
+            },
+            "version": 1
+          }
+        },
+        "640": {
+          "json": {
+            "isBasicViewEnabled": false,
+            "componentName": "Classroom Chair",
+            "fields": [],
+            "assetId": "b77f481d-184b-4704-b1fb-aaeec14eb738",
+            "helpTooltip": {
+              "text": "A classroom chair that players can sit on. Click to sit down at this location."
+            },
+            "version": 1
+          }
+        },
+        "641": {
+          "json": {
+            "isBasicViewEnabled": false,
+            "componentName": "Sit Spot",
+            "fields": [
+              {
+                "name": "Hover Text",
+                "type": "core::PointerEvents"
+              },
+              {
+                "name": "When Clicked",
+                "type": "asset-packs::Triggers",
+                "basicViewId": "trigger-when-clicked"
+              }
+            ],
+            "assetId": "b77f481d-184b-4704-b1fb-aaeec14eb738",
+            "helpTooltip": {
+              "text": "Configure the sit spot's hover text and actions. Players can click to sit here. The spot tracks whether it's free or taken and shows a message when occupied."
+            },
+            "version": 1
+          }
+        },
+        "642": {
           "json": {
             "isBasicViewEnabled": false,
             "componentName": "Classroom Chair",
@@ -8554,6 +10366,65 @@
         "serializationType": "map"
       },
       "data": {
+        "561": {
+          "json": {
+            "id": 33,
+            "value": [
+              {
+                "name": "Move here",
+                "type": "move_player_here",
+                "jsonPayload": "{}"
+              },
+              {
+                "name": "Sit anim1",
+                "type": "play_default_emote",
+                "jsonPayload": "{\"emote\":\"sittingChair1\"}"
+              },
+              {
+                "name": "Mark as taken",
+                "type": "set_state",
+                "jsonPayload": "{\"state\":\"Taken\"}"
+              },
+              {
+                "name": "Mark as free",
+                "type": "set_state",
+                "jsonPayload": "{\"state\":\"Free\"}",
+                "allowedInBasicView": true
+              },
+              {
+                "name": "Sit Here",
+                "type": "batch",
+                "jsonPayload": "{\"actions\":[\"Move here\",\"Mark as taken\",\"Random sit anim\"]}",
+                "allowedInBasicView": true
+              },
+              {
+                "name": "Sit anim2",
+                "type": "play_default_emote",
+                "jsonPayload": "{\"emote\":\"sittingChair2\"}"
+              },
+              {
+                "name": "Random sit anim",
+                "type": "random",
+                "jsonPayload": "{\"actions\":[\"Sit anim1\",\"Sit anim2\"]}"
+              },
+              {
+                "name": "Print text",
+                "type": "show_text",
+                "jsonPayload": "{\"text\":\"Seat is taken\",\"hideAfterSeconds\":2,\"font\":0,\"fontSize\":40,\"textAlign\":7}"
+              },
+              {
+                "name": "Hide text",
+                "type": "hide_text",
+                "jsonPayload": "{}"
+              },
+              {
+                "name": "Show text",
+                "type": "batch",
+                "jsonPayload": "{\"actions\":[\"Hide text\",\"Print text\"]}"
+              }
+            ]
+          }
+        },
         "564": {
           "json": {
             "id": 1,
@@ -9497,6 +11368,419 @@
               }
             ]
           }
+        },
+        "613": {
+          "json": {
+            "id": 35,
+            "value": [
+              {
+                "name": "Move here",
+                "type": "move_player_here",
+                "jsonPayload": "{}"
+              },
+              {
+                "name": "Sit anim1",
+                "type": "play_default_emote",
+                "jsonPayload": "{\"emote\":\"sittingChair1\"}"
+              },
+              {
+                "name": "Mark as taken",
+                "type": "set_state",
+                "jsonPayload": "{\"state\":\"Taken\"}"
+              },
+              {
+                "name": "Mark as free",
+                "type": "set_state",
+                "jsonPayload": "{\"state\":\"Free\"}",
+                "allowedInBasicView": true
+              },
+              {
+                "name": "Sit Here",
+                "type": "batch",
+                "jsonPayload": "{\"actions\":[\"Move here\",\"Mark as taken\",\"Random sit anim\"]}",
+                "allowedInBasicView": true
+              },
+              {
+                "name": "Sit anim2",
+                "type": "play_default_emote",
+                "jsonPayload": "{\"emote\":\"sittingChair2\"}"
+              },
+              {
+                "name": "Random sit anim",
+                "type": "random",
+                "jsonPayload": "{\"actions\":[\"Sit anim1\",\"Sit anim2\"]}"
+              },
+              {
+                "name": "Print text",
+                "type": "show_text",
+                "jsonPayload": "{\"text\":\"Seat is taken\",\"hideAfterSeconds\":2,\"font\":0,\"fontSize\":40,\"textAlign\":7}"
+              },
+              {
+                "name": "Hide text",
+                "type": "hide_text",
+                "jsonPayload": "{}"
+              },
+              {
+                "name": "Show text",
+                "type": "batch",
+                "jsonPayload": "{\"actions\":[\"Hide text\",\"Print text\"]}"
+              }
+            ]
+          }
+        },
+        "616": {
+          "json": {
+            "id": 37,
+            "value": [
+              {
+                "name": "Move here",
+                "type": "move_player_here",
+                "jsonPayload": "{}"
+              },
+              {
+                "name": "Sit anim1",
+                "type": "play_default_emote",
+                "jsonPayload": "{\"emote\":\"sittingChair1\"}"
+              },
+              {
+                "name": "Mark as taken",
+                "type": "set_state",
+                "jsonPayload": "{\"state\":\"Taken\"}"
+              },
+              {
+                "name": "Mark as free",
+                "type": "set_state",
+                "jsonPayload": "{\"state\":\"Free\"}",
+                "allowedInBasicView": true
+              },
+              {
+                "name": "Sit Here",
+                "type": "batch",
+                "jsonPayload": "{\"actions\":[\"Move here\",\"Mark as taken\",\"Random sit anim\"]}",
+                "allowedInBasicView": true
+              },
+              {
+                "name": "Sit anim2",
+                "type": "play_default_emote",
+                "jsonPayload": "{\"emote\":\"sittingChair2\"}"
+              },
+              {
+                "name": "Random sit anim",
+                "type": "random",
+                "jsonPayload": "{\"actions\":[\"Sit anim1\",\"Sit anim2\"]}"
+              },
+              {
+                "name": "Print text",
+                "type": "show_text",
+                "jsonPayload": "{\"text\":\"Seat is taken\",\"hideAfterSeconds\":2,\"font\":0,\"fontSize\":40,\"textAlign\":7}"
+              },
+              {
+                "name": "Hide text",
+                "type": "hide_text",
+                "jsonPayload": "{}"
+              },
+              {
+                "name": "Show text",
+                "type": "batch",
+                "jsonPayload": "{\"actions\":[\"Hide text\",\"Print text\"]}"
+              }
+            ]
+          }
+        },
+        "618": {
+          "json": {
+            "id": 39,
+            "value": [
+              {
+                "name": "Move here",
+                "type": "move_player_here",
+                "jsonPayload": "{}"
+              },
+              {
+                "name": "Sit anim1",
+                "type": "play_default_emote",
+                "jsonPayload": "{\"emote\":\"sittingChair1\"}"
+              },
+              {
+                "name": "Mark as taken",
+                "type": "set_state",
+                "jsonPayload": "{\"state\":\"Taken\"}"
+              },
+              {
+                "name": "Mark as free",
+                "type": "set_state",
+                "jsonPayload": "{\"state\":\"Free\"}",
+                "allowedInBasicView": true
+              },
+              {
+                "name": "Sit Here",
+                "type": "batch",
+                "jsonPayload": "{\"actions\":[\"Move here\",\"Mark as taken\",\"Random sit anim\"]}",
+                "allowedInBasicView": true
+              },
+              {
+                "name": "Sit anim2",
+                "type": "play_default_emote",
+                "jsonPayload": "{\"emote\":\"sittingChair2\"}"
+              },
+              {
+                "name": "Random sit anim",
+                "type": "random",
+                "jsonPayload": "{\"actions\":[\"Sit anim1\",\"Sit anim2\"]}"
+              },
+              {
+                "name": "Print text",
+                "type": "show_text",
+                "jsonPayload": "{\"text\":\"Seat is taken\",\"hideAfterSeconds\":2,\"font\":0,\"fontSize\":40,\"textAlign\":7}"
+              },
+              {
+                "name": "Hide text",
+                "type": "hide_text",
+                "jsonPayload": "{}"
+              },
+              {
+                "name": "Show text",
+                "type": "batch",
+                "jsonPayload": "{\"actions\":[\"Hide text\",\"Print text\"]}"
+              }
+            ]
+          }
+        },
+        "633": {
+          "json": {
+            "id": 49,
+            "value": [
+              {
+                "name": "Move here",
+                "type": "move_player_here",
+                "jsonPayload": "{}"
+              },
+              {
+                "name": "Sit anim1",
+                "type": "play_default_emote",
+                "jsonPayload": "{\"emote\":\"sittingChair1\"}"
+              },
+              {
+                "name": "Mark as taken",
+                "type": "set_state",
+                "jsonPayload": "{\"state\":\"Taken\"}"
+              },
+              {
+                "name": "Mark as free",
+                "type": "set_state",
+                "jsonPayload": "{\"state\":\"Free\"}",
+                "allowedInBasicView": true
+              },
+              {
+                "name": "Sit Here",
+                "type": "batch",
+                "jsonPayload": "{\"actions\":[\"Move here\",\"Mark as taken\",\"Random sit anim\"]}",
+                "allowedInBasicView": true
+              },
+              {
+                "name": "Sit anim2",
+                "type": "play_default_emote",
+                "jsonPayload": "{\"emote\":\"sittingChair2\"}"
+              },
+              {
+                "name": "Random sit anim",
+                "type": "random",
+                "jsonPayload": "{\"actions\":[\"Sit anim1\",\"Sit anim2\"]}"
+              },
+              {
+                "name": "Print text",
+                "type": "show_text",
+                "jsonPayload": "{\"text\":\"Seat is taken\",\"hideAfterSeconds\":2,\"font\":0,\"fontSize\":40,\"textAlign\":7}"
+              },
+              {
+                "name": "Hide text",
+                "type": "hide_text",
+                "jsonPayload": "{}"
+              },
+              {
+                "name": "Show text",
+                "type": "batch",
+                "jsonPayload": "{\"actions\":[\"Hide text\",\"Print text\"]}"
+              }
+            ]
+          }
+        },
+        "635": {
+          "json": {
+            "id": 51,
+            "value": [
+              {
+                "name": "Move here",
+                "type": "move_player_here",
+                "jsonPayload": "{}"
+              },
+              {
+                "name": "Sit anim1",
+                "type": "play_default_emote",
+                "jsonPayload": "{\"emote\":\"sittingChair1\"}"
+              },
+              {
+                "name": "Mark as taken",
+                "type": "set_state",
+                "jsonPayload": "{\"state\":\"Taken\"}"
+              },
+              {
+                "name": "Mark as free",
+                "type": "set_state",
+                "jsonPayload": "{\"state\":\"Free\"}",
+                "allowedInBasicView": true
+              },
+              {
+                "name": "Sit Here",
+                "type": "batch",
+                "jsonPayload": "{\"actions\":[\"Move here\",\"Mark as taken\",\"Random sit anim\"]}",
+                "allowedInBasicView": true
+              },
+              {
+                "name": "Sit anim2",
+                "type": "play_default_emote",
+                "jsonPayload": "{\"emote\":\"sittingChair2\"}"
+              },
+              {
+                "name": "Random sit anim",
+                "type": "random",
+                "jsonPayload": "{\"actions\":[\"Sit anim1\",\"Sit anim2\"]}"
+              },
+              {
+                "name": "Print text",
+                "type": "show_text",
+                "jsonPayload": "{\"text\":\"Seat is taken\",\"hideAfterSeconds\":2,\"font\":0,\"fontSize\":40,\"textAlign\":7}"
+              },
+              {
+                "name": "Hide text",
+                "type": "hide_text",
+                "jsonPayload": "{}"
+              },
+              {
+                "name": "Show text",
+                "type": "batch",
+                "jsonPayload": "{\"actions\":[\"Hide text\",\"Print text\"]}"
+              }
+            ]
+          }
+        },
+        "639": {
+          "json": {
+            "id": 53,
+            "value": [
+              {
+                "name": "Move here",
+                "type": "move_player_here",
+                "jsonPayload": "{}"
+              },
+              {
+                "name": "Sit anim1",
+                "type": "play_default_emote",
+                "jsonPayload": "{\"emote\":\"sittingChair1\"}"
+              },
+              {
+                "name": "Mark as taken",
+                "type": "set_state",
+                "jsonPayload": "{\"state\":\"Taken\"}"
+              },
+              {
+                "name": "Mark as free",
+                "type": "set_state",
+                "jsonPayload": "{\"state\":\"Free\"}",
+                "allowedInBasicView": true
+              },
+              {
+                "name": "Sit Here",
+                "type": "batch",
+                "jsonPayload": "{\"actions\":[\"Move here\",\"Mark as taken\",\"Random sit anim\"]}",
+                "allowedInBasicView": true
+              },
+              {
+                "name": "Sit anim2",
+                "type": "play_default_emote",
+                "jsonPayload": "{\"emote\":\"sittingChair2\"}"
+              },
+              {
+                "name": "Random sit anim",
+                "type": "random",
+                "jsonPayload": "{\"actions\":[\"Sit anim1\",\"Sit anim2\"]}"
+              },
+              {
+                "name": "Print text",
+                "type": "show_text",
+                "jsonPayload": "{\"text\":\"Seat is taken\",\"hideAfterSeconds\":2,\"font\":0,\"fontSize\":40,\"textAlign\":7}"
+              },
+              {
+                "name": "Hide text",
+                "type": "hide_text",
+                "jsonPayload": "{}"
+              },
+              {
+                "name": "Show text",
+                "type": "batch",
+                "jsonPayload": "{\"actions\":[\"Hide text\",\"Print text\"]}"
+              }
+            ]
+          }
+        },
+        "641": {
+          "json": {
+            "id": 55,
+            "value": [
+              {
+                "name": "Move here",
+                "type": "move_player_here",
+                "jsonPayload": "{}"
+              },
+              {
+                "name": "Sit anim1",
+                "type": "play_default_emote",
+                "jsonPayload": "{\"emote\":\"sittingChair1\"}"
+              },
+              {
+                "name": "Mark as taken",
+                "type": "set_state",
+                "jsonPayload": "{\"state\":\"Taken\"}"
+              },
+              {
+                "name": "Mark as free",
+                "type": "set_state",
+                "jsonPayload": "{\"state\":\"Free\"}",
+                "allowedInBasicView": true
+              },
+              {
+                "name": "Sit Here",
+                "type": "batch",
+                "jsonPayload": "{\"actions\":[\"Move here\",\"Mark as taken\",\"Random sit anim\"]}",
+                "allowedInBasicView": true
+              },
+              {
+                "name": "Sit anim2",
+                "type": "play_default_emote",
+                "jsonPayload": "{\"emote\":\"sittingChair2\"}"
+              },
+              {
+                "name": "Random sit anim",
+                "type": "random",
+                "jsonPayload": "{\"actions\":[\"Sit anim1\",\"Sit anim2\"]}"
+              },
+              {
+                "name": "Print text",
+                "type": "show_text",
+                "jsonPayload": "{\"text\":\"Seat is taken\",\"hideAfterSeconds\":2,\"font\":0,\"fontSize\":40,\"textAlign\":7}"
+              },
+              {
+                "name": "Hide text",
+                "type": "hide_text",
+                "jsonPayload": "{}"
+              },
+              {
+                "name": "Show text",
+                "type": "batch",
+                "jsonPayload": "{\"actions\":[\"Hide text\",\"Print text\"]}"
+              }
+            ]
+          }
         }
       }
     },
@@ -9520,7 +11804,7 @@
         "0": {
           "json": {
             "id": 0,
-            "value": 32
+            "value": 64
           }
         }
       }
@@ -9695,6 +11979,29 @@
         "serializationType": "map"
       },
       "data": {
+        "561": {
+          "json": {
+            "value": [
+              {
+                "type": "on_player_leaves_area",
+                "conditions": [
+                  {
+                    "id": 34,
+                    "type": "when_state_is",
+                    "value": "Taken"
+                  }
+                ],
+                "operation": "and",
+                "actions": [
+                  {
+                    "id": 33,
+                    "name": "Mark as free"
+                  }
+                ]
+              }
+            ]
+          }
+        },
         "564": {
           "json": {
             "value": [
@@ -10702,6 +13009,487 @@
               }
             ]
           }
+        },
+        "612": {
+          "json": {
+            "value": [
+              {
+                "type": "on_input_action",
+                "conditions": [
+                  {
+                    "id": 34,
+                    "type": "when_state_is",
+                    "value": "Free"
+                  }
+                ],
+                "operation": "and",
+                "actions": [
+                  {
+                    "id": 33,
+                    "name": "Sit Here"
+                  }
+                ]
+              },
+              {
+                "type": "on_input_action",
+                "conditions": [
+                  {
+                    "id": 34,
+                    "type": "when_state_is",
+                    "value": "Taken"
+                  }
+                ],
+                "operation": "and",
+                "actions": [
+                  {
+                    "id": 33,
+                    "name": "Show text"
+                  }
+                ]
+              }
+            ]
+          }
+        },
+        "613": {
+          "json": {
+            "value": [
+              {
+                "type": "on_player_leaves_area",
+                "conditions": [
+                  {
+                    "id": 36,
+                    "type": "when_state_is",
+                    "value": "Taken"
+                  }
+                ],
+                "operation": "and",
+                "actions": [
+                  {
+                    "id": 35,
+                    "name": "Mark as free"
+                  }
+                ]
+              }
+            ]
+          }
+        },
+        "614": {
+          "json": {
+            "value": [
+              {
+                "type": "on_input_action",
+                "conditions": [
+                  {
+                    "id": 36,
+                    "type": "when_state_is",
+                    "value": "Free"
+                  }
+                ],
+                "operation": "and",
+                "actions": [
+                  {
+                    "id": 35,
+                    "name": "Sit Here"
+                  }
+                ]
+              },
+              {
+                "type": "on_input_action",
+                "conditions": [
+                  {
+                    "id": 36,
+                    "type": "when_state_is",
+                    "value": "Taken"
+                  }
+                ],
+                "operation": "and",
+                "actions": [
+                  {
+                    "id": 35,
+                    "name": "Show text"
+                  }
+                ]
+              }
+            ]
+          }
+        },
+        "616": {
+          "json": {
+            "value": [
+              {
+                "type": "on_player_leaves_area",
+                "conditions": [
+                  {
+                    "id": 38,
+                    "type": "when_state_is",
+                    "value": "Taken"
+                  }
+                ],
+                "operation": "and",
+                "actions": [
+                  {
+                    "id": 37,
+                    "name": "Mark as free"
+                  }
+                ]
+              }
+            ]
+          }
+        },
+        "617": {
+          "json": {
+            "value": [
+              {
+                "type": "on_input_action",
+                "conditions": [
+                  {
+                    "id": 38,
+                    "type": "when_state_is",
+                    "value": "Free"
+                  }
+                ],
+                "operation": "and",
+                "actions": [
+                  {
+                    "id": 37,
+                    "name": "Sit Here"
+                  }
+                ]
+              },
+              {
+                "type": "on_input_action",
+                "conditions": [
+                  {
+                    "id": 38,
+                    "type": "when_state_is",
+                    "value": "Taken"
+                  }
+                ],
+                "operation": "and",
+                "actions": [
+                  {
+                    "id": 37,
+                    "name": "Show text"
+                  }
+                ]
+              }
+            ]
+          }
+        },
+        "618": {
+          "json": {
+            "value": [
+              {
+                "type": "on_player_leaves_area",
+                "conditions": [
+                  {
+                    "id": 40,
+                    "type": "when_state_is",
+                    "value": "Taken"
+                  }
+                ],
+                "operation": "and",
+                "actions": [
+                  {
+                    "id": 39,
+                    "name": "Mark as free"
+                  }
+                ]
+              }
+            ]
+          }
+        },
+        "619": {
+          "json": {
+            "value": [
+              {
+                "type": "on_input_action",
+                "conditions": [
+                  {
+                    "id": 40,
+                    "type": "when_state_is",
+                    "value": "Free"
+                  }
+                ],
+                "operation": "and",
+                "actions": [
+                  {
+                    "id": 39,
+                    "name": "Sit Here"
+                  }
+                ]
+              },
+              {
+                "type": "on_input_action",
+                "conditions": [
+                  {
+                    "id": 40,
+                    "type": "when_state_is",
+                    "value": "Taken"
+                  }
+                ],
+                "operation": "and",
+                "actions": [
+                  {
+                    "id": 39,
+                    "name": "Show text"
+                  }
+                ]
+              }
+            ]
+          }
+        },
+        "633": {
+          "json": {
+            "value": [
+              {
+                "type": "on_player_leaves_area",
+                "conditions": [
+                  {
+                    "id": 50,
+                    "type": "when_state_is",
+                    "value": "Taken"
+                  }
+                ],
+                "operation": "and",
+                "actions": [
+                  {
+                    "id": 49,
+                    "name": "Mark as free"
+                  }
+                ]
+              }
+            ]
+          }
+        },
+        "634": {
+          "json": {
+            "value": [
+              {
+                "type": "on_input_action",
+                "conditions": [
+                  {
+                    "id": 50,
+                    "type": "when_state_is",
+                    "value": "Free"
+                  }
+                ],
+                "operation": "and",
+                "actions": [
+                  {
+                    "id": 49,
+                    "name": "Sit Here"
+                  }
+                ]
+              },
+              {
+                "type": "on_input_action",
+                "conditions": [
+                  {
+                    "id": 50,
+                    "type": "when_state_is",
+                    "value": "Taken"
+                  }
+                ],
+                "operation": "and",
+                "actions": [
+                  {
+                    "id": 49,
+                    "name": "Show text"
+                  }
+                ]
+              }
+            ]
+          }
+        },
+        "635": {
+          "json": {
+            "value": [
+              {
+                "type": "on_player_leaves_area",
+                "conditions": [
+                  {
+                    "id": 52,
+                    "type": "when_state_is",
+                    "value": "Taken"
+                  }
+                ],
+                "operation": "and",
+                "actions": [
+                  {
+                    "id": 51,
+                    "name": "Mark as free"
+                  }
+                ]
+              }
+            ]
+          }
+        },
+        "636": {
+          "json": {
+            "value": [
+              {
+                "type": "on_input_action",
+                "conditions": [
+                  {
+                    "id": 52,
+                    "type": "when_state_is",
+                    "value": "Free"
+                  }
+                ],
+                "operation": "and",
+                "actions": [
+                  {
+                    "id": 51,
+                    "name": "Sit Here"
+                  }
+                ]
+              },
+              {
+                "type": "on_input_action",
+                "conditions": [
+                  {
+                    "id": 52,
+                    "type": "when_state_is",
+                    "value": "Taken"
+                  }
+                ],
+                "operation": "and",
+                "actions": [
+                  {
+                    "id": 51,
+                    "name": "Show text"
+                  }
+                ]
+              }
+            ]
+          }
+        },
+        "639": {
+          "json": {
+            "value": [
+              {
+                "type": "on_player_leaves_area",
+                "conditions": [
+                  {
+                    "id": 54,
+                    "type": "when_state_is",
+                    "value": "Taken"
+                  }
+                ],
+                "operation": "and",
+                "actions": [
+                  {
+                    "id": 53,
+                    "name": "Mark as free"
+                  }
+                ]
+              }
+            ]
+          }
+        },
+        "640": {
+          "json": {
+            "value": [
+              {
+                "type": "on_input_action",
+                "conditions": [
+                  {
+                    "id": 54,
+                    "type": "when_state_is",
+                    "value": "Free"
+                  }
+                ],
+                "operation": "and",
+                "actions": [
+                  {
+                    "id": 53,
+                    "name": "Sit Here"
+                  }
+                ]
+              },
+              {
+                "type": "on_input_action",
+                "conditions": [
+                  {
+                    "id": 54,
+                    "type": "when_state_is",
+                    "value": "Taken"
+                  }
+                ],
+                "operation": "and",
+                "actions": [
+                  {
+                    "id": 53,
+                    "name": "Show text"
+                  }
+                ]
+              }
+            ]
+          }
+        },
+        "641": {
+          "json": {
+            "value": [
+              {
+                "type": "on_player_leaves_area",
+                "conditions": [
+                  {
+                    "id": 56,
+                    "type": "when_state_is",
+                    "value": "Taken"
+                  }
+                ],
+                "operation": "and",
+                "actions": [
+                  {
+                    "id": 55,
+                    "name": "Mark as free"
+                  }
+                ]
+              }
+            ]
+          }
+        },
+        "642": {
+          "json": {
+            "value": [
+              {
+                "type": "on_input_action",
+                "conditions": [
+                  {
+                    "id": 56,
+                    "type": "when_state_is",
+                    "value": "Free"
+                  }
+                ],
+                "operation": "and",
+                "actions": [
+                  {
+                    "id": 55,
+                    "name": "Sit Here"
+                  }
+                ]
+              },
+              {
+                "type": "on_input_action",
+                "conditions": [
+                  {
+                    "id": 56,
+                    "type": "when_state_is",
+                    "value": "Taken"
+                  }
+                ],
+                "operation": "and",
+                "actions": [
+                  {
+                    "id": 55,
+                    "name": "Show text"
+                  }
+                ]
+              }
+            ]
+          }
         }
       }
     },
@@ -10750,6 +13538,16 @@
         "serializationType": "map"
       },
       "data": {
+        "561": {
+          "json": {
+            "id": 34,
+            "value": [
+              "Free",
+              "Taken"
+            ],
+            "defaultValue": "Free"
+          }
+        },
         "564": {
           "json": {
             "id": 2,
@@ -10903,6 +13701,76 @@
         "600": {
           "json": {
             "id": 32,
+            "value": [
+              "Free",
+              "Taken"
+            ],
+            "defaultValue": "Free"
+          }
+        },
+        "613": {
+          "json": {
+            "id": 36,
+            "value": [
+              "Free",
+              "Taken"
+            ],
+            "defaultValue": "Free"
+          }
+        },
+        "616": {
+          "json": {
+            "id": 38,
+            "value": [
+              "Free",
+              "Taken"
+            ],
+            "defaultValue": "Free"
+          }
+        },
+        "618": {
+          "json": {
+            "id": 40,
+            "value": [
+              "Free",
+              "Taken"
+            ],
+            "defaultValue": "Free"
+          }
+        },
+        "633": {
+          "json": {
+            "id": 50,
+            "value": [
+              "Free",
+              "Taken"
+            ],
+            "defaultValue": "Free"
+          }
+        },
+        "635": {
+          "json": {
+            "id": 52,
+            "value": [
+              "Free",
+              "Taken"
+            ],
+            "defaultValue": "Free"
+          }
+        },
+        "639": {
+          "json": {
+            "id": 54,
+            "value": [
+              "Free",
+              "Taken"
+            ],
+            "defaultValue": "Free"
+          }
+        },
+        "641": {
+          "json": {
+            "id": 56,
             "value": [
               "Free",
               "Taken"
