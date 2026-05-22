@@ -272,9 +272,15 @@ const spawnAnims: SpawnAnim[] = []
 
 function scaleForStep(step: PizzaStep, doughClicks: number): Vector3 {
   if (step === PizzaStep.RawDough) {
-    if (doughClicks <= 0) return Vector3.create(0.7, 0.7, 0.7)
-    if (doughClicks === 1) return Vector3.create(0.85, 0.5, 0.85)
-    if (doughClicks === 2) return Vector3.create(1.0, 0.3, 1.0)
+    // Linear lerp across the full knead range so every click moves the
+    // sphere a perceptible amount. Click 0 = original ball; click
+    // MASA_CLICKS_REQUIRED-1 = almost-flat sphere; the next click flips
+    // step to FlatDough and the mesh becomes the thinner cylinder.
+    const totalKneads = Math.max(1, MASA_CLICKS_REQUIRED - 1)
+    const t = Math.max(0, Math.min(1, doughClicks / totalKneads))
+    const xz = 0.7 + (1.0 - 0.7) * t
+    const y = 0.7 + (0.3 - 0.7) * t
+    return Vector3.create(xz, y, xz)
   }
   // FlatDough / Topped / Baking / Perfect / Burnt all share the flat
   // cylinder profile — same shape, only material colour differs.

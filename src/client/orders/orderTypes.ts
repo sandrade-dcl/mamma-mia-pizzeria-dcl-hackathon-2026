@@ -20,22 +20,38 @@ export const RECIPES: PizzaRecipe[] = [
   {
     id: PizzaRecipeId.Margherita,
     displayName: 'Margherita',
-    toppings: [Topping.Tomato, Topping.Mozzarella, Topping.Mozzarella]
+    toppings: [
+      Topping.Tomato, Topping.Tomato,
+      Topping.Mozzarella, Topping.Mozzarella, Topping.Mozzarella, Topping.Mozzarella
+    ]
   },
   {
     id: PizzaRecipeId.Diavola,
     displayName: 'Diavola',
-    toppings: [Topping.Tomato, Topping.Mozzarella, Topping.Salami, Topping.Salami]
+    toppings: [
+      Topping.Tomato, Topping.Tomato,
+      Topping.Mozzarella, Topping.Mozzarella,
+      Topping.Salami, Topping.Salami, Topping.Salami, Topping.Salami
+    ]
   },
   {
     id: PizzaRecipeId.Funghi,
     displayName: 'Funghi',
-    toppings: [Topping.Tomato, Topping.Mozzarella, Topping.Mushroom, Topping.Mushroom]
+    toppings: [
+      Topping.Tomato, Topping.Tomato,
+      Topping.Mozzarella, Topping.Mozzarella,
+      Topping.Mushroom, Topping.Mushroom, Topping.Mushroom, Topping.Mushroom
+    ]
   },
   {
     id: PizzaRecipeId.QuattroStagioni,
     displayName: 'Quattro Stagioni',
-    toppings: [Topping.Tomato, Topping.Mozzarella, Topping.Salami, Topping.Mushroom]
+    toppings: [
+      Topping.Tomato, Topping.Tomato,
+      Topping.Mozzarella, Topping.Mozzarella,
+      Topping.Salami, Topping.Salami,
+      Topping.Mushroom, Topping.Mushroom
+    ]
   }
 ]
 
@@ -59,6 +75,10 @@ export const EXPIRED_DISPLAY_MS = 1500
 // re-tighten these.
 export const MAX_ACTIVE_ORDERS = 3
 export const TICKET_LIFETIME_MS = 45_000
+// During the final minute of a round, new tickets spawn with a tighter
+// 30 s window instead of 45 s — the home stretch should feel rushed.
+export const TICKET_LIFETIME_FINAL_MINUTE_MS = 30_000
+export const FINAL_MINUTE_THRESHOLD_MS = 60_000
 export const INITIAL_GENERATION_INTERVAL_MS = 22_000
 export const FINAL_GENERATION_INTERVAL_MS = 10_000
 export const GENERATION_RAMP_DURATION_MS = 4 * 60 * 1000

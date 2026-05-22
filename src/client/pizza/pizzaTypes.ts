@@ -62,6 +62,6 @@ PizzaState.validateBeforeChange((value) =>
   value.senderAddress.toLowerCase() === AUTH_SERVER_PEER_ID.toLowerCase()
 )
 
-export const MASA_CLICKS_REQUIRED = 3
+export const MASA_CLICKS_REQUIRED = 10
 export const BAKE_TIME_PERFECT = 5
 export const BAKE_TIME_BURNT = 9

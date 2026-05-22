@@ -109,7 +109,7 @@ Z=1   ├──[Wall_Front_L]──┤  ├──[Wall_Front_R]──┤
 | **2. Mechanics core (single-player)** | Station interactions, conveyor tweens, dough/toppings/oven flow, F-key discard | ~5h | ✅ Completed |
 | **3. Game loop complete** | Orders, tickets UI, scoring, timer, start/end states. **MVP single-player playable.** | ~3.5h | ✅ Completed |
 | **4. Auth Server + multiplayer** | `isServer()` branching, `registerMessages`, server-authoritative orders/scoring, `Storage` leaderboard | ~6h | ✅ Completed |
-| **5. Polish** | Particles (flour, smoke), SFX, feedback on success/fail, bug fixing | ~2h | ⏳ Pending |
+| **5. Polish** | Audio (BGM + SFX), spectator HUD parity, topping labels, oven "ready" pulse, balance pass, dough animation across 10 clicks | ~2h | ✅ Completed |
 
 Total ≈ 20h.
 
@@ -137,7 +137,62 @@ Total ≈ 20h.
 
 These are **invisible** entities (just `Transform` + `Name`, no MeshRenderer). They use local positions relative to their parent so a parent swap (cube → GLB) only needs the slot's local Y/Z fine-tuned.
 
-## 9. Current state — Hitos 1, 2, 3 & 4 completed
+## 9. Current state — All 5 hitos completed (first playable build)
+
+### Hito 5 — polish & balance
+
+Audio:
+
+- Ambient track swapped to `Background_Music.mp3` on `Audio_Ambient` (entity
+  525, global loop, volume 0.4).
+- Score-delta SFX in `src/client/sfx.ts`: two runtime `AudioSource` entities
+  (`pizza_delivered.mp3` on gain, `pizza_lost.mp3` on loss). The system
+  watches `RoundState.score`, ignores deltas outside `phase=Playing` (so the
+  inter-round reset to 0 doesn't fire a false "lost"), and retriggers via
+  one-frame `playing=false`→`true` toggle so consecutive deltas don't cut.
+
+Spectator UX:
+
+- `PlayingHud` (tickets + Score/Best/Time) now renders for **any** client
+  during `phase=Playing`, not just lobby members. Spectators see the same
+  HUD as players, minus the Quit button.
+- The dark overlay backdrop is suppressed for the spectator-during-play
+  state so the tickets stay readable. The end-of-round modal still has its
+  backdrop (no live tickets to obscure).
+- HUD wrapper made `positionType: 'absolute'` fullscreen so it coexists
+  with the centred Spectator overlay/widget without flex collisions.
+
+Toppings legibility:
+
+- Each ingredient cube now has a floating `TextShape` label (Tomato /
+  Mozzarella / Salami / Mushroom) anchored 0.6 m above the box, white text
+  with black outline, `Billboard.BM_Y` to face whoever is reading. The
+  label is a standalone world-space entity (not parented to the box) so
+  the cube's non-uniform 0.5×0.4×0.5 scale doesn't squash the glyphs.
+
+Oven "ready" cue:
+
+- The pulse animation (±0.005 scale at ~3 Hz) moved off the Burnt step and
+  onto the Perfect step. Renamed `OvenState` adds a `'ready'` state with
+  the same orange light + grey smoke as `'fire'`, plus the pulse. Burnt
+  stops pulsing (red light + dark dense smoke remain). The pulse therefore
+  reads as "take me out now!" rather than "you blew it".
+
+Balance pass:
+
+- `MASA_CLICKS_REQUIRED` raised 3 → **10**. `scaleForStep` for `RawDough`
+  was bugged (only handled clicks 0/1/2 — anything ≥3 fell through to the
+  flat-cylinder scale on the still-spherical mesh) so it was replaced with
+  a linear lerp `(0.7, 0.7, 0.7)` → `(1.0, 0.3, 1.0)` over the 9 knead
+  range. Every click moves the dough a perceptible amount.
+- Recipe topping counts **doubled** (Margherita = T×2 + M×4, Diavola = T×2
+  + M×2 + S×4, Funghi = T×2 + M×2 + Mu×4, Quattro Stagioni = 2 of each).
+- Order generation cadence now divides by the locked-in lobby player
+  count (`base / max(1, roundParticipants.length)`). A 3-player round
+  sees orders ~3× as often as a solo run, balancing the parallel throughput.
+- Ticket lifetime drops 45 s → **30 s** for tickets that *spawn* during
+  the last 60 s of the round. The HUD reads `expiresAt - createdAt` so
+  the progress bar adapts per ticket.
 
 ### Hito 4 — authoritative server + multiplayer
 

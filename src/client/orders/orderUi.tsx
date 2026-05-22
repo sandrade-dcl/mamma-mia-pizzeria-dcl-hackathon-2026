@@ -20,7 +20,7 @@ import { getBestScore, getScore, SCORE_EXPIRED_TICKET } from '../scoring'
 import { getReadyPizzaToppings } from '../stations/delivery'
 import { LOBBY_MAX_PLAYERS } from '../../shared/syncedState'
 import { getOrderSlots, toppingsMatch } from './orderManager'
-import { Order, TICKET_LIFETIME_MS } from './orderTypes'
+import { Order } from './orderTypes'
 import {
   enterSpectatorMode,
   exitSpectatorMode,
@@ -112,7 +112,11 @@ function formatRoundClock(remainingMs: number): string {
 function TicketCard(order: Order, isReady: boolean) {
   const now = Date.now()
   const remainingMs = Math.max(0, order.expiresAt - now)
-  const progress = remainingMs / TICKET_LIFETIME_MS
+  // Lifetime varies per-ticket (45 s normally, 30 s in the last minute)
+  // so the progress bar is computed against this ticket's own span, not
+  // a global constant.
+  const lifetimeMs = Math.max(1, order.expiresAt - order.createdAt)
+  const progress = remainingMs / lifetimeMs
   const secondsLeft = Math.ceil(remainingMs / 1000)
   const ingredientLine = formatToppings(order.recipe.toppings)
 

@@ -5,9 +5,11 @@ import { Storage } from '@dcl/sdk/server'
 import {
   EXPIRED_DISPLAY_MS,
   FINAL_GENERATION_INTERVAL_MS,
+  FINAL_MINUTE_THRESHOLD_MS,
   GENERATION_RAMP_DURATION_MS,
   INITIAL_GENERATION_INTERVAL_MS,
   RECIPES,
+  TICKET_LIFETIME_FINAL_MINUTE_MS,
   TICKET_LIFETIME_MS
 } from '../client/orders/orderTypes'
 import { SCORE_EXPIRED_TICKET } from '../client/scoring'
@@ -375,10 +377,14 @@ function clearAllSlots() {
 function currentGenerationInterval(): number {
   const elapsed = Date.now() - generationStartedAt
   const ramp = Math.min(1, elapsed / GENERATION_RAMP_DURATION_MS)
-  return (
+  const base =
     INITIAL_GENERATION_INTERVAL_MS +
     (FINAL_GENERATION_INTERVAL_MS - INITIAL_GENERATION_INTERVAL_MS) * ramp
-  )
+  // Cadence scales with the number of players locked into this round, so
+  // a full lobby of 3 sees orders ~3× more often than a solo run. Floor
+  // at 1 to avoid division-by-zero if the snapshot is somehow empty.
+  const playerCount = Math.max(1, roundParticipants.length)
+  return base / playerCount
 }
 
 function findEmptySlotEntity(): Entity | null {
@@ -399,9 +405,18 @@ function spawnOrder() {
   slot.id = nextOrderId++
   slot.recipeIndex = recipeIndex
   slot.createdAt = now
-  slot.expiresAt = now + TICKET_LIFETIME_MS
+  // Last-minute pressure: tickets spawned with <60 s left only live 30 s
+  // instead of 45 s. The HUD reads `(expiresAt - createdAt)` to drive the
+  // progress bar, so it naturally adapts to either lifetime.
+  const round = RoundState.getOrNull(ROUND_SINGLETON)
+  const remainingRoundMs = round ? Math.max(0, Number(round.roundEndsAt) - now) : 0
+  const lifetime =
+    remainingRoundMs <= FINAL_MINUTE_THRESHOLD_MS
+      ? TICKET_LIFETIME_FINAL_MINUTE_MS
+      : TICKET_LIFETIME_MS
+  slot.expiresAt = now + lifetime
   slot.expiredSince = 0
-  console.log(`[SERVER] new order: ${RECIPES[recipeIndex].displayName} (slot ${slot.slotIndex})`)
+  console.log(`[SERVER] new order: ${RECIPES[recipeIndex].displayName} (slot ${slot.slotIndex}, lifetime ${lifetime}ms)`)
 }
 
 function orderGenerationSystem(_dt: number) {
